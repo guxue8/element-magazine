@@ -25,4 +25,4 @@
 - 新截图：`docs/screenshots/pixel-desktop.png`、`pixel-landscape.png`、`pixel-portrait.png`。旧版截图不作为像素版证据。
 - 未测试真实手机硬件；本次浏览器检查未重新跑完整 18 批流程。
 
-预览服务使用4174端口。未创建远程仓库、未上传GitHub、未发布GitHub Pages。
+预览服务使用4174端口。2026-10-26 已上传 https://github.com/guxue8/element-magazine 并成功部署到 https://guxue8.github.io/element-magazine/；线上 21 个运行文件及代表性素材通过 HTTP/MIME/提交内容校验。内置浏览器访问公网域名连接关闭，未将本地截图冒充线上截图。详见静态发布实现报告。
