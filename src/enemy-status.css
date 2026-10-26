@@ -1,0 +1,43 @@
+/* One continuous red health bar, followed by the current-state pixel icons. */
+.creature .creature-vitals{
+  position:absolute;left:50%;right:auto;top:auto;bottom:calc(100% + 4px);
+  display:flex;align-items:center;gap:3px;width:max-content;
+  transform:translateX(-50%);z-index:4;pointer-events:none;
+}
+.creature-vitals .creature-health{
+  position:static;display:block;inset:auto;flex:0 0 48px;width:48px;height:6px;
+  overflow:hidden;background:#29161e;border:1px solid #130e16;
+  border-radius:0;box-shadow:0 1px #e8b9a633;
+}
+.creature.boss .creature-vitals .creature-health{flex-basis:64px;width:64px;}
+.creature .creature-vitals .creature-health i,
+.creature.boss .creature-vitals .creature-health i{
+  display:block;height:100%;background:#e14d4d;background-image:none;
+  border:0;border-radius:0;box-shadow:none;
+}
+.creature-vitals .status-dots{
+  position:static;inset:auto;display:flex;flex-direction:row;flex-wrap:nowrap;
+  align-items:center;gap:2px;transform:none;
+}
+.creature-vitals .status-dots:empty{display:none;}
+.creature-vitals .status-dots .enemy-status{
+  display:inline-flex;align-items:center;justify-content:center;flex:0 0 14px;
+  width:14px;height:14px;padding:0;border:0;border-radius:0;
+  background:#0d1827dc;box-shadow:0 1px #08111b;pointer-events:auto;
+}
+.creature-vitals .enemy-status .glyph{
+  width:12px;height:12px;image-rendering:pixelated;filter:none;
+}
+.creature-vitals .status-burn{color:#ffa667;}
+.creature-vitals .status-wet{color:#81d7ef;}
+.creature-vitals .status-slow{color:#b4dcff;}
+.creature-vitals .status-shield{color:#dfc598;}
+.creature-vitals .status-windMark{color:#9ce4c0;}
+.creature-vitals .status-boost{color:#efbf68;}
+@media(max-height:450px) and (orientation:landscape){
+  .creature .creature-vitals{bottom:calc(100% + 3px);gap:2px;}
+  .creature-vitals .creature-health{flex-basis:28px;width:28px;height:5px;}
+  .creature.boss .creature-vitals .creature-health{flex-basis:38px;width:38px;}
+  .creature-vitals .status-dots{gap:1px;}
+  .creature-vitals .status-dots .enemy-status{flex-basis:12px;width:12px;height:12px;}
+}

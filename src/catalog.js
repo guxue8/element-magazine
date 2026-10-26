@@ -1,4 +1,4 @@
-// Approved design data. Regenerate with python scripts/generate-catalog.py.
+// Maintained game data. The legacy generator is a historical seed, not an update command.
 
 export const ELEMENTS = {
   "fire": {
@@ -1197,7 +1197,7 @@ export const BONDS = [
       "fire": 3
     },
     "grade": "normal",
-    "description": "火属性原生弹直接伤害 +15%。",
+    "description": "火弹首击燃烧敌人：燃烧 +1。每夹最多 3 次。",
     "targetId": null,
     "whiteRequired": 0,
     "stages": []
@@ -1209,7 +1209,7 @@ export const BONDS = [
       "fire": 6
     },
     "grade": "normal",
-    "description": "燃烧结算伤害 +25%；不增加燃烧层数上限或持续时间。",
+    "description": "燃烧结算：伤害 +25%。层数上限与持续时间不变。",
     "targetId": null,
     "whiteRequired": 0,
     "stages": []
@@ -1221,7 +1221,7 @@ export const BONDS = [
       "fire": 10
     },
     "grade": "normal",
-    "description": "火属性原生弹命中已经燃烧的目标时，直接伤害 +30%。",
+    "description": "火弹命中燃烧敌人：直接伤害 +30%。",
     "targetId": null,
     "whiteRequired": 0,
     "stages": []
@@ -1233,7 +1233,7 @@ export const BONDS = [
       "water": 3
     },
     "grade": "normal",
-    "description": "每夹第一枚水属性原生弹取得首次本体命中时，获得 3 护盾；每夹 1 次。",
+    "description": "水弹首击潮湿敌人：获得 3 护盾。每夹最多 2 次。",
     "targetId": null,
     "whiteRequired": 0,
     "stages": []
@@ -1245,7 +1245,7 @@ export const BONDS = [
       "water": 6
     },
     "grade": "normal",
-    "description": "泉灵每次正常行动造成的基础水伤 +25%；不改变潮湿和行动次数。",
+    "description": "泉灵正常行动：水伤 +25%。指令行动不加成。",
     "targetId": null,
     "whiteRequired": 0,
     "stages": []
@@ -1257,19 +1257,19 @@ export const BONDS = [
       "water": 10
     },
     "grade": "normal",
-    "description": "泉灵正常行动成功命中后恢复玩家 2 生命；每只每回合 1 次，全体每回合最多 2 次。",
+    "description": "泉灵正常行动命中：回复 2 生命。每只每回合 1 次，全体最多 2 次。",
     "targetId": null,
     "whiteRequired": 0,
     "stages": []
   },
   {
     "id": "S07",
-    "name": "电光初现",
+    "name": "电荷追击",
     "requirements": {
       "lightning": 3
     },
     "grade": "normal",
-    "description": "雷属性原生弹直接伤害 +15%。",
+    "description": "命中本夹先前雷弹击中过的敌人：雷弹直接伤害 +25%。同一枚雷弹不能自行触发。",
     "targetId": null,
     "whiteRequired": 0,
     "stages": []
@@ -1281,7 +1281,7 @@ export const BONDS = [
       "lightning": 6
     },
     "grade": "normal",
-    "description": "雷属性计时弹成功执行时，本体直接伤害 +25%。",
+    "description": "雷系计时弹触发：直接伤害 +25%。",
     "targetId": null,
     "whiteRequired": 0,
     "stages": []
@@ -1293,7 +1293,7 @@ export const BONDS = [
       "lightning": 10
     },
     "grade": "normal",
-    "description": "雷属性原生弹的弹跳段基础伤害 +35%；不增加弹跳次数，首目标不受此项加成。",
+    "description": "雷弹弹跳命中：伤害 +35%。首目标不加成，不增加弹跳。",
     "targetId": null,
     "whiteRequired": 0,
     "stages": []
@@ -1305,7 +1305,7 @@ export const BONDS = [
       "wind": 3
     },
     "grade": "normal",
-    "description": "风属性原生弹直接伤害 +15%。",
+    "description": "同排左邻格子弹已命中：风弹直接伤害 +20%。",
     "targetId": null,
     "whiteRequired": 0,
     "stages": []
@@ -1317,7 +1317,7 @@ export const BONDS = [
       "wind": 6
     },
     "grade": "normal",
-    "description": "回响／重射的伤害 +25%；只修改已有回响，不额外制造回响次数。",
+    "description": "回响／重射：伤害 +25%。不增加次数。",
     "targetId": null,
     "whiteRequired": 0,
     "stages": []
@@ -1329,19 +1329,19 @@ export const BONDS = [
       "wind": 10
     },
     "grade": "normal",
-    "description": "风属性原生弹命中带有风标的目标时，直接伤害 +40%。风标仍按原规则消耗。",
+    "description": "风弹命中风标敌人：直接伤害 +40%。风标照常消耗。",
     "targetId": null,
     "whiteRequired": 0,
     "stages": []
   },
   {
     "id": "S13",
-    "name": "碎岩护体",
+    "name": "岩石弹头",
     "requirements": {
       "earth": 3
     },
     "grade": "normal",
-    "description": "每夹全部子弹执行完后获得 4 护盾；每夹 1 次。",
+    "description": "岩弹直接伤害 +15%。",
     "targetId": null,
     "whiteRequired": 0,
     "stages": []
@@ -1353,7 +1353,7 @@ export const BONDS = [
       "earth": 6
     },
     "grade": "normal",
-    "description": "岩卫正常行动时额外提供 1 护盾；每只每回合 1 次，全体每回合最多 2 次。",
+    "description": "岩卫正常行动：额外获得 1 护盾。每只每回合 1 次，全体最多 2 次。",
     "targetId": null,
     "whiteRequired": 0,
     "stages": []
@@ -1365,7 +1365,7 @@ export const BONDS = [
       "earth": 10
     },
     "grade": "normal",
-    "description": "岩卫或礁炮自然到期时获得 1 删除值；每回合最多 2 次，计入岩系资源共享上限。替换退场无收益。",
+    "description": "岩卫／礁炮自然到期：获得 1 删除值。每回合最多 2 次，与岩系资源共享上限；替换无效。",
     "targetId": null,
     "whiteRequired": 0,
     "stages": []
@@ -2377,7 +2377,7 @@ export const TALENTS = [
   {
     "id": "body",
     "name": "结实体魄",
-    "description": "最大生命 +10",
+    "description": "每级最大生命 +5。",
     "costs": [
       1,
       2
@@ -2386,7 +2386,7 @@ export const TALENTS = [
   {
     "id": "repair",
     "name": "战后修缮",
-    "description": "每击杀首领恢复 6 血",
+    "description": "击杀首领：每级回复 3 生命。",
     "costs": [
       1,
       2
@@ -2395,7 +2395,7 @@ export const TALENTS = [
   {
     "id": "supply",
     "name": "启动储备",
-    "description": "起始选弹值 +50",
+    "description": "每级起始选弹值 +25。",
     "costs": [
       1,
       2
@@ -2457,6 +2457,36 @@ export const TALENTS = [
     "costs": [
       1
     ]
+  },
+  {
+    "id": "freeSwap",
+    "name": "灵活编排",
+    "description": "每夹第一次有效换位免费。无效操作不消耗次数。",
+    "costs": [3]
+  },
+  {
+    "id": "freeRefresh",
+    "name": "再看一次",
+    "description": "每局第一次候选刷新免费。适用于子弹、羁绊和卷轴选择。",
+    "costs": [2]
+  },
+  {
+    "id": "skipRefresh",
+    "name": "弃选回收",
+    "description": "跳过付费招募：获得 5 刷新值。每局最多 2 次，不返还选弹值。",
+    "costs": [3]
+  },
+  {
+    "id": "scrollCache",
+    "name": "旅途卷匣",
+    "description": "完成第 6、12、18 批：随机获得 1 枚元素卷轴。清场回合不重复获得。",
+    "costs": [3]
+  },
+  {
+    "id": "rescueScroll",
+    "name": "绝境药匣",
+    "description": "应急护板触发后，存活结束该夹：获得 1 枚应急卷轴（回澜；禁水时为岩阵）。每局 1 次，需之后入夹才生效。",
+    "costs": [3]
   }
 ];
 

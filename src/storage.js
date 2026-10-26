@@ -1,6 +1,8 @@
 import {BULLET_MAP,BOND_MAP,ENEMIES,TALENTS,ENCHANTMENT_MAP,EVENTS,WAVES} from './catalog.js';
 import {createMeta} from './campaign.js';
 import {RESOURCE_CAPS,normalizeResources} from './resources.js';
+import {MAX_DIFFICULTY,getUnlockedDifficulty} from './difficulty.js';
+import {validElementBan,bulletAllowed,bondAllowed,enchantmentAllowed} from './element-pool.js';
 
 export const GAME_STORAGE_KEY='element-magazine.save.v1';
 const finite=n=>typeof n==='number'&&Number.isFinite(n);
@@ -14,15 +16,15 @@ function preserveChargeBackup(storage,saved,raw=JSON.stringify(saved)){
   const key=`${GAME_STORAGE_KEY}.backup.charge-cap.${saved.run.id}`;
   if(storage.getItem(key)===null)storage.setItem(key,raw);
 }
-function validOffer(offer){
+function validOffer(offer,run){
   if(!record(offer)||typeof offer.source!=='string'||!Array.isArray(offer.cards)||!offer.cards.length)return false;
   return offer.cards.every(c=>{
     if(offer.kind==='event')return record(c)&&eventChoices.has(c.id)&&typeof c.name==='string'&&typeof c.description==='string';
     if(typeof c!=='string')return false;
-    if(offer.kind==='bond')return Boolean(BOND_MAP[c]);
-    if(offer.kind==='bullet')return BULLET_MAP[c]?.trigger&&BULLET_MAP[c].trigger!=='consumable';
-    if(offer.kind==='scroll')return BULLET_MAP[c]?.trigger==='consumable';
-    if(offer.kind==='enchant')return Boolean(ENCHANTMENT_MAP[c]||BULLET_MAP[c]?.trigger==='consumable');
+    if(offer.kind==='bond')return bondAllowed(run,BOND_MAP[c]);
+    if(offer.kind==='bullet')return bulletAllowed(run,BULLET_MAP[c])&&BULLET_MAP[c].trigger!=='consumable';
+    if(offer.kind==='scroll')return bulletAllowed(run,BULLET_MAP[c])&&BULLET_MAP[c].trigger==='consumable';
+    if(offer.kind==='enchant')return enchantmentAllowed(run,ENCHANTMENT_MAP[c])||bulletAllowed(run,BULLET_MAP[c])&&BULLET_MAP[c].trigger==='consumable';
     return false;
   });
 }
@@ -34,32 +36,40 @@ function numericTreeValid(value){
 }
 function validMeta(meta){
   if(!meta||meta.version!==1||!integer(meta.points)||!integer(meta.earned)||!integer(meta.wins)||!integer(meta.bestBatch)||!meta.talents||!Array.isArray(meta.settledRuns))return false;
+  if(meta.unlockedDifficulty!==undefined&&(!integer(meta.unlockedDifficulty)||meta.unlockedDifficulty>MAX_DIFFICULTY))return false;
   if(!meta.settledRuns.every(x=>typeof x==='string'))return false;
   return Object.entries(meta.talents).every(([id,level])=>{const talent=TALENTS.find(x=>x.id===id);return talent&&integer(level)&&level<=talent.costs.length;});
 }
 function validRun(run){
   if(run===null)return true;
   if(!run||run.version!==1||!['supply','prepare','locked','ended'].includes(run.phase)||typeof run.id!=='string'||!numericTreeValid(run))return false;
+  if(run.difficulty!==undefined&&(!integer(run.difficulty)||run.difficulty>MAX_DIFFICULTY))return false;
+  if(run.encounterVersion!==undefined&&![1,2].includes(run.encounterVersion))return false;
+  if(run.bannedElement!==undefined&&!validElementBan(run.bannedElement))return false;
   if(!integer(run.rng)||!integer(run.nextUid)||!Number.isInteger(run.batch)||run.batch<1||run.batch>18||!Number.isInteger(run.round)||run.round<1)return false;
   if(!finite(run.hp)||!finite(run.maxHp)||run.maxHp<=0||!finite(run.shield))return false;
   if(!run.resources||!['draft','refresh','remove','swap'].every(k=>integer(run.resources[k])))return false;
   if(!Array.isArray(run.inventory)||run.inventory.length<3||run.inventory.length>10000)return false;
-  if(!run.inventory.every(x=>x&&typeof x.uid==='string'&&BULLET_MAP[x.typeId]&&integer(x.counter)&&(!x.mark||ENCHANTMENT_MAP[x.mark]?.kind==='mark')&&x.temp&&typeof x.temp==='object'))return false;
+  if(!run.inventory.every(x=>x&&typeof x.uid==='string'&&bulletAllowed(run,BULLET_MAP[x.typeId])&&integer(x.counter)&&(!x.mark||ENCHANTMENT_MAP[x.mark]?.kind==='mark'&&enchantmentAllowed(run,ENCHANTMENT_MAP[x.mark]))&&x.temp&&typeof x.temp==='object'))return false;
   const ids=new Set(run.inventory.map(x=>x.uid));if(ids.size!==run.inventory.length)return false;
   if(!Array.isArray(run.magazine)||run.magazine.length!==12||!run.magazine.every(uid=>uid===null||typeof uid==='string'&&(run.phase==='ended'||ids.has(uid))))return false;
   const loaded=run.magazine.filter(Boolean);if(new Set(loaded).size!==loaded.length)return false;
-  if(!Array.isArray(run.bonds)||!run.bonds.every(x=>BOND_MAP[x])||new Set(run.bonds).size!==run.bonds.length)return false;
+  if(!Array.isArray(run.bonds)||!run.bonds.every(x=>bondAllowed(run,BOND_MAP[x]))||new Set(run.bonds).size!==run.bonds.length)return false;
   if(!Array.isArray(run.enemies)||!run.enemies.every(x=>x&&ENEMIES[x.typeId]&&finite(x.hp)&&finite(x.maxHp)&&integer(x.position)&&x.position<=6&&integer(x.lane)&&x.lane<3))return false;
   if(!Array.isArray(run.summons)||!run.summons.every(x=>x&&['spring','cannon','guard'].includes(x.kind)&&integer(x.life)))return false;
-  if(!Array.isArray(run.slots)||run.slots.length!==12||!run.slots.every(x=>x&&(!x.engraving||ENCHANTMENT_MAP[x.engraving]?.kind==='slot')))return false;
+  if(!Array.isArray(run.slots)||run.slots.length!==12||!run.slots.every(x=>x&&(!x.engraving||ENCHANTMENT_MAP[x.engraving]?.kind==='slot'&&enchantmentAllowed(run,ENCHANTMENT_MAP[x.engraving]))))return false;
   if(!Array.isArray(run.pending)||!run.pending.every(x=>record(x)&&typeof x.source==='string'&&(['bond','scroll'].includes(x.kind)||x.kind==='event'&&eventIds.has(x.eventId))))return false;
   if(!strings(run.handled)||!strings(run.defeatedBosses)||!strings(run.logs)||!strings(run.eventOrder)||!run.eventOrder.every(id=>eventIds.has(id)))return false;
   if(!Array.isArray(run.waveLanes)||run.waveLanes.length!==18||!run.waveLanes.every((lanes,i)=>Array.isArray(lanes)&&lanes.length===WAVES[i].length&&lanes.every(n=>integer(n)&&n<3)))return false;
   if(!record(run.stats)||!['kills','bossKills','damage','turns'].every(k=>integer(run.stats[k]))||!record(run.traits)||!record(run.evolutions))return false;
-  if(!Object.entries(run.evolutions).every(([id,value])=>BOND_MAP[id]?.grade==='evolution'&&record(value)&&integer(value.progress)))return false;
+  if(run.talentState!==undefined){
+    const t=run.talentState;
+    if(!record(t)||!integer(t.freeSwapRound)||t.freeSwapRound>run.round||typeof t.freeRefreshUsed!=='boolean'||!integer(t.skipRefunds)||t.skipRefunds>2||typeof t.rescueGranted!=='boolean'||!Array.isArray(t.scrollBatches)||!t.scrollBatches.every(n=>[6,12,18].includes(n))||new Set(t.scrollBatches).size!==t.scrollBatches.length)return false;
+  }
+  if(!Object.entries(run.evolutions).every(([id,value])=>BOND_MAP[id]?.grade==='evolution'&&bondAllowed(run,BOND_MAP[id])&&record(value)&&integer(value.progress)))return false;
   if(!integer(run.completedBatches)||run.completedBatches>18||!integer(run.draftCount)||!integer(run.reward))return false;
   if(run.rest&&(!ids.has(run.rest.uid)||!Number.isInteger(run.rest.slot)||run.rest.slot<0||run.rest.slot>=12||run.magazine[run.rest.slot]!==null))return false;
-  if(run.offers&&!validOffer(run.offers))return false;
+  if(run.offers&&!validOffer(run.offers,run))return false;
   return true;
 }
 export function loadGame(storage){
@@ -69,9 +79,10 @@ export function loadGame(storage){
     raw=storage.getItem(GAME_STORAGE_KEY);
     if(!raw)return {run:null,meta:createMeta(),warning:null};
     const saved=JSON.parse(raw);
-    const meta=validMeta(saved.meta)?saved.meta:createMeta();
+    const meta=validMeta(saved.meta)?{...saved.meta,unlockedDifficulty:getUnlockedDifficulty(saved.meta)}:createMeta();
     if(saved.version===1&&validMeta(saved.meta)&&validRun(saved.run)){
       let warning=null;
+      if(saved.run){saved.run.difficulty??=0;saved.run.encounterVersion??=1;saved.run.bannedElement??=null;}
       if(overChargeCap(saved.run)){
         let backedUp=true;
         try{preserveChargeBackup(storage,saved,raw);}catch{backedUp=false;}

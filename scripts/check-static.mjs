@@ -22,7 +22,7 @@ try {
     child.stdout.on('data',chunk=>{const match=String(chunk).match(/LocalURL: (http:\/\/\S+)/);if(match){clearTimeout(timer);resolve(match[1]);}});
     child.stderr.on('data',chunk=>{clearTimeout(timer);reject(new Error(String(chunk)));});
   });
-  const runtimeFiles=['index.html','style.css','src/app.js','src/campaign.js','src/combat.js','src/combat-effects.js','src/combat-bonds.js','src/catalog.js','src/random.js','src/storage.js','src/resources.js','src/art.js','src/view-utils.js','src/presentation.js','src/pixel-art.js','src/pixel.css'];
+  const runtimeFiles=['index.html','style.css',...(await readdir(new URL('src/',root))).filter(name=>/\.(js|css)$/.test(name)).sort().map(name=>`src/${name}`)];
   const assets=await assetFiles();
   assert.ok(assets.some(file=>file.endsWith('.svg')),'local SVG icons must be present');
   for(const required of ['assets/pixel/fantasy-atlas.png','assets/pixel/forest-ruins.png','assets/icons/credits.json','assets/icons/LICENSE.txt'])assert.ok(assets.includes(required),required);

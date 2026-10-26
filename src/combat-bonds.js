@@ -16,16 +16,19 @@ export class CombatBonds {
     this.rail={
     };
     this.benefitElements=new Set();
+    // A lightning bullet only charges targets for later bullets, never itself.
+    this.chargedTargets=new Set();
   }  grow(id){
     const c=this.c;
     if(c.stage(id)&&c.once(`${id}.growth`,3))this.progress[id]=(this.progress[id]||0)+1;
   }  multiplier(d,t,opts){
     const c=this.c,e=d.element,b=(id,n,cond=true)=>c.has(id)&&cond?n:0;
-    return b('S01',.15,e==='fire')+b('S03',.3,e==='fire'&&t.burn>0)+b('S07',.15,e==='lightning')+b('S08',.25,e==='lightning'&&d.trigger==='timer')+b('S09',.35,e==='lightning'&&opts.jump)+b('S10',.15,e==='wind')+b('S12',.4,e==='wind'&&t.windMark)+b('D02',.25,e==='water'&&t.burn)+b('D03',.3,e==='fire'&&t.burn>=2)+b('D04',.25,e==='lightning'&&t.burn)+b('D06',.25,e==='wind'&&t.burn)+b('D08',.25,e==='earth'&&t.burn)+b('D10',.25,e==='water'&&t.wet)+b('D12',.25,e==='wind'&&t.wet)+b('D14',.2,e==='earth'&&t.playerShield>0)+b('D16',.3,e==='lightning'&&t.windMark)+b('D20',.2,e==='wind'&&t.playerShield>0)+b('T01',.3,e==='fire'&&t.wet)+b('T04',.25,e==='lightning'&&(t.burn||t.windMark))+b('T07',.3,e==='wind'&&t.wet)+b('T10',.25,e==='lightning'&&d.trigger==='timer')+b('Q03',.15,d.trigger==='shot')+b('Q04',.4,e==='lightning'&&d.trigger==='timer'&&!c.success.some(x=>BULLET_MAP[x.typeId].element==='lightning'))+b('A03',.2,d.trigger==='shot');
+    return b('S03',.3,e==='fire'&&t.burn>0)+b('S07',.25,e==='lightning'&&this.chargedTargets.has(t.uid))+b('S08',.25,e==='lightning'&&d.trigger==='timer')+b('S09',.35,e==='lightning'&&opts.jump)+b('S10',.2,e==='wind'&&c.slot%4>0&&c.hits.has(c.slot-1))+b('S12',.4,e==='wind'&&t.windMark)+b('S13',.15,e==='earth')+b('D02',.25,e==='water'&&t.burn)+b('D03',.3,e==='fire'&&t.burn>=2)+b('D04',.25,e==='lightning'&&t.burn)+b('D06',.25,e==='wind'&&t.burn)+b('D08',.25,e==='earth'&&t.burn)+b('D10',.25,e==='water'&&t.wet)+b('D12',.25,e==='wind'&&t.wet)+b('D14',.2,e==='earth'&&t.playerShield>0)+b('D16',.3,e==='lightning'&&t.windMark)+b('D20',.2,e==='wind'&&t.playerShield>0)+b('T01',.3,e==='fire'&&t.wet)+b('T04',.25,e==='lightning'&&(t.burn||t.windMark))+b('T07',.3,e==='wind'&&t.wet)+b('T10',.25,e==='lightning'&&d.trigger==='timer')+b('Q03',.15,d.trigger==='shot')+b('Q04',.4,e==='lightning'&&d.trigger==='timer'&&!c.success.some(x=>BULLET_MAP[x.typeId].element==='lightning'))+b('A03',.2,d.trigger==='shot');
   }  hit(t,snap,d){
     const c=this.c,e=d.element;
+    if(e==='fire'&&snap.burn>0&&t.hp>0&&c.has('S01')&&c.once('S01',3))c.burn(t,1);
     if(e==='water'){
-      if(c.has('S04')&&c.once('S04'))c.shield(3);
+      if(snap.wet>0&&c.has('S04')&&c.once('S04',2))c.shield(3);
       if(c.has('T02')&&c.once('T02',2))c.heal(1);
       if(c.has('Q01')&&d.trigger==='shot'&&c.once('Q01'))c.resource('refresh',2);
     }  if(c.has('D01')&&(e==='fire'||e==='water')){
@@ -93,6 +96,7 @@ export class CombatBonds {
   }  complete(b){
     const c=this.c,d=BULLET_MAP[b.typeId];
     if(c.resonant.has(b.uid))return;
+    if(d.element==='lightning')for(const uid of c.hitTargets)this.chargedTargets.add(uid);
     if(d.element==='lightning'&&c.nativeCount)this.grow('E04');
     if(['W01','W03','W05','W06'].includes(b.typeId)&&new Set(c.hitTargets).size<c.hitTargets.length)this.grow('E06');
     if(d.trigger!=='shot'||!c.nativeCount)return;

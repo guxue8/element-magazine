@@ -12,15 +12,16 @@ async function harness(run,meta=createMeta()){
   const values=new Map(),listeners={},timers=new Set();
   const storage={getItem:k=>values.get(k)??null,setItem:(k,v)=>values.set(k,String(v))};
   assert.equal(saveGame(run,meta,storage),null);
-  const app={innerHTML:'',addEventListener:(kind,fn)=>listeners[kind]=fn};
+  const app={innerHTML:'',addEventListener:(kind,fn)=>listeners[kind]=fn},scroller={scrollTop:0};
   const toast={textContent:'',classList:{add(){},remove(){}}};
   const prior={document:globalThis.document,localStorage:globalThis.localStorage,setTimeout:globalThis.setTimeout};
-  globalThis.document={querySelector:s=>s==='#app'?app:s==='#toast'?toast:null,addEventListener(){}};
+  globalThis.document={querySelector:s=>s==='#app'?app:s==='#toast'?toast:s==='.modal-content'&&app.innerHTML.includes('class="modal-content"')?scroller:null,addEventListener(){}};
   globalThis.localStorage=storage;
   globalThis.setTimeout=(fn,ms)=>{const handle=prior.setTimeout(fn,ms);timers.add(handle);return handle;};
   await import(`../src/app.js?ui-review=${++importNumber}`);
   return {
     html:()=>app.innerHTML,
+    scroll:y=>{scroller.scrollTop=y;},scrollTop:()=>scroller.scrollTop,
     saved:()=>JSON.parse(storage.getItem(GAME_STORAGE_KEY)).run,
     async reload(){await import(`../src/app.js?ui-review=${++importNumber}`);},
     click(dataset){
@@ -48,12 +49,55 @@ test('bond details lead with a summary and keep complete rules collapsed',async(
   const h=await harness(newRun(130));
   try{
     h.click({ui:'codex'});h.click({tab:'bonds'});h.click({bond:'D09'});
-    assert.ok(h.html().includes(escapeHTML(bondSummary('D09'))));
+    assert.ok(h.html().replace(/<[^>]*>/g,'').includes(escapeHTML(bondSummary('D09'))));
     const rules=h.html().match(/<details class="rule-details"[^>]*>([^]*?)<\/details>/);
     assert.ok(rules,'precise rules remain accessible');
     assert.doesNotMatch(rules[0],/<details[^>]*\sopen/);
     assert.ok(rules[1].includes(escapeHTML(BOND_MAP.D09.description)));
   }finally{h.close();}
+});
+
+test('opening a card starts at its title and returning restores the catalog scroll',async()=>{
+ const h=await harness(newRun(150));
+ try{
+  h.click({ui:'codex'});h.scroll(180);
+  h.click({type:'F01'});assert.equal(h.scrollTop(),0);
+  h.scroll(120);h.click({ui:'back'});assert.equal(h.scrollTop(),180);
+ }finally{h.close();}
+});
+
+test('a new expedition offers a random element ban before replacing the current save',async()=>{
+ const run=newRun(155),h=await harness(run);
+ try{
+  h.click({ui:'new'});h.click({ui:'newConfirmed'});
+  assert.match(h.html(),/aria-label="本局元素封印"/);
+  assert.equal(h.saved().id,run.id);
+  const banned=h.html().match(/data-ban-element="([a-z]+)"/)[1];
+  h.click({ui:'acceptElementBan'});
+  assert.equal(h.saved().bannedElement,banned);
+  assert.ok(h.saved().inventory.every(x=>BULLET_MAP[x.typeId].element!==banned));
+ }finally{h.close();}
+});
+
+test('the opening ban can be skipped to retain all five elements',async()=>{
+ const h=await harness(null);
+ try{
+  h.click({ui:'new'});h.click({ui:'skipElementBan'});
+  assert.equal(h.saved().bannedElement,null);
+  assert.equal(h.saved().inventory.length,4);
+ }finally{h.close();}
+});
+
+test('enemy health carries only the current status icons and no stack numbers',async()=>{
+ const run=newRun(156);Object.assign(run.enemies[0],{burn:3,burnTurns:2,wet:2,shield:5,slow:true});
+ const h=await harness(run);
+ try{
+  h.click({ui:'continue'});
+  const vitals=h.html().match(/<span class="creature-vitals">([^]*?)<\/button>/)[1];
+  assert.match(vitals,/enemy-status status-burn/);assert.match(vitals,/enemy-status status-wet/);
+  assert.match(vitals,/enemy-status status-slow/);assert.match(vitals,/enemy-status status-shield/);
+  assert.doesNotMatch(vitals,/<b>\d+<\/b>/);
+ }finally{h.close();}
 });
 
 test('pixel battlefield and enemy intel consistently show one horizontal front',async()=>{
@@ -75,7 +119,7 @@ test('magazine icons reveal full bullet information only after clicking',async()
     assert.doesNotMatch(h.html(),/role="dialog"/);
     const uid=run.magazine[0],b=BULLET_MAP[run.inventory.find(i=>i.uid===uid).typeId];
     const tile=h.html().match(/<button class="bullet-slot[^]*?<\/button>/)[0];
-    assert.match(tile,/bullet-glyph/);assert.doesNotMatch(tile,new RegExp(`>${b.name}<`));
+    assert.match(tile,/pixel-bullet/);assert.doesNotMatch(tile,new RegExp(`>${b.name}<`));
     h.click({slot:'0'});
     assert.match(h.html(),/aria-label="子弹详情"/);
     assert.ok(h.html().includes(escapeHTML(b.description)));
@@ -92,6 +136,39 @@ test('swap icon selects two slots and persists exactly one charge payment',async
     h.click({ui:'continue'});h.click({mode:'swap'});h.click({slot:'0'});h.click({slot:'8'});
     const saved=h.saved();assert.equal(saved.magazine[8],run.magazine[0]);assert.equal(saved.magazine[0],null);
     assert.equal(saved.resources.swap,run.resources.swap-10);
+  }finally{h.close();}
+});
+
+test('talent free swap stays reachable with zero charge and shows the free indicator',async()=>{
+  const meta=createMeta();meta.talents={swap:1,freeSwap:1};
+  const run=prepare(newRun(902,meta));run.resources.swap=0;
+  const h=await harness(run,meta);
+  try{
+    h.click({ui:'continue'});assert.match(h.html(),/free-charge/);
+    h.click({mode:'swap'});h.click({slot:'0'});h.click({slot:'8'});
+    assert.equal(h.saved().magazine[8],run.magazine[0]);
+    assert.equal(h.saved().resources.swap,0);assert.equal(h.saved().talentState.freeSwapRound,run.round);
+  }finally{h.close();}
+});
+
+test('talent free refresh is available in an offer with zero refresh resource',async()=>{
+  const meta=createMeta();meta.talents={supply:1,refresh:1,freeRefresh:1};
+  const run=act(newRun(903,meta),{type:'draft',cost:100}).run;run.resources.refresh=0;
+  const h=await harness(run,meta);
+  try{
+    h.click({ui:'continue'});h.click({main:'true'});assert.match(h.html(),/本次免费/);
+    h.click({action:'refresh'});assert.equal(h.saved().resources.refresh,0);
+    assert.equal(h.saved().talentState.freeRefreshUsed,true);
+  }finally{h.close();}
+});
+
+test('talent tree shows branches, prerequisites and inspectable locked nodes',async()=>{
+  const h=await harness(newRun(904));
+  try{
+    h.click({ui:'talents'});assert.match(h.html(),/talent-tree/);
+    for(const name of ['守线','补给','编排'])assert.ok(h.html().includes(name));
+    h.click({talentInfo:'freeSwap'});assert.match(h.html(),/每夹[^<]*免费/);
+    assert.match(h.html(),/需要先解锁/);
   }finally{h.close();}
 });
 

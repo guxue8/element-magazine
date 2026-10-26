@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="240" viewBox="0 0 960 240" preserveAspectRatio="none" shape-rendering="crispEdges">
+  <!-- Original pixel scenery. A single composition, never a repeating tile. -->
+  <defs>
+    <g id="grass">
+      <path fill="#29463d" d="M0 13h3V7h3v4h3V3h3v8h3V6h3v7h4v3H0z"/>
+      <path fill="#41604a" d="M3 8h2v6H3zm7-4h2v9h-2zm6 3h2v7h-2z"/>
+    </g>
+    <g id="fern">
+      <path fill="#1c3b32" d="M18 7h4v29h-4zM8 3h9v4H8zM4 7h14v4H4zM1 13h17v5H1zM5 21h13v5H5zM9 28h10v4H9zM23 1h7v4h-7zM23 6h13v5H23zM22 13h18v5H22zM23 21h13v5H23zM22 28h9v4h-9z"/>
+      <path fill="#355343" d="M18 6h2v29h-2zM7 7h9v2H7zm-3 7h12v2H4zm5 8h8v2H9zM24 7h9v2h-9zm0 7h13v2H24zm-1 8h10v2H23z"/>
+    </g>
+    <g id="pebbles">
+      <path fill="#0d2027" d="M0 7h21v5H0zm25 6h11v4H25z"/>
+      <path fill="#2b3c3c" d="M2 5h4V2h9v3h4v5H2zm25 5h6v2h2v3h-8z"/>
+      <path fill="#43534b" d="M6 2h8v2H6zm-3 4h6v2H3zm24 4h5v2h-5z"/>
+    </g>
+    <g id="moss">
+      <path fill="#253e33" d="M0 6h7V3h14V0h17v3h15v4h9v5H46v3H15v-2H0z"/>
+      <path fill="#35523d" d="M5 6h13V4h18v3h11v3H29v2H10v-2H5z"/>
+      <path fill="#486345" d="M16 5h12v2H16zm21 3h7v2h-7z"/>
+    </g>
+  </defs>
+
+  <!-- Cool earth: quiet in the center, rougher toward the scene edges. -->
+  <path fill="#14282d" d="M0 0h960v240H0z"/>
+  <path fill="#1d3233" d="M0 4h960v24h-48v5h-64v-3h-75v7h-68v-5h-91v4h-93v-5h-67v4h-86v-6h-75v4h-91v-6H98v5H41v-7H0z"/>
+  <path fill="#182c2e" d="M0 30h73v9h77v-3h45v9h80v-5h70v7h96v-7h72v7h97v-6h72v7h96v-9h63v7h59v-7h60v201H0z"/>
+  <path fill="#11252c" d="M0 119h38v-8h49v11h76v-6h64v14h84v-8h79v15h118v-5h89v-10h69v8h76v-11h71v6h61v-8h86v123H0z"/>
+  <path fill="#10232a" d="M0 205h51v-11h71v10h60v-8h77v15h89v-4h78v12h105v-9h87v-6h71v8h78v-12h69v6h66v-11h58v45H0z"/>
+
+  <!-- Broken grass lip follows the existing combat ground line. -->
+  <path fill="#334b40" d="M0 0h960v4h-25V3h-32v3h-43V4h-66v2h-35V3h-61v3h-49V4h-74v1h-53V3h-61v3h-51V4h-81v2h-68V3h-46v3h-73V4H99v2H54V3H0z"/>
+  <path fill="#718263" d="M0 0h37v2H0zm54 0h32v1H54zm44 1h49v2H98zm78-1h31v2h-31zm47 1h36v1h-36zm60-1h73v1h-73zm112 1h41v1h-41zm64-1h62v2h-62zm90 0h24v2h-24zm58 1h72v1h-72zm98-1h42v2h-42zm62 0h55v1h-55zm97 1h37v2h-37zm58-1h37v2h-37z"/>
+  <path fill="#3f5947" d="M17 5h19v2H17zm79 3h15v2H96zm78-3h27v2h-27zm128 1h21v2h-21zm243 1h29v2h-29zm90-2h19v2h-19zm169 2h25v2h-25zm91-1h38v2h-38z"/>
+
+  <!-- Exposed soil, winding roots and old cracks, without a regular grid. -->
+  <path fill="#223632" d="M0 64h22v-5h36v4h20v9H63v5H21v-4H0zm193-4h34v-3h25v8h-19v5h-30v-3h-10zm499 7h22v-5h39v5h21v8h-40v-3h-42zm192-8h31v-4h45v17h-29v5h-34v-5h-13z"/>
+  <path fill="#1a302c" d="M5 155h30v-7h50v5h24v8H81v6H31v-4H5zm171 23h28v-5h31v5h18v9h-26v4h-37v-5h-14zm500-11h35v-5h35v7h30v9h-48v5h-26v-7h-26zm194 14h29v-6h61v18h-32v5h-45v-8h-13z"/>
+  <path fill="#0e2228" d="M53 40h5v15h13v5h14v4H69v-5H53zm130 59h19v4h15v12h17v4h-21v-12h-15v-4h-15zm548-54h5v12h-13v6h-16v-4h12v-6h12zm95 103h14v-11h17v-5h15v4h-11v6h-17v12h-18z"/>
+  <path fill="#293b34" d="M0 109h19v-5h15v-8h20v-8h4v11H38v8H23v5H0zm960-15h-22v9h-13v12h-19v5h-21v4h-4v-8h21v-5h19v-12h13v-9h26z"/>
+
+  <!-- Left: a low, broken boundary wall with one weathered pillar. -->
+  <path fill="#0b1e26" d="M19 111h176v9H19zm62-35h82v41H81z"/>
+  <path fill="#283c3c" d="M25 80h41V68h39V45h13V31h23v8h12v23h24v20h16v28H25z"/>
+  <path fill="#3b4c45" d="M25 80h41v4H25zm41-12h38v5H66zm39-23h13v-7h22v5h10v4h-35v17h-10zm48 17h22v5h-22zm24 20h16v5h-16z"/>
+  <path fill="#1a3033" d="M65 84h4v26h-4zm39-15h4v41h-4zm45-20h4v61h-4zm-41 36h41v4h-41zm45 10h40v4h-40zM77 68h4v7h-4zm49-20h4v14h-7v8h-4V58h7z"/>
+  <path fill="#4c5b4c" d="M118 31h21v3h-21zm-8 18h7v11h-7zm46 16h15v2h-15zM29 84h27v2H29z"/>
+  <path fill="#3c5140" d="M25 79h17v5h-8v8h-5v-5h-4zm42-12h26v4h-12v6h-8v-3h-6zm50-34h13v5h-7v7h-6zm36 28h15v5h-7v9h-4v-6h-4z"/>
+  <use href="#moss" x="52" y="107"/>
+  <use href="#moss" x="127" y="111" transform="translate(40 28) scale(.8)"/>
+  <use href="#fern" x="8" y="76"/>
+  <use href="#grass" x="171" y="99"/>
+  <use href="#pebbles" x="199" y="105"/>
+
+  <!-- Right: fallen masonry, a root-covered pedestal and a tiny old lantern. -->
+  <path fill="#0b1e26" d="M748 123h197v8H748zm64-18h61v23h-61z"/>
+  <path fill="#2c3d3b" d="M752 103h39V85h31v-8h13v-8h29v9h12v26h29V94h24v16h15v14H752z"/>
+  <path fill="#425047" d="M753 103h36v4h-36zm39-18h29v4h-29zm31-8h13v-5h27v4h10v5h-50zm54 27h27v4h-27zm30-10h22v4h-22zm23 16h13v3h-13z"/>
+  <path fill="#1a2e31" d="M788 106h4v18h-4zm32-16h4v34h-4zm27-9h4v15h-7v10h-4V92h7zm26 0h4v43h-4zm30 27h4v16h-4zM824 111h49v4h-49z"/>
+  <path fill="#3c5340" d="M790 85h26v5h-13v7h-5v-7h-8zm36-9h20v5h-8v8h-6v-6h-6zm79 18h15v5h-7v7h-5v-7h-3z"/>
+  <path fill="#142b2d" d="M866 66h5v17h8v15h11v14h-5v-11h-11V86h-8z"/>
+  <use href="#fern" x="914" y="88"/>
+  <use href="#grass" x="736" y="110"/>
+  <use href="#moss" x="791" y="122"/>
+  <use href="#pebbles" x="710" y="132"/>
+  <path fill="#101f26" d="M895 68h17v4h-3v25h3v4h-17v-4h3V72h-3z"/>
+  <path fill="#4c4f3d" d="M898 68h11v3h-11zm2 5h2v21h-2zm7 0h2v21h-2zm-7 22h9v3h-9z"/>
+  <path fill="#776344" d="M902 80h5v11h-5z"/>
+  <path fill="#b0935b" d="M903 83h3v6h-3z"/>
+
+  <!-- Small natural details frame the interface, leaving x=310..650 quiet. -->
+  <use href="#grass" x="79" y="18"/>
+  <use href="#grass" x="242" y="30" transform="translate(47 4) scale(.8)"/>
+  <use href="#grass" x="672" y="16"/>
+  <use href="#grass" x="884" y="26"/>
+  <use href="#pebbles" x="133" y="28"/>
+  <use href="#pebbles" x="762" y="32"/>
+  <use href="#moss" x="23" y="41" transform="translate(8 10) scale(.7)"/>
+  <use href="#moss" x="825" y="40" transform="translate(247 12) scale(.7)"/>
+  <use href="#fern" x="53" y="174"/>
+  <use href="#fern" x="890" y="181"/>
+  <use href="#grass" x="251" y="159"/>
+  <use href="#grass" x="685" y="192"/>
+  <use href="#pebbles" x="116" y="190"/>
+  <use href="#pebbles" x="221" y="209"/>
+  <use href="#pebbles" x="795" y="199"/>
+  <use href="#moss" x="4" y="221"/>
+  <use href="#moss" x="866" y="230"/>
+  <path fill="#2b3b37" d="M290 74h9v2h-9zm354 13h8v2h-8zm-321 99h7v2h-7zm313 15h9v2h-9zm-339 23h5v2h-5zm365-5h8v2h-8z"/>
+  <path fill="#233730" d="M8 20h4v3H8zm49 27h6v2h-6zm138-28h4v2h-4zm78 88h6v3h-6zm-91 42h5v2h-5zm-92 14h7v2h-7zm151 37h4v3h-4zm462-77h6v3h-6zm31-72h4v2h-4zm47-38h7v2h-7zm135 23h6v3h-6zm31 96h5v2h-5zm-102 40h4v3h-4zm57 25h6v2h-6z"/>
+</svg>

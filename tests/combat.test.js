@@ -204,11 +204,13 @@ test('isolated lightning uses pre-hit neighborhood without counting itself',()=>
   assert.equal(a.enemies[0].hp,86);
 });
 test('damage percentages round once over a native conditional segment',()=>{
-  const r=fixture(['W03','W01','W01']);
+  // R10 spends 3 shield: (8 + 9) * 1.15 rounds to 20, not 9 + 10.
+  const r=fixture(['R10','R15','R15']);
   r.magazine[1]=r.magazine[2]=null;
-  r.bonds=['S10'];
+  r.shield=3;
+  r.bonds=['S13'];
   const a=resolveRound(r).state;
-  assert.equal(a.enemies[0].hp,85);
+  assert.equal(a.enemies[0].hp,80);
 });
 test('returning chain is not a native multishot evolution growth event',()=>{
   const r=fixture(['L05','W03','W01','W01'],[{
@@ -268,10 +270,12 @@ test('natural expiration runs after every summon action; replacement never explo
   assert.equal(resolveRound(r).state.enemies[0].hp,100);
 });
 test('consumed element counts remain locked until round end',()=>{
-  const r=fixture(['F15','F15','C01']);
+  const r=fixture(['F15','F15','C01'],[{burn:1,burnTurns:2}]);
   r.bonds=['S01'];
   const a=resolveRound(r).state;
-  assert.equal(a.enemies[0].hp,66);
+  // The consumed fire scroll still satisfies S01 for both later fire shots.
+  assert.equal(a.enemies[0].burn,3);
+  assert.equal(a.enemies[0].hp,64);
   assert.equal(a.inventory.length,2);
 });
 test('burn-consuming conditional damage is native, amplified, and grants native kill listeners',()=>{
@@ -279,7 +283,9 @@ test('burn-consuming conditional damage is native, amplified, and grants native 
     hp:27,maxHp:27,burn:2,burnTurns:2
   }]);
   r.magazine[1]=r.magazine[2]=null;
-  r.bonds=['S01'];
+  // S03 now owns the conditional fire multiplier; S01 grows existing burn.
+  r.bonds=['S03'];
+  for(let i=0;i<7;i++)r.inventory.push({uid:`fire-filler${i}`,typeId:'F15',counter:0,mark:null,temp:{}});
   const a=resolveRound(r).state;
   assert.equal(a.resources.remove,3);
   assert.equal(a.stats.kills,1);

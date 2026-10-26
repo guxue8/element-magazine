@@ -78,7 +78,7 @@ const GROWTH = {
 
 const valid = id => typeof id === 'string' && Object.hasOwn(BOND_MAP, id);
 export function bondSummary(id) {
-  return valid(id) ? (SUMMARIES[id] || BOND_MAP[id].description) : '暂无羁绊说明';
+  return valid(id) ? (id.startsWith('S') ? BOND_MAP[id].description : SUMMARIES[id] || BOND_MAP[id].description) : '暂无羁绊说明';
 }
 export function bondGrowth(id) {
   return valid(id) && GROWTH[id] ? GROWTH[id].map((description, index) => ({ progress: [2, 5, 9][index], description })) : [];

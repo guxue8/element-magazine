@@ -112,11 +112,26 @@ export class Combat {
     if(!this.replay&&t?.hp>0&&n>0){
       t.burn=Math.min(5,(t.burn||0)+n);
       t.burnTurns=2;
+      // Effects run after the hit snapshot. Attach only their new status to that
+      // latest frame, preserving its damage, health, positions and playback time.
+      const f=this.frames.at(-1);
+      for(const snapshot of [f?.board?.enemies?.find(e=>e.uid===t.uid),f?.target])if(snapshot?.uid===t.uid){
+        snapshot.burn=t.burn;
+        snapshot.burnTurns=t.burnTurns;
+      }
     }
   } wet(t){
-    if(!this.replay&&t?.hp>0)t.wet=2;
+    if(!this.replay&&t?.hp>0){
+      t.wet=2;
+      const f=this.frames.at(-1);
+      for(const snapshot of [f?.board?.enemies?.find(e=>e.uid===t.uid),f?.target])if(snapshot?.uid===t.uid)snapshot.wet=t.wet;
+    }
   } mark(t){
-    if(!this.replay&&t?.hp>0)t.windMark=this.current?.uid;
+    if(!this.replay&&t?.hp>0){
+      t.windMark=this.current?.uid;
+      const f=this.frames.at(-1);
+      for(const snapshot of [f?.board?.enemies?.find(e=>e.uid===t.uid),f?.target])if(snapshot?.uid===t.uid)snapshot.windMark=t.windMark;
+    }
   }  control(t,kind,origin=true){
     if(this.replay||!t||t.hp<=0||t.controlledAt>=this.s.round-1)return false;
     const boss=t.typeId.startsWith('boss');
@@ -154,7 +169,9 @@ export class Combat {
         this.s.hp=Math.min(this.s.maxHp,this.s.hp+(this.s.traits.repair||0)*3);
       }
     }this.frame(opts.type||'shot',`${opts.label||this.currentDef?.name||'攻击'}：${amount} ${ELEMENTS[element]?.name||element}伤害${killed?'，击杀':''}`,{
-      slot:this.slot>=0?this.slot:undefined,targetId:t.uid,element,amount
+      slot:this.slot>=0?this.slot:undefined,targetId:t.uid,element,amount,
+      target:clone(t),killed,absorbed,hpDamage:Math.min(before,amount-absorbed),
+      sourceId:this.currentDef?.id||null,secondary:Boolean(opts.secondary||opts.burn||opts.jump||this.replay)
     });
     return {
       killed,amount,overflow:Math.max(0,amount-absorbed-before)
@@ -221,7 +238,7 @@ export class Combat {
     if(this.replay)return {
       killed:false,amount:0,overflow:0
     };
-    return this.damage(t,n,e,opts);
+    return this.damage(t,n,e,{...opts,secondary:true});
   }  removeShield(t,n){
     if(this.replay||!t)return 0;
     const removed=Math.min(t.shield||0,n);
@@ -363,7 +380,6 @@ export class Combat {
       }
     }this.slot=-1;
     for(const e of this.s.enemies)delete e.windMark;
-    if(this.has('S13'))this.shield(4);
     if(this.has('A02'))this.shield(6);
     this.current=null;
     this.currentDef=null;
@@ -428,7 +444,7 @@ export class Combat {
           for(const a of allies().slice(0,2))a.boost=2;
           this.frame('enemy','雷鸣祭司强化友军');
         }else{
-          const damage=(e.typeId==='boss3'&&e.hp<=e.maxHp/2?14:def.damage)+(e.boost||0);
+          const damage=(e.typeId==='boss3'&&e.hp<=e.maxHp/2?14:def.damage)+(e.boost||0)+(e.difficultyDamage||0);
           e.boost=0;
           const absorbed=Math.min(this.s.shield,damage);
           this.s.shield-=absorbed;

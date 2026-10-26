@@ -2,8 +2,11 @@ import {BULLETS,BULLET_MAP,BONDS,BOND_MAP,ENCHANTMENTS,ENCHANTMENT_MAP,ENEMIES,W
 import {random,shuffle,sample} from './random.js';
 import {resolveRound} from './combat.js';
 import {RESOURCE_COSTS,normalizeResources,addResource} from './resources.js';
+import {canBuyTalent,createTalentState,ensureTalentState,getSwapCost,getRefreshCost} from './talent-tree.js';
+import {getUnlockedDifficulty,selectDifficulty,getWaveIds,getEnemyPreview} from './difficulty.js';
+import {ELEMENT_KEYS,validElementBan,allowedElements,bulletAllowed,bondAllowed,enchantmentAllowed} from './element-pool.js';
+export {rollElementBan} from './element-pool.js';
 
-const ELEMENT_KEYS=['fire','water','lightning','wind','earth'];
 const BOND_ROUNDS=[2,4,6,9,12,15,17];
 const EVENT_ROUNDS=[4,10,16];
 const ODDS={100:[65,28,6,1,0],200:[20,43,29,7,1],300:[0,15,45,32,8]};
@@ -25,27 +28,27 @@ function bondGap(run,bond){
   if(bond.targetId&&!run.inventory.some(x=>x.typeId===bond.targetId))gap++;
   return gap;
 }
-export function getActiveBonds(run){return run.bonds.filter(id=>BOND_MAP[id]&&bondGap(run,BOND_MAP[id])===0);}
-export function previewWave(batch){return (WAVES[batch-1]||[]).map(id=>ENEMIES[id]);}
+export function getActiveBonds(run){return run.bonds.filter(id=>bondAllowed(run,BOND_MAP[id])&&bondGap(run,BOND_MAP[id])===0);}
+export function previewWave(batch,difficulty=0,encounterVersion=2){return getWaveIds(batch,encounterVersion).map(id=>getEnemyPreview(id,batch,difficulty,encounterVersion));}
 export function getIntent(enemy,run){
   const def=ENEMIES[enemy.typeId];
   if(!def)return '未知敌人';
   if(enemy.position<=def.range){
     if(enemy.typeId==='healer')return '治疗同伴';
     if(enemy.typeId==='boss2'&&(enemy.attackCount+1)%2===0)return '鼓舞同伴 / 攻击';
-    let damage=def.damage+(enemy.boost||0);
-    if(enemy.typeId==='boss3'&&enemy.hp<=enemy.maxHp/2)damage=14+(enemy.boost||0);
+    let damage=def.damage+(enemy.boost||0)+(enemy.difficultyDamage||0);
+    if(enemy.typeId==='boss3'&&enemy.hp<=enemy.maxHp/2)damage=14+(enemy.boost||0)+(enemy.difficultyDamage||0);
     return `攻击 ${damage}`;
   }
   const move=enemy.slow?Math.max(enemy.typeId.startsWith('boss')?1:0,def.move-1):def.move;
   return `前进 ${move} 格`;
 }
 
-export function createMeta(){return {version:1,points:0,earned:0,talents:{},settledRuns:[],wins:0,bestBatch:0};}
+export function createMeta(){return {version:1,points:0,earned:0,talents:{},settledRuns:[],wins:0,bestBatch:0,unlockedDifficulty:0};}
 export function buyTalent(meta,id){
   const def=TALENTS.find(x=>x.id===id),level=meta.talents[id]||0;
   const price=def?.costs[level];
-  if(price===undefined||meta.points<price)return meta;
+  if(!canBuyTalent(meta,id))return meta;
   const out=clone(meta);out.points-=price;out.talents[id]=level+1;return out;
 }
 export function resetTalents(meta){
@@ -60,7 +63,11 @@ export function applyRunReward(meta,run){
   const points=Math.floor(Math.min(run.completedBatches,18)/3)+run.stats.bossKills+(first?2:0);
   out.points+=points;out.earned+=points;
   out.bestBatch=Math.max(out.bestBatch,run.completedBatches);
-  if(run.outcome==='victory')out.wins++;
+  if(run.outcome==='victory'){
+    const unlocked=getUnlockedDifficulty(meta);
+    out.wins++;
+    out.unlockedDifficulty=(run.difficulty||0)===unlocked?Math.min(10,unlocked+1):unlocked;
+  }else out.unlockedDifficulty=getUnlockedDifficulty(meta);
   out.settledRuns.push(run.id);
   // Keep all settlement ids: evicting them would let an old save claim twice.
   return out;
@@ -69,11 +76,12 @@ export function applyRunReward(meta,run){
 function addBullet(run,id){
   const def=BULLET_MAP[id];
   requireRule(Boolean(def),'未知子弹');
+  requireRule(bulletAllowed(run,def),'本局已禁用该元素');
   const instance={uid:`b${run.nextUid++}`,typeId:id,counter:def.counter||0,mark:null,temp:{}};
   run.inventory.push(instance);return instance;
 }
 function starter(run){
-  const white=BULLETS.filter(x=>x.rarity===0&&x.trigger!=='consumable');
+  const white=BULLETS.filter(x=>bulletAllowed(run,x)&&x.rarity===0&&x.trigger!=='consumable');
   // Full-group rejection preserves equal probability of legal combinations.
   for(;;){
     const group=sample(run,white,4);
@@ -84,20 +92,21 @@ function starter(run){
   }
 }
 function spawnBatch(run){
-  const scale=run.batch<=6?1:run.batch<=12?1.6:2.4;
-  for(const typeId of WAVES[run.batch-1]||[]){
-    const def=ENEMIES[typeId],boss=typeId.startsWith('boss');
-    const hp=boss?def.hp:Math.ceil(def.hp*scale);
+  for(const preview of previewWave(run.batch,run.difficulty||0,run.encounterVersion||1)){
+    const typeId=preview.id,boss=typeId.startsWith('boss');
+    const hp=preview.hp;
     const position=typeId==='boss3'?4:boss?5:6;
-    run.enemies.push({uid:`e${run.nextUid++}`,typeId,hp,maxHp:hp,heal:typeId==='healer'?(run.batch<=6?6:run.batch<=12?9:12):0,shield:0,lane:(random(run),0),position,burn:0,burnTurns:0,wet:0,slow:false,controlledAt:-2,attackCount:0,boost:0});
+    run.enemies.push({uid:`e${run.nextUid++}`,typeId,hp,maxHp:hp,heal:typeId==='healer'?(run.batch<=6?6:run.batch<=12?9:12):0,shield:preview.shield,difficultyDamage:preview.difficultyDamage,lane:(random(run),0),position,burn:0,burnTurns:0,wet:0,slow:false,controlledAt:-2,attackCount:0,boost:0});
   }
 }
-export function newRun(seed=Date.now(),meta=createMeta()){
+export function newRun(seed=Date.now(),meta=createMeta(),difficulty=0,bannedElement=null){
+  requireRule(validElementBan(bannedElement),'禁用元素无效');
   const traits=clone(meta.talents||{}),maxHp=100+5*(traits.body||0);
-  const run={version:1,id:`run-${seed}-${Date.now()}`,seed:Number(seed)>>>0,rng:(Number(seed)>>>0)||1,phase:'supply',round:1,batch:1,completedBatches:0,isCleanup:false,
+  const run={version:1,id:`run-${seed}-${Date.now()}`,seed:Number(seed)>>>0,rng:(Number(seed)>>>0)||1,difficulty:selectDifficulty(meta,difficulty),bannedElement,encounterVersion:2,phase:'supply',round:1,batch:1,completedBatches:0,isCleanup:false,
     hp:maxHp,maxHp,shield:0,resources:{draft:100+25*(traits.supply||0),refresh:10+10*(traits.refresh||0),remove:30+30*(traits.remove||0),swap:20+5*(traits.swap||0)},
     inventory:[],magazine:Array(12).fill(null),rest:null,slots:Array.from({length:12},()=>({engraving:null,charge:0,recycleRound:0})),enemies:[],summons:[],bonds:[],evolutions:{},offers:null,pending:[],selectedTarget:null,logs:[],stats:{kills:0,bossKills:0,damage:0,turns:0},defeatedBosses:[],traits,handled:[],eventOrder:[],outcome:null,reward:0,nextUid:1,draftCount:0,startRerolled:false,emergencyUsed:false};
   run.resources=normalizeResources(run.resources);
+  run.talentState=createTalentState();
   starter(run);
   run.eventOrder=shuffle(run,EVENTS.map(x=>x.id));
   // Retain RNG consumption and save fields; all enemies share one ground line.
@@ -113,23 +122,24 @@ function rarity(run,cost){
 }
 function primaryElement(run){
   const counts=getCounts(run),max=Math.max(...Object.values(counts));
-  return pick(run,ELEMENT_KEYS.filter(e=>counts[e]===max));
+  return pick(run,allowedElements(run).filter(e=>counts[e]===max));
 }
 function draftCards(run,cost,focus){
   const tiers=Array.from({length:3},()=>rarity(run,cost)),used=new Set();
   const selected=[];
-  let elems=run.batch<=3?sample(run,ELEMENT_KEYS,3):[];
+  const elements=allowedElements(run);
+  let elems=run.batch<=3?sample(run,elements,3):[];
   if(focus){
-    elems=[focus,...sample(run,ELEMENT_KEYS.filter(e=>e!==focus),2)];
+    elems=[focus,...sample(run,elements.filter(e=>e!==focus),2)];
   }
   const primary=run.batch>3?primaryElement(run):null;
   for(let i=0;i<3;i++){
-    let pool=BULLETS.filter(x=>x.trigger!=='consumable'&&x.rarity===tiers[i]&&!used.has(x.id));
+    let pool=BULLETS.filter(x=>bulletAllowed(run,x)&&x.trigger!=='consumable'&&x.rarity===tiers[i]&&!used.has(x.id));
     const all=pool;
     if(run.batch<=3||focus){pool=pool.filter(x=>x.element===elems[i]);}
     else if(i===0){pool=pool.filter(x=>x.element===primary);}
     else if(i===1){
-      const inactive=run.bonds.map(id=>BOND_MAP[id]).filter(x=>bondGap(run,x)>0).sort((a,b)=>bondGap(run,a)-bondGap(run,b));
+      const inactive=run.bonds.map(id=>BOND_MAP[id]).filter(x=>bondAllowed(run,x)&&bondGap(run,x)>0).sort((a,b)=>bondGap(run,a)-bondGap(run,b));
       if(inactive.length){
         const counts=getCounts(run),requirements=Object.entries(inactive[0].requirements).map(([e,n])=>({e,gap:n-counts[e]})).filter(x=>x.gap>0).sort((a,b)=>b.gap-a.gap);
         if(requirements.length)pool=pool.filter(x=>x.element===requirements[0].e);
@@ -145,10 +155,10 @@ function draftCards(run,cost,focus){
   return selected;
 }
 function bondCards(run,core=false){
-  const pool=BONDS.filter(x=>x.grade===(core?'core':'normal')&&!run.bonds.includes(x.id));
+  const pool=BONDS.filter(x=>bondAllowed(run,x)&&x.grade===(core?'core':'normal')&&!run.bonds.includes(x.id));
   const chosen=[];
   if(!core&&[4,9,15].includes(run.batch)){
-    const evo=pick(run,BONDS.filter(x=>x.grade==='evolution'&&!run.bonds.includes(x.id)&&bondGap(run,x)===0));
+    const evo=pick(run,BONDS.filter(x=>bondAllowed(run,x)&&x.grade==='evolution'&&!run.bonds.includes(x.id)&&bondGap(run,x)===0));
     if(evo)chosen.push(evo.id);
   }
   function take(list){const found=pick(run,list.filter(x=>!chosen.includes(x.id)));if(found)chosen.push(found.id);}
@@ -165,16 +175,17 @@ function bondCards(run,core=false){
   while(chosen.length<3){const prior=chosen.length;take(pool);if(chosen.length===prior)break;}
   return chosen;
 }
-function scrollCards(run,element){return sample(run,BULLETS.filter(x=>x.trigger==='consumable'&&(!element||x.element===element)),3).map(x=>x.id);}
+function scrollCards(run,element){return sample(run,BULLETS.filter(x=>bulletAllowed(run,x)&&x.trigger==='consumable'&&(!element||x.element===element)),3).map(x=>x.id);}
 function eventOffer(run,descriptor){
   if(descriptor.eventId==='anvil'){
-    const first=pick(run,ENCHANTMENTS.filter(x=>x.kind==='mark'));
-    const second=pick(run,ENCHANTMENTS.filter(x=>x.kind==='slot'));
-    const third=pick(run,ENCHANTMENTS.filter(x=>x.id!==first.id&&x.id!==second.id));
+    const pool=ENCHANTMENTS.filter(x=>enchantmentAllowed(run,x));
+    const first=pick(run,pool.filter(x=>x.kind==='mark'));
+    const second=pick(run,pool.filter(x=>x.kind==='slot'));
+    const third=pick(run,pool.filter(x=>x.id!==first.id&&x.id!==second.id));
     return {...descriptor,kind:'enchant',cards:[first.id,second.id,third.id]};
   }
   if(descriptor.eventId==='circuit'){
-    const element=pick(run,ELEMENT_KEYS);
+    const element=pick(run,allowedElements(run));
     return {...descriptor,kind:'enchant',cards:[...ENCHANTMENTS.filter(x=>x.element===element).map(x=>x.id),pick(run,BULLETS.filter(x=>x.trigger==='consumable'&&x.element===element)).id]};
   }
   if(descriptor.eventId==='supplies')return {...descriptor,cards:[{id:'refresh10',name:'重整补给',description:'获得 10 刷新值。'},{id:'remove30',name:'拆解工具',description:'获得 30 删除值。'},{id:'swap20',name:'调度组件',description:'获得 20 换位值。'},{id:'scroll-box',name:'元素卷轴箱',description:'打开后从三种随机卷轴中选择一枚，也可放弃。'}]};
@@ -218,12 +229,14 @@ function chooseOffer(run,action){
   const option=offer.cards[action.index],id=typeof option==='string'?option:option.id;
   if(offer.kind==='bullet'||offer.kind==='scroll')addBullet(run,id);
   else if(offer.kind==='bond'){
+    requireRule(bondAllowed(run,BOND_MAP[id]),'本局已禁用该羁绊需求元素');
     requireRule(!run.bonds.includes(id),'已经拥有该羁绊');
     run.bonds.push(id);if(BOND_MAP[id].grade==='evolution')run.evolutions[id]={progress:0};
   }else if(offer.kind==='enchant'){
     if(BULLET_MAP[id]?.trigger==='consumable')addBullet(run,id);
     else {
       const def=ENCHANTMENT_MAP[id];requireRule(Boolean(def),'未知附魔');
+      requireRule(enchantmentAllowed(run,def),'本局已禁用该附魔元素');
       if(def.kind==='slot'){
         const index=Number(action.target);requireRule(action.target!==undefined&&Number.isInteger(index)&&index>=0&&index<12,'请先选择一个弹夹槽位');
         run.slots[index]={engraving:id,charge:0,recycleRound:0};
@@ -251,6 +264,13 @@ function endRun(run,outcome){
 function advanceAfterCombat(run,previousBosses){
   run.stats.turns=run.round;
   if(run.hp<=0){endRun(run,'defeat');return;}
+  const talentState=ensureTalentState(run);
+  if(run.traits.rescueScroll&&run.emergencyUsed&&!talentState.rescueGranted){
+    talentState.rescueGranted=true;
+    const id=bulletAllowed(run,BULLET_MAP.C04)?'C04':'C08';
+    addBullet(run,id);
+    run.logs.push(`绝境药匣：获得${BULLET_MAP[id].name}，之后入夹时生效。`);
+  }
   for(const boss of run.defeatedBosses.filter(id=>!previousBosses.includes(id))){
     if(boss!=='boss3')run.pending.push({kind:'scroll',source:`scroll-${boss}`});
   }
@@ -260,6 +280,13 @@ function advanceAfterCombat(run,previousBosses){
     run.resources.refresh+=2+([6,12].includes(run.batch)?10:0);
     if([3,6,9,12,15].includes(run.batch))addResource(run.resources,'remove',30);
     addResource(run.resources,'swap',5);
+    if(run.traits.scrollCache&&[6,12,18].includes(run.batch)&&!talentState.scrollBatches.includes(run.batch)){
+      const element=pick(run,allowedElements(run));
+      const scroll=pick(run,BULLETS.filter(x=>x.trigger==='consumable'&&x.element===element));
+      addBullet(run,scroll.id);
+      talentState.scrollBatches.push(run.batch);
+      run.logs.push(`旅途卷匣：获得${scroll.name}，之后入夹时生效。`);
+    }
   }
   if(run.batch===18&&run.enemies.length===0&&run.stats.bossKills>=3){endRun(run,'victory');return;}
   run.round++;
@@ -276,7 +303,9 @@ export function act(input,action){
   let run=clone(input),frames=[];
   try {
     requireRule(run&&run.version===1,'存档版本不兼容');
+    requireRule(run.bannedElement===undefined||validElementBan(run.bannedElement),'禁用元素无效');
     run.resources=normalizeResources(run.resources);
+    ensureTalentState(run);
     requireRule(run.phase!=='ended','本局已结束');
     if(['draft','choose','skip','refresh','load','rerollStart'].includes(action.type))requireRule(run.phase==='supply','请在补给阶段操作');
     if(['swap','remove','rest','undoRest','target'].includes(action.type))requireRule(run.phase==='prepare','请先装填弹夹');
@@ -292,10 +321,19 @@ export function act(input,action){
         break;
       }
       case 'choose':chooseOffer(run,action);break;
-      case 'skip':requireRule(Boolean(run.offers),'当前没有可跳过的选择');finishOffer(run);break;
+      case 'skip': {
+        requireRule(Boolean(run.offers),'当前没有可跳过的选择');
+        if(run.traits.skipRefresh&&run.offers.kind==='bullet'&&[100,200,300].includes(run.offers.cost)&&run.talentState.skipRefunds<2){
+          run.talentState.skipRefunds++;
+          run.resources.refresh+=5;
+        }
+        finishOffer(run);break;
+      }
       case 'refresh': {
         const offer=run.offers;requireRule(offer&&['bullet','bond','scroll'].includes(offer.kind),'当前选择不能刷新');
-        requireRule(run.resources.refresh>=10,'刷新值不足');run.resources.refresh-=10;
+        const cost=getRefreshCost(run);
+        requireRule(run.resources.refresh>=cost,'刷新值不足');run.resources.refresh-=cost;
+        if(cost===0)run.talentState.freeRefreshUsed=true;
         offer.cards=offer.kind==='bullet'?draftCards(run,offer.cost,offer.focus):offer.kind==='bond'?bondCards(run,offer.core):scrollCards(run);
         break;
       }
@@ -304,7 +342,9 @@ export function act(input,action){
         const {a,b}=action;requireRule(Number.isInteger(a)&&Number.isInteger(b)&&a>=0&&a<12&&b>=0&&b<12&&a!==b,'请选择两个不同槽位');
         requireRule(run.magazine[a]||run.magazine[b],'两个空槽不需要换位');
         requireRule(!run.rest||![a,b].includes(run.rest.slot),'先撤销该槽位的休止');
-        requireRule(run.resources.swap>=RESOURCE_COSTS.swap,'换位值不足');run.resources.swap-=RESOURCE_COSTS.swap;
+        const cost=getSwapCost(run);
+        requireRule(run.resources.swap>=cost,'换位值不足');run.resources.swap-=cost;
+        if(cost===0)run.talentState.freeSwapRound=run.round;
         [run.magazine[a],run.magazine[b]]=[run.magazine[b],run.magazine[a]];break;
       }
       case 'remove': {
