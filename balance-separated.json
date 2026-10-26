@@ -1,0 +1,768 @@
+{
+  "campaign": {
+    "only-singleline": {
+      "wins": 10,
+      "avgTurns": 24.65,
+      "avgKills": 49.95,
+      "rows": [
+        {
+          "seed": 1,
+          "outcome": "victory",
+          "turns": 24,
+          "kills": 53,
+          "hp": 51,
+          "batch": 18
+        },
+        {
+          "seed": 2,
+          "outcome": "victory",
+          "turns": 25,
+          "kills": 53,
+          "hp": 22,
+          "batch": 18
+        },
+        {
+          "seed": 3,
+          "outcome": "defeat",
+          "turns": 25,
+          "kills": 48,
+          "hp": 0,
+          "batch": 18
+        },
+        {
+          "seed": 4,
+          "outcome": "victory",
+          "turns": 25,
+          "kills": 53,
+          "hp": 36,
+          "batch": 18
+        },
+        {
+          "seed": 5,
+          "outcome": "defeat",
+          "turns": 24,
+          "kills": 46,
+          "hp": 0,
+          "batch": 18
+        },
+        {
+          "seed": 6,
+          "outcome": "victory",
+          "turns": 27,
+          "kills": 53,
+          "hp": 5,
+          "batch": 18
+        },
+        {
+          "seed": 7,
+          "outcome": "defeat",
+          "turns": 23,
+          "kills": 44,
+          "hp": 0,
+          "batch": 18
+        },
+        {
+          "seed": 8,
+          "outcome": "defeat",
+          "turns": 24,
+          "kills": 47,
+          "hp": 0,
+          "batch": 18
+        },
+        {
+          "seed": 9,
+          "outcome": "defeat",
+          "turns": 25,
+          "kills": 49,
+          "hp": 0,
+          "batch": 18
+        },
+        {
+          "seed": 10,
+          "outcome": "victory",
+          "turns": 26,
+          "kills": 53,
+          "hp": 34,
+          "batch": 18
+        },
+        {
+          "seed": 11,
+          "outcome": "victory",
+          "turns": 25,
+          "kills": 53,
+          "hp": 57,
+          "batch": 18
+        },
+        {
+          "seed": 12,
+          "outcome": "defeat",
+          "turns": 26,
+          "kills": 46,
+          "hp": 0,
+          "batch": 18
+        },
+        {
+          "seed": 13,
+          "outcome": "defeat",
+          "turns": 23,
+          "kills": 46,
+          "hp": 0,
+          "batch": 18
+        },
+        {
+          "seed": 14,
+          "outcome": "defeat",
+          "turns": 24,
+          "kills": 47,
+          "hp": 0,
+          "batch": 18
+        },
+        {
+          "seed": 15,
+          "outcome": "victory",
+          "turns": 25,
+          "kills": 53,
+          "hp": 40,
+          "batch": 18
+        },
+        {
+          "seed": 16,
+          "outcome": "defeat",
+          "turns": 25,
+          "kills": 46,
+          "hp": 0,
+          "batch": 18
+        },
+        {
+          "seed": 17,
+          "outcome": "victory",
+          "turns": 25,
+          "kills": 53,
+          "hp": 46,
+          "batch": 18
+        },
+        {
+          "seed": 18,
+          "outcome": "victory",
+          "turns": 24,
+          "kills": 53,
+          "hp": 76,
+          "batch": 18
+        },
+        {
+          "seed": 19,
+          "outcome": "defeat",
+          "turns": 25,
+          "kills": 50,
+          "hp": 0,
+          "batch": 18
+        },
+        {
+          "seed": 20,
+          "outcome": "victory",
+          "turns": 23,
+          "kills": 53,
+          "hp": 78,
+          "batch": 18
+        }
+      ]
+    },
+    "all-five": {
+      "wins": 12,
+      "avgTurns": 25.1,
+      "avgKills": 50.6,
+      "rows": [
+        {
+          "seed": 1,
+          "outcome": "victory",
+          "turns": 24,
+          "kills": 53,
+          "hp": 51,
+          "batch": 18
+        },
+        {
+          "seed": 2,
+          "outcome": "victory",
+          "turns": 25,
+          "kills": 53,
+          "hp": 22,
+          "batch": 18
+        },
+        {
+          "seed": 3,
+          "outcome": "defeat",
+          "turns": 25,
+          "kills": 48,
+          "hp": 0,
+          "batch": 18
+        },
+        {
+          "seed": 4,
+          "outcome": "defeat",
+          "turns": 25,
+          "kills": 49,
+          "hp": 0,
+          "batch": 18
+        },
+        {
+          "seed": 5,
+          "outcome": "victory",
+          "turns": 29,
+          "kills": 52,
+          "hp": 39,
+          "batch": 18
+        },
+        {
+          "seed": 6,
+          "outcome": "victory",
+          "turns": 26,
+          "kills": 53,
+          "hp": 5,
+          "batch": 18
+        },
+        {
+          "seed": 7,
+          "outcome": "victory",
+          "turns": 27,
+          "kills": 53,
+          "hp": 28,
+          "batch": 18
+        },
+        {
+          "seed": 8,
+          "outcome": "defeat",
+          "turns": 24,
+          "kills": 47,
+          "hp": 0,
+          "batch": 18
+        },
+        {
+          "seed": 9,
+          "outcome": "defeat",
+          "turns": 25,
+          "kills": 49,
+          "hp": 0,
+          "batch": 18
+        },
+        {
+          "seed": 10,
+          "outcome": "victory",
+          "turns": 26,
+          "kills": 53,
+          "hp": 18,
+          "batch": 18
+        },
+        {
+          "seed": 11,
+          "outcome": "victory",
+          "turns": 25,
+          "kills": 53,
+          "hp": 47,
+          "batch": 18
+        },
+        {
+          "seed": 12,
+          "outcome": "defeat",
+          "turns": 26,
+          "kills": 46,
+          "hp": 0,
+          "batch": 18
+        },
+        {
+          "seed": 13,
+          "outcome": "defeat",
+          "turns": 23,
+          "kills": 46,
+          "hp": 0,
+          "batch": 18
+        },
+        {
+          "seed": 14,
+          "outcome": "defeat",
+          "turns": 23,
+          "kills": 45,
+          "hp": 0,
+          "batch": 18
+        },
+        {
+          "seed": 15,
+          "outcome": "victory",
+          "turns": 26,
+          "kills": 53,
+          "hp": 38,
+          "batch": 18
+        },
+        {
+          "seed": 16,
+          "outcome": "defeat",
+          "turns": 26,
+          "kills": 47,
+          "hp": 0,
+          "batch": 18
+        },
+        {
+          "seed": 17,
+          "outcome": "victory",
+          "turns": 24,
+          "kills": 53,
+          "hp": 76,
+          "batch": 18
+        },
+        {
+          "seed": 18,
+          "outcome": "victory",
+          "turns": 24,
+          "kills": 53,
+          "hp": 72,
+          "batch": 18
+        },
+        {
+          "seed": 19,
+          "outcome": "victory",
+          "turns": 26,
+          "kills": 53,
+          "hp": 17,
+          "batch": 18
+        },
+        {
+          "seed": 20,
+          "outcome": "victory",
+          "turns": 23,
+          "kills": 53,
+          "hp": 78,
+          "batch": 18
+        }
+      ]
+    },
+    "final-three": {
+      "wins": 12,
+      "avgTurns": 25.1,
+      "avgKills": 50.6,
+      "rows": [
+        {
+          "seed": 1,
+          "outcome": "victory",
+          "turns": 24,
+          "kills": 53,
+          "hp": 51,
+          "batch": 18
+        },
+        {
+          "seed": 2,
+          "outcome": "victory",
+          "turns": 25,
+          "kills": 53,
+          "hp": 22,
+          "batch": 18
+        },
+        {
+          "seed": 3,
+          "outcome": "defeat",
+          "turns": 25,
+          "kills": 48,
+          "hp": 0,
+          "batch": 18
+        },
+        {
+          "seed": 4,
+          "outcome": "defeat",
+          "turns": 25,
+          "kills": 49,
+          "hp": 0,
+          "batch": 18
+        },
+        {
+          "seed": 5,
+          "outcome": "victory",
+          "turns": 29,
+          "kills": 52,
+          "hp": 36,
+          "batch": 18
+        },
+        {
+          "seed": 6,
+          "outcome": "victory",
+          "turns": 26,
+          "kills": 53,
+          "hp": 5,
+          "batch": 18
+        },
+        {
+          "seed": 7,
+          "outcome": "victory",
+          "turns": 27,
+          "kills": 53,
+          "hp": 28,
+          "batch": 18
+        },
+        {
+          "seed": 8,
+          "outcome": "defeat",
+          "turns": 24,
+          "kills": 47,
+          "hp": 0,
+          "batch": 18
+        },
+        {
+          "seed": 9,
+          "outcome": "defeat",
+          "turns": 25,
+          "kills": 49,
+          "hp": 0,
+          "batch": 18
+        },
+        {
+          "seed": 10,
+          "outcome": "victory",
+          "turns": 26,
+          "kills": 53,
+          "hp": 18,
+          "batch": 18
+        },
+        {
+          "seed": 11,
+          "outcome": "victory",
+          "turns": 25,
+          "kills": 53,
+          "hp": 47,
+          "batch": 18
+        },
+        {
+          "seed": 12,
+          "outcome": "defeat",
+          "turns": 26,
+          "kills": 46,
+          "hp": 0,
+          "batch": 18
+        },
+        {
+          "seed": 13,
+          "outcome": "defeat",
+          "turns": 23,
+          "kills": 46,
+          "hp": 0,
+          "batch": 18
+        },
+        {
+          "seed": 14,
+          "outcome": "defeat",
+          "turns": 23,
+          "kills": 45,
+          "hp": 0,
+          "batch": 18
+        },
+        {
+          "seed": 15,
+          "outcome": "victory",
+          "turns": 26,
+          "kills": 53,
+          "hp": 38,
+          "batch": 18
+        },
+        {
+          "seed": 16,
+          "outcome": "defeat",
+          "turns": 26,
+          "kills": 47,
+          "hp": 0,
+          "batch": 18
+        },
+        {
+          "seed": 17,
+          "outcome": "victory",
+          "turns": 24,
+          "kills": 53,
+          "hp": 76,
+          "batch": 18
+        },
+        {
+          "seed": 18,
+          "outcome": "victory",
+          "turns": 24,
+          "kills": 53,
+          "hp": 72,
+          "batch": 18
+        },
+        {
+          "seed": 19,
+          "outcome": "victory",
+          "turns": 26,
+          "kills": 53,
+          "hp": 17,
+          "batch": 18
+        },
+        {
+          "seed": 20,
+          "outcome": "victory",
+          "turns": 23,
+          "kills": 53,
+          "hp": 78,
+          "batch": 18
+        }
+      ]
+    }
+  },
+  "targets": {
+    "only-singleline": {
+      "F08": {
+        "isolated": [
+          10
+        ],
+        "dense": [
+          10,
+          3,
+          3,
+          0
+        ],
+        "spread": [
+          10,
+          0,
+          0,
+          0
+        ]
+      },
+      "H02": {
+        "isolated": [
+          10
+        ],
+        "dense": [
+          10,
+          0,
+          0,
+          0
+        ],
+        "spread": [
+          10,
+          0,
+          0,
+          0
+        ]
+      },
+      "L01": {
+        "isolated": [
+          8
+        ],
+        "dense": [
+          8,
+          4,
+          0,
+          0
+        ],
+        "spread": [
+          8,
+          4,
+          0,
+          0
+        ]
+      },
+      "W08": {
+        "isolated": [
+          8
+        ],
+        "dense": [
+          8,
+          8,
+          0,
+          0
+        ],
+        "spread": [
+          8,
+          8,
+          0,
+          0
+        ]
+      },
+      "R02": {
+        "isolated": [
+          8
+        ],
+        "dense": [
+          8,
+          0,
+          0,
+          0
+        ],
+        "spread": [
+          8,
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "all-five": {
+      "F08": {
+        "isolated": [
+          6
+        ],
+        "dense": [
+          6,
+          4,
+          4,
+          0
+        ],
+        "spread": [
+          6,
+          0,
+          0,
+          0
+        ]
+      },
+      "H02": {
+        "isolated": [
+          6
+        ],
+        "dense": [
+          6,
+          3,
+          3,
+          0
+        ],
+        "spread": [
+          6,
+          0,
+          0,
+          0
+        ]
+      },
+      "L01": {
+        "isolated": [
+          6
+        ],
+        "dense": [
+          6,
+          5,
+          5,
+          0
+        ],
+        "spread": [
+          6,
+          5,
+          5,
+          0
+        ]
+      },
+      "W08": {
+        "isolated": [
+          6
+        ],
+        "dense": [
+          6,
+          6,
+          6,
+          0
+        ],
+        "spread": [
+          6,
+          6,
+          6,
+          0
+        ]
+      },
+      "R02": {
+        "isolated": [
+          6
+        ],
+        "dense": [
+          6,
+          3,
+          3,
+          0
+        ],
+        "spread": [
+          6,
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "final-three": {
+      "F08": {
+        "isolated": [
+          6
+        ],
+        "dense": [
+          6,
+          4,
+          4,
+          0
+        ],
+        "spread": [
+          6,
+          0,
+          0,
+          0
+        ]
+      },
+      "H02": {
+        "isolated": [
+          10
+        ],
+        "dense": [
+          10,
+          0,
+          0,
+          0
+        ],
+        "spread": [
+          10,
+          0,
+          0,
+          0
+        ]
+      },
+      "L01": {
+        "isolated": [
+          6
+        ],
+        "dense": [
+          6,
+          5,
+          5,
+          0
+        ],
+        "spread": [
+          6,
+          5,
+          5,
+          0
+        ]
+      },
+      "W08": {
+        "isolated": [
+          6
+        ],
+        "dense": [
+          6,
+          6,
+          6,
+          0
+        ],
+        "spread": [
+          6,
+          6,
+          6,
+          0
+        ]
+      },
+      "R02": {
+        "isolated": [
+          8
+        ],
+        "dense": [
+          8,
+          0,
+          0,
+          0
+        ],
+        "spread": [
+          8,
+          0,
+          0,
+          0
+        ]
+      }
+    }
+  }
+}

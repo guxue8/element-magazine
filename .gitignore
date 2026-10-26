@@ -1,0 +1,9 @@
+node_modules/
+__pycache__/
+dist/
+.DS_Store
+*.log
+release-*.json
+.superpowers/
+playwright-report/
+test-results/

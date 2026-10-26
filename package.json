@@ -1,0 +1,14 @@
+{
+  "name": "element-magazine",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "弹阵：元素守线 — 静态网页肉鸽游戏",
+  "scripts": {
+    "start": "node scripts/start-preview.mjs",
+    "dev": "node scripts/serve.mjs",
+    "build": "node scripts/build.mjs",
+    "test": "node --test"
+  },
+  "engines": { "node": ">=22" }
+}
