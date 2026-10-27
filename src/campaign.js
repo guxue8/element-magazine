@@ -21,15 +21,15 @@ export function getCounts(run){
   for(const item of run.inventory) if(card(item))counts[card(item).element]++;
   return counts;
 }
-function bondGap(run,bond){
+function bondGap(run,bond,{includeTarget=true}={}){
   const counts=getCounts(run);
   let gap=Object.entries(bond.requirements||{}).reduce((n,[e,value])=>n+Math.max(0,value-(counts[e]||0)),0);
   if(bond.whiteRequired)gap+=Math.max(0,bond.whiteRequired-run.inventory.filter(x=>card(x).rarity===0).length);
-  if(bond.targetId&&!run.inventory.some(x=>x.typeId===bond.targetId))gap++;
+  if(includeTarget&&bond.targetId&&!run.inventory.some(x=>x.typeId===bond.targetId))gap++;
   return gap;
 }
 export function getActiveBonds(run){return run.bonds.filter(id=>bondAllowed(run,BOND_MAP[id])&&bondGap(run,BOND_MAP[id])===0);}
-export function previewWave(batch,difficulty=0,encounterVersion=2){return getWaveIds(batch,encounterVersion).map(id=>getEnemyPreview(id,batch,difficulty,encounterVersion));}
+export function previewWave(batch,difficulty=0,encounterVersion=3){return getWaveIds(batch,encounterVersion).map(id=>getEnemyPreview(id,batch,difficulty,encounterVersion));}
 export function getIntent(enemy,run){
   const def=ENEMIES[enemy.typeId];
   if(!def)return '未知敌人';
@@ -102,7 +102,7 @@ function spawnBatch(run){
 export function newRun(seed=Date.now(),meta=createMeta(),difficulty=0,bannedElement=null){
   requireRule(validElementBan(bannedElement),'禁用元素无效');
   const traits=clone(meta.talents||{}),maxHp=100+5*(traits.body||0);
-  const run={version:1,id:`run-${seed}-${Date.now()}`,seed:Number(seed)>>>0,rng:(Number(seed)>>>0)||1,difficulty:selectDifficulty(meta,difficulty),bannedElement,encounterVersion:2,phase:'supply',round:1,batch:1,completedBatches:0,isCleanup:false,
+  const run={version:1,id:`run-${seed}-${Date.now()}`,seed:Number(seed)>>>0,rng:(Number(seed)>>>0)||1,difficulty:selectDifficulty(meta,difficulty),bannedElement,encounterVersion:3,phase:'supply',round:1,batch:1,completedBatches:0,isCleanup:false,
     hp:maxHp,maxHp,shield:0,resources:{draft:100+25*(traits.supply||0),refresh:10+10*(traits.refresh||0),remove:30+30*(traits.remove||0),swap:20+5*(traits.swap||0)},
     inventory:[],magazine:Array(12).fill(null),rest:null,slots:Array.from({length:12},()=>({engraving:null,charge:0,recycleRound:0})),enemies:[],summons:[],bonds:[],evolutions:{},offers:null,pending:[],selectedTarget:null,logs:[],stats:{kills:0,bossKills:0,damage:0,turns:0},defeatedBosses:[],traits,handled:[],eventOrder:[],outcome:null,reward:0,nextUid:1,draftCount:0,startRerolled:false,emergencyUsed:false};
   run.resources=normalizeResources(run.resources);
@@ -158,7 +158,7 @@ function bondCards(run,core=false){
   const pool=BONDS.filter(x=>bondAllowed(run,x)&&x.grade===(core?'core':'normal')&&!run.bonds.includes(x.id));
   const chosen=[];
   if(!core&&[4,9,15].includes(run.batch)){
-    const evo=pick(run,BONDS.filter(x=>bondAllowed(run,x)&&x.grade==='evolution'&&!run.bonds.includes(x.id)&&bondGap(run,x)===0));
+    const evo=pick(run,BONDS.filter(x=>bondAllowed(run,x)&&x.grade==='evolution'&&!run.bonds.includes(x.id)&&bondGap(run,x,{includeTarget:false})===0));
     if(evo)chosen.push(evo.id);
   }
   function take(list){const found=pick(run,list.filter(x=>!chosen.includes(x.id)));if(found)chosen.push(found.id);}
@@ -231,7 +231,12 @@ function chooseOffer(run,action){
   else if(offer.kind==='bond'){
     requireRule(bondAllowed(run,BOND_MAP[id]),'本局已禁用该羁绊需求元素');
     requireRule(!run.bonds.includes(id),'已经拥有该羁绊');
-    run.bonds.push(id);if(BOND_MAP[id].grade==='evolution')run.evolutions[id]={progress:0};
+    const bond=BOND_MAP[id];
+    run.bonds.push(id);
+    if(bond.grade==='evolution'){
+      run.evolutions[id]={progress:0};
+      if(bond.targetId&&!run.inventory.some(item=>item.typeId===bond.targetId))addBullet(run,bond.targetId);
+    }
   }else if(offer.kind==='enchant'){
     if(BULLET_MAP[id]?.trigger==='consumable')addBullet(run,id);
     else {
@@ -369,7 +374,7 @@ export function act(input,action){
       case 'execute': {
         requireRule(['prepare','locked'].includes(run.phase),'请先装填');
         const previousBosses=[...run.defeatedBosses];
-        const result=resolveRound(run);run=result.state;frames=result.frames||[];
+        const result=resolveRound(run);run=result.state;frames=result.presentationFrames||result.frames||[];
         advanceAfterCombat(run,previousBosses);break;
       }
       default:throw new Error('未知操作');

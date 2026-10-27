@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {newRun,act,createMeta,getCounts,applyRunReward,buyTalent,resetTalents} from '../src/campaign.js';
+import {newRun,act,createMeta,getCounts,applyRunReward,buyTalent,resetTalents,previewWave} from '../src/campaign.js';
 import {BULLET_MAP,BULLETS} from '../src/catalog.js';
 
 const doAction=(run,action)=>{
@@ -73,7 +73,7 @@ test('old enemies remain while the next batch enters without a clear requirement
   const result=act(r,{type:'execute'});
   assert.equal(result.error,null);
   assert.equal(result.run.batch,2);
-  assert.equal(result.run.enemies.length,3);
+  assert.equal(result.run.enemies.length,previewWave(2).length+1);
   assert.equal(result.run.enemies.find(x=>x.uid===old).position,5);
   assert.equal(result.run.offers.kind,'bond');
   const skipped=doAction(result.run,{type:'skip'});

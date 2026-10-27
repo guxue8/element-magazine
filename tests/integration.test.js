@@ -21,10 +21,24 @@ test('twenty natural campaigns finish and every action survives validated storag
       assert.equal(run.enemies.length,0);
       assert.equal(run.stats.bossKills,3);
       assert.equal(meta.points,11,'first complete victory gives 9 earned points and 2 first-win points');
-    }else assert.equal(run.hp,0);
+    }else {assert.equal(run.outcome,'defeat');assert.equal(run.hp,0);}
   }
   assert.ok(saves>1500);
-  assert.deepEqual(outcomes,new Set(['victory','defeat']),'smoke strategy covers both real ending paths');
+  assert.ok(outcomes.has('victory'),'the introductory smoke strategy reaches the final victory path');
+});
+
+test('a deterministic lethal encounter covers defeat and its saved settlement independently of balance',()=>{
+  const startRun=newRun(1,{...createMeta(),unlockedDifficulty:10},10);
+  startRun.phase='prepare';startRun.hp=1;startRun.enemies[0].position=0;
+  startRun.magazine.fill(null);
+  const result=simulateCampaign(1,{startRun});
+  assert.equal(result.run.phase,'ended');
+  assert.equal(result.run.outcome,'defeat');
+  assert.equal(result.run.hp,0);
+  assert.equal(result.run.completedBatches,0);
+  assert.equal(result.saveChecks,1);
+  assert.equal(result.meta.points,0);
+  assert.deepEqual(applyRunReward(result.meta,result.run),result.meta);
 });
 
 test('mid-campaign JSON restoration preserves offers, draws and the eventual result',()=>{

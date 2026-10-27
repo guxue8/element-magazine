@@ -1,0 +1,63 @@
+/* Integer-grid silhouettes, discrete impact frames, and shared enemy movement. */
+.combat-fx,.enemy-action-fx{position:absolute;inset:0;pointer-events:none;z-index:110;--hit-height:76px;--fx-duration:420ms}
+.combat-fx svg,.enemy-action-fx svg{display:block;width:100%;height:100%;overflow:visible;image-rendering:pixelated;shape-rendering:crispEdges}
+.combat-fx>span{position:absolute;left:var(--impact-x);bottom:var(--hit-height);translate:-50% 50%}
+.combat-fx .rune-projectile{left:15%;width:64px;height:32px;animation:pixel-flight var(--fx-duration) steps(12) both}
+.combat-fx .muzzle-flash{left:15%;width:40px;height:40px;animation:pixel-muzzle var(--fx-duration) steps(1,end) both}
+.impact-flare{width:64px;height:64px}
+.fx-kill .impact-flare{width:96px;height:96px}
+.burst-core{animation:pixel-core var(--fx-duration) steps(1,end) both}
+.burst-bloom{animation:pixel-bloom var(--fx-duration) steps(1,end) both}
+.impact-particles i{position:absolute;width:var(--particle-size);height:var(--particle-size);background:var(--spark);box-shadow:2px 2px #121b26;animation:pixel-debris var(--fx-duration) steps(6) both}
+.combat-fx .combat-number{bottom:calc(var(--hit-height) + 34px);font:bold 24px Consolas,monospace;text-shadow:2px 2px #14202a,-1px -1px #14202a;color:#fff3c9;text-align:center;white-space:nowrap;animation:pixel-number var(--fx-duration) steps(5) both}
+.combat-number small,.combat-number b{display:block;font:10px 'Microsoft YaHei',sans-serif;color:#a3d2e6}
+.combat-number b{color:#ffd588;font-size:11px}.fx-kill .combat-number{color:#ffcf78;font-size:28px}
+.fx-instant .burst-core,.fx-instant .burst-bloom,.fx-instant .impact-particles i,.fx-instant .combat-number{animation-delay:calc(var(--fx-duration) * -.3)}
+.fallen-enemy{position:absolute;bottom:28px;width:90px;height:90px;transform:translateX(-50%);z-index:3;pointer-events:none;animation:pixel-dissolve var(--fx-duration) steps(5) both}
+.fallen-enemy>.pixel-sprite{width:100%;height:100%}
+.creature.hit{animation:pixel-enemy-impact var(--fx-duration) steps(1,end) both}
+.instant-impact .creature.hit,.instant-impact .fallen-enemy{animation-delay:calc(var(--fx-duration) * -.3)}
+.player-character.casting{animation:pixel-caster-recoil var(--fx-duration) steps(2) both}
+.playback-paused *{animation-play-state:paused!important}
+@keyframes pixel-flight{0%{left:15%;opacity:1}32%{left:var(--impact-x);opacity:1}33%,100%{left:var(--impact-x);opacity:0}}
+@keyframes pixel-muzzle{0%,12%{opacity:1}13%,100%{opacity:0}}
+@keyframes pixel-core{0%,30%{opacity:0}31%,44%{opacity:1}45%,100%{opacity:0}}
+@keyframes pixel-bloom{0%,43%{opacity:0}44%,70%{opacity:1}71%,100%{opacity:0}}
+@keyframes pixel-debris{0%,42%{opacity:0;transform:translate(0,0)}43%{opacity:1}85%{opacity:1}100%{opacity:0;transform:translate(var(--dx),var(--dy))}}
+@keyframes pixel-number{0%,30%{opacity:0;transform:translateY(8px)}31%{opacity:1}100%{opacity:1;transform:translateY(-20px)}}
+@keyframes pixel-enemy-impact{0%,30%,72%,100%{filter:none;translate:0}31%{filter:brightness(2);translate:4px 0}48%{filter:none;translate:2px 0}}
+@keyframes pixel-dissolve{0%,30%{opacity:1;filter:none}31%{opacity:1;filter:brightness(2);translate:4px 0}100%{opacity:0;translate:8px 8px}}
+@keyframes pixel-caster-recoil{0%{translate:-4px 0}30%,100%{translate:0}}
+
+.creature.advancing{animation:enemy-march var(--fx-duration) steps(24,end) both}
+.creature.advancing .creature-body{animation:enemy-stride 160ms steps(2,end) infinite}
+.creature.advancing::after{content:'';position:absolute;bottom:0;left:65%;width:6px;height:4px;background:#a0a58b;box-shadow:10px 2px #798c77,18px -2px #536f69;animation:march-dust 240ms steps(3,end) infinite}
+.creature.acting-melee .creature-body,.creature.acting-explode .creature-body{animation:enemy-lunge var(--fx-duration) steps(5) both}
+.creature.acting-ranged .creature-body{animation:enemy-cast var(--fx-duration) steps(4) both}
+.creature.acting-heal .creature-body,.creature.acting-buff .creature-body{animation:enemy-chant var(--fx-duration) steps(4) both}
+.player-character.hurt{animation:player-hurt var(--fx-duration) steps(1,end) both}
+.enemy-action-fx>span{position:absolute;bottom:var(--hit-height);translate:-50% 50%}
+.hostile-projectile{width:52px;height:24px;animation:hostile-flight var(--fx-duration) steps(12) both}
+.hostile-spell svg{transform:scaleX(-1)}
+.action-explode .melee-slash{width:88px;height:88px}
+.hostile-impact{left:11%;width:56px;height:56px;animation:hostile-impact var(--fx-duration) steps(1,end) both}
+.hostile-damage{left:11%;color:#ffb5a1;font:bold 23px Consolas,monospace;text-shadow:2px 2px #17212b;animation:hostile-number var(--fx-duration) steps(5) both}
+.hostile-damage small{display:block;font:10px 'Microsoft YaHei',sans-serif;color:#a3d2e6}
+.support-spark{left:var(--support-x);width:36px;height:48px;animation:support-rise var(--fx-duration) steps(5) both}
+.enemy-action-fx .melee-slash{left:var(--actor-x);width:44px;height:44px;animation:hostile-impact var(--fx-duration) steps(1,end) both}
+@keyframes enemy-march{from{left:var(--from-x)}to{left:var(--x)}}
+@keyframes enemy-stride{0%,100%{translate:0 0}50%{translate:0 -3px}}
+@keyframes march-dust{0%{opacity:0;translate:0 0}35%{opacity:.7}100%{opacity:0;translate:12px -4px}}
+@keyframes enemy-lunge{0%,100%{translate:0}25%{translate:4px 0}50%{translate:-16px 0}72%{translate:-8px 0}}
+@keyframes enemy-cast{0%,100%{translate:0}25%{translate:4px -2px}45%{translate:7px 0}70%{translate:2px 0}}
+@keyframes enemy-chant{0%,100%{translate:0}30%,65%{translate:0 -5px}}
+@keyframes hostile-flight{0%,22%{left:var(--actor-x);opacity:0}23%{left:var(--actor-x);opacity:1}52%{left:11%;opacity:1}53%,100%{left:11%;opacity:0}}
+@keyframes hostile-impact{0%,51%{opacity:0}52%,73%{opacity:1}74%,100%{opacity:0}}
+@keyframes hostile-number{0%,51%{opacity:0;transform:translateY(-18px)}52%{opacity:1}100%{opacity:1;transform:translateY(-40px)}}
+@keyframes player-hurt{0%,51%,85%,100%{filter:none;translate:0}52%{filter:brightness(1.7) sepia(.4);translate:-4px 0}70%{translate:-2px 0;filter:none}}
+@keyframes support-rise{0%{opacity:0;transform:translateY(8px)}20%,75%{opacity:1}100%{opacity:0;transform:translateY(-16px)}}
+
+.evolution-gift{padding:7px 9px;border-left:3px solid #b7ca89;background:#263b32;color:#d4e5b6;font-size:11px;line-height:1.6}
+@media(max-height:650px) and (orientation:landscape){.combat-fx,.enemy-action-fx{--hit-height:62px}.fallen-enemy{width:74px;height:74px}.impact-flare{width:56px;height:56px}.fx-kill .impact-flare{width:80px;height:80px}}
+@media(max-height:450px) and (orientation:landscape){.combat-fx,.enemy-action-fx{--hit-height:46px}.combat-fx .rune-projectile{width:48px;height:24px}.impact-flare{width:48px;height:48px}.fx-kill .impact-flare{width:64px;height:64px}.combat-fx .combat-number,.hostile-damage{font-size:18px}.fx-kill .combat-number{font-size:21px}.fallen-enemy{width:58px;height:58px;bottom:19px}.hostile-projectile{width:40px;height:20px}.hostile-impact{width:40px;height:40px}.evolution-gift{font-size:9px;padding:4px 6px}}
+@media(prefers-reduced-motion:reduce){.combat-fx *,.enemy-action-fx *,.fallen-enemy,.creature.hit,.creature.advancing,.creature.advancing::after,.creature .creature-body,.player-character{animation:none!important}.rune-projectile,.muzzle-flash,.impact-particles,.impact-flare,.fallen-enemy,.hostile-projectile,.hostile-impact,.support-spark,.melee-slash,.creature.advancing::after{display:none}.combat-number,.hostile-damage{opacity:1;transform:none}}

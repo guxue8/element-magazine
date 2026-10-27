@@ -11,6 +11,67 @@ import {normalizeResources,addResource} from './resources.js';
 export const implementedBulletIds=Object.freeze([...Object.keys(effects),...Object.keys(scrollEffects)]);
 const clone=x=>structuredClone(x);
 export const distance=(a,b)=>Math.abs(a.position-b.position);
+// The simulation keeps its original enemy-by-enemy order. Playback groups
+// advances only within intervals that do not cross a counter/control displacement.
+export function combatPresentationFrames({frames=[],enemyPhase}){
+  if(!enemyPhase)return clone(frames);
+  const {startIndex,endIndex,startBoard,endBoard,events=[]}=enemyPhase;
+  const sequence=[];
+  for(let i=startIndex;i<=endIndex;i++){
+    for(const event of events)if(event.at===i)sequence.push(event.frame);
+    if(i<endIndex)sequence.push(frames[i]);
+  }
+  const playback=[];
+  const appendGroup=(group,groupStart)=>{
+    const advances=new Map();
+    group.forEach((frame,index)=>{
+      for(const movement of frame.movements||[]){
+        const start=groupStart.enemies.find(e=>e.uid===movement.uid);
+        if(start)advances.set(movement.uid,{...clone(movement),from:start.position,index});
+      }
+    });
+    const movements=[...advances.values()].filter(m=>m.from!==m.to).map(({index,...m})=>m);
+    if(movements.length){
+      const board=clone(groupStart);
+      for(const enemy of board.enemies)if(advances.has(enemy.uid))enemy.position=advances.get(enemy.uid).to;
+      playback.push({type:'enemy',action:'move',text:'敌群推进',duration:600,movements,board});
+    }
+    group.forEach((original,index)=>{
+      if(original.action==='move')return;
+      const frame=clone(original);
+      // Project only within this interval; later advances must never overwrite
+      // an earlier counter push or its damage/actor snapshots.
+      for(const enemy of [...frame.board.enemies,frame.actor,frame.target]){
+        const advance=enemy&&advances.get(enemy.uid);
+        if(advance&&index<=advance.index)enemy.position=advance.to;
+      }
+      delete frame.movements;
+      if(frame.action)frame.duration=frame.action==='wait'?160:480;
+      playback.push(frame);
+    });
+  };
+  let group=[],groupStart=startBoard,previousBoard=startBoard;
+  for(const frame of sequence){
+    const displaced=frame.board.enemies.some(enemy=>{
+      const previous=previousBoard.enemies.find(e=>e.uid===enemy.uid);
+      return previous&&previous.position!==enemy.position&&
+        !(frame.movements||[]).some(m=>m.uid===enemy.uid&&m.from===previous.position&&m.to===enemy.position);
+    });
+    if(displaced){
+      appendGroup(group,groupStart);
+      playback.push(clone(frame));
+      group=[];
+      groupStart=frame.board;
+    }else group.push(frame);
+    previousBoard=frame.board;
+  }
+  appendGroup(group,groupStart);
+  const lastBoard=playback.at(-1)?.board||startBoard;
+  if(JSON.stringify(lastBoard)!==JSON.stringify(endBoard)){
+    playback.push({type:'status',action:'settle',text:'敌方行动结束',duration:160,board:clone(endBoard)});
+  }
+  return [...clone(frames.slice(0,startIndex)),...playback,...clone(frames.slice(endIndex))];
+}
 export class Combat {
   constructor(run){
     this.s=clone(run);
@@ -412,10 +473,17 @@ export class Combat {
     }this.s.inventory=this.s.inventory.filter(b=>!this.used.has(b.uid));
     this.s.enemies=this.alive();
     this.s.stats.turns++;
-    return {
-      state:this.s,frames:this.frames,summary:`本回合造成 ${this.s.stats.damage-this.startDamage} 伤害；场上剩余 ${this.s.enemies.length} 名敌人。`
+    const result={
+      state:this.s,frames:this.frames,enemyPhase:this.enemyPhaseData,summary:`本回合造成 ${this.s.stats.damage-this.startDamage} 伤害；场上剩余 ${this.s.enemies.length} 名敌人。`
     };
+    result.presentationFrames=combatPresentationFrames(result);
+    return result;
   }  enemyPhase(){
+    const board=()=>clone({enemies:this.alive(),summons:this.s.summons,hp:this.s.hp,shield:this.s.shield});
+    const phase=this.enemyPhaseData={startIndex:this.frames.length,startBoard:board(),events:[]};
+    // Previously unframed support effects belong only to the presentation
+    // timeline, so combat logs and the original frame sequence stay compatible.
+    const support=(text,extra)=>phase.events.push({at:this.frames.length,frame:{type:'enemy',action:'buff',text,...extra,board:board()}});
     const boosted=new Set();
     for(const e of this.alive()){
       if(this.s.hp<=0)break;
@@ -424,33 +492,42 @@ export class Combat {
       const allies=()=>this.sorted(this.alive().filter(x=>x!==e&&!x.typeId.startsWith('boss')),false);
       if(e.typeId==='boss1'){
         const a=allies()[0];
-        if(a)a.shield=Math.max(a.shield,6);
+        if(a){
+          const before=a.shield;
+          a.shield=Math.max(a.shield,6);
+          if(a.shield>before)support(`${def.name}庇护友军`,{actor:clone(e),targetId:a.uid,affectedIds:[a.uid],amount:a.shield-before});
+        }
       }if(e.position>def.range){
+        const actor=clone(e),from=e.position;
         e.position=Math.max(0,e.position-Math.max(e.typeId.startsWith('boss')?1:0,def.move-(e.slow?1:0)));
         this.frame('enemy',`${def.name}移动`,{
-          targetId:e.uid
+          targetId:e.uid,action:e.position===from?'wait':'move',actor,from,to:e.position,
+          movements:e.position===from?[]:[{uid:e.uid,from,to:e.position,actor}]
         });
       }else if(e.typeId==='healer'){
         const a=allies()[0];
         if(a){
+          const before=a.hp;
           a.hp=Math.min(a.maxHp,a.hp+(e.heal ?? (e.maxHp<=30?6:e.maxHp<=48?9:12)));
           this.frame('enemy',`${def.name}治疗友军`,{
-            targetId:a.uid
+            targetId:a.uid,action:'heal',actor:clone(e),affectedIds:[a.uid],amount:a.hp-before
           });
         }
       }else{
         e.attackCount++;
         if(e.typeId==='boss2'&&e.attackCount%2===0&&allies().length){
-          for(const a of allies().slice(0,2))a.boost=2;
-          this.frame('enemy','雷鸣祭司强化友军');
+          const targets=allies().slice(0,2);
+          for(const a of targets)a.boost=2;
+          this.frame('enemy','雷鸣祭司强化友军',{action:'buff',actor:clone(e),affectedIds:targets.map(a=>a.uid)});
         }else{
+          const actor=clone(e),hpBefore=this.s.hp;
           const damage=(e.typeId==='boss3'&&e.hp<=e.maxHp/2?14:def.damage)+(e.boost||0)+(e.difficultyDamage||0);
           e.boost=0;
           const absorbed=Math.min(this.s.shield,damage);
           this.s.shield-=absorbed;
           this.s.hp=Math.max(0,this.s.hp-(damage-absorbed));
           this.frame('enemy',`${def.name}攻击 ${damage}`,{
-            targetId:e.uid,amount:damage
+            targetId:e.uid,amount:damage,action:e.typeId==='bomber'?'explode':def.range>0?'ranged':'melee',actor,absorbed,playerDamage:hpBefore-this.s.hp
           });
           if(this.s.hp<=0)break;
           this.bonds.attacked(e,absorbed);
@@ -466,14 +543,21 @@ export class Combat {
       }if(e.typeId==='drummer'){
         const a=allies().find(a=>!boosted.has(a.uid));
         if(a){
+          const from=a.position;
           a.position=Math.max(0,a.position-1);
           boosted.add(a.uid);
+          if(a.position!==from)support(`${def.name}催动友军`,{
+            actor:clone(e),targetId:a.uid,affectedIds:[a.uid],
+            movements:[{uid:a.uid,from,to:a.position,actor:clone(a)}]
+          });
         }
       }
     }for(const e of this.alive()){
       e.wet=Math.max(0,(e.wet||0)-1);
       e.slow=false;
     }
+    phase.endIndex=this.frames.length;
+    phase.endBoard=board();
   }
 } export function resolveRound(run){
   return new Combat(run).execute();

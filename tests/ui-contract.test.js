@@ -57,6 +57,21 @@ test('bond details lead with a summary and keep complete rules collapsed',async(
   }finally{h.close();}
 });
 
+test('evolution offers disclose the missing core gift and selection adds it to the bag',async()=>{
+ const run=newRun(160),b=BOND_MAP.E01;
+ run.inventory=run.inventory.filter(x=>x.typeId!==b.targetId);
+ run.offers={kind:'bond',source:'gift-ui',cards:['E01']};
+ const h=await harness(run);
+ try{
+  h.click({ui:'continue'});h.click({main:'true'});
+  assert.match(h.html(),/选择后获赠/);
+  h.click({bond:'E01'});assert.match(h.html(),/选择后获赠/);
+  h.click({ui:'back'});h.click({choose:'0'});
+  assert.equal(h.saved().inventory.filter(x=>x.typeId===b.targetId).length,1);
+  h.click({ui:'bag'});assert.ok(h.html().includes(BULLET_MAP[b.targetId].name));
+ }finally{h.close();}
+});
+
 test('opening a card starts at its title and returning restores the catalog scroll',async()=>{
  const h=await harness(newRun(150));
  try{

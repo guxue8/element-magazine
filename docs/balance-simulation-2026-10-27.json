@@ -1,0 +1,5496 @@
+{
+  "strategy": "Fixed existing chooseAction policy: no talents, current-card and reachable-bond scores, no target selection or slot swaps, no future RNG/combat inspection. Every action saved and reloaded.",
+  "limitations": "An automated regression proxy, not a measured human win rate. Versions share seeds and initial cards; extra spawn RNG and kill rewards may change later offers. The policy does not learn or optimize for either version.",
+  "groups": [
+    {
+      "difficulty": 0,
+      "encounterVersion": 2,
+      "runs": 100,
+      "wins": 60,
+      "winRate": 0.6,
+      "meanFinalHp": 35.57,
+      "meanWinnerHp": 59.28,
+      "meanKills": 72.99,
+      "meanWinnerKills": 75.97,
+      "meanTurns": 23.69,
+      "meanCompletedBatches": 18,
+      "rows": [
+        {
+          "seed": 1,
+          "outcome": "victory",
+          "hp": 92,
+          "kills": 76,
+          "turns": 22,
+          "completedBatches": 18,
+          "saveChecks": 93
+        },
+        {
+          "seed": 2,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 62,
+          "turns": 21,
+          "completedBatches": 18,
+          "saveChecks": 91
+        },
+        {
+          "seed": 3,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 70,
+          "turns": 24,
+          "completedBatches": 18,
+          "saveChecks": 99
+        },
+        {
+          "seed": 4,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 74,
+          "turns": 25,
+          "completedBatches": 18,
+          "saveChecks": 103
+        },
+        {
+          "seed": 5,
+          "outcome": "victory",
+          "hp": 10,
+          "kills": 75,
+          "turns": 28,
+          "completedBatches": 18,
+          "saveChecks": 106
+        },
+        {
+          "seed": 6,
+          "outcome": "victory",
+          "hp": 10,
+          "kills": 76,
+          "turns": 25,
+          "completedBatches": 18,
+          "saveChecks": 100
+        },
+        {
+          "seed": 7,
+          "outcome": "victory",
+          "hp": 22,
+          "kills": 76,
+          "turns": 25,
+          "completedBatches": 18,
+          "saveChecks": 102
+        },
+        {
+          "seed": 8,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 70,
+          "turns": 24,
+          "completedBatches": 18,
+          "saveChecks": 98
+        },
+        {
+          "seed": 9,
+          "outcome": "victory",
+          "hp": 73,
+          "kills": 76,
+          "turns": 23,
+          "completedBatches": 18,
+          "saveChecks": 97
+        },
+        {
+          "seed": 10,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 65,
+          "turns": 22,
+          "completedBatches": 18,
+          "saveChecks": 94
+        },
+        {
+          "seed": 11,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 69,
+          "turns": 24,
+          "completedBatches": 18,
+          "saveChecks": 100
+        },
+        {
+          "seed": 12,
+          "outcome": "victory",
+          "hp": 11,
+          "kills": 75,
+          "turns": 29,
+          "completedBatches": 18,
+          "saveChecks": 111
+        },
+        {
+          "seed": 13,
+          "outcome": "victory",
+          "hp": 16,
+          "kills": 76,
+          "turns": 26,
+          "completedBatches": 18,
+          "saveChecks": 105
+        },
+        {
+          "seed": 14,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 70,
+          "turns": 24,
+          "completedBatches": 18,
+          "saveChecks": 101
+        },
+        {
+          "seed": 15,
+          "outcome": "victory",
+          "hp": 80,
+          "kills": 76,
+          "turns": 22,
+          "completedBatches": 18,
+          "saveChecks": 96
+        },
+        {
+          "seed": 16,
+          "outcome": "victory",
+          "hp": 3,
+          "kills": 76,
+          "turns": 26,
+          "completedBatches": 18,
+          "saveChecks": 101
+        },
+        {
+          "seed": 17,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 68,
+          "turns": 23,
+          "completedBatches": 18,
+          "saveChecks": 99
+        },
+        {
+          "seed": 18,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 69,
+          "turns": 23,
+          "completedBatches": 18,
+          "saveChecks": 98
+        },
+        {
+          "seed": 19,
+          "outcome": "victory",
+          "hp": 100,
+          "kills": 76,
+          "turns": 21,
+          "completedBatches": 18,
+          "saveChecks": 94
+        },
+        {
+          "seed": 20,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 70,
+          "turns": 24,
+          "completedBatches": 18,
+          "saveChecks": 98
+        },
+        {
+          "seed": 21,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 71,
+          "turns": 25,
+          "completedBatches": 18,
+          "saveChecks": 103
+        },
+        {
+          "seed": 22,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 71,
+          "turns": 24,
+          "completedBatches": 18,
+          "saveChecks": 97
+        },
+        {
+          "seed": 23,
+          "outcome": "victory",
+          "hp": 78,
+          "kills": 76,
+          "turns": 24,
+          "completedBatches": 18,
+          "saveChecks": 100
+        },
+        {
+          "seed": 24,
+          "outcome": "victory",
+          "hp": 103,
+          "kills": 76,
+          "turns": 22,
+          "completedBatches": 18,
+          "saveChecks": 94
+        },
+        {
+          "seed": 25,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 70,
+          "turns": 25,
+          "completedBatches": 18,
+          "saveChecks": 103
+        },
+        {
+          "seed": 26,
+          "outcome": "victory",
+          "hp": 105,
+          "kills": 76,
+          "turns": 22,
+          "completedBatches": 18,
+          "saveChecks": 96
+        },
+        {
+          "seed": 27,
+          "outcome": "victory",
+          "hp": 100,
+          "kills": 76,
+          "turns": 21,
+          "completedBatches": 18,
+          "saveChecks": 95
+        },
+        {
+          "seed": 28,
+          "outcome": "victory",
+          "hp": 41,
+          "kills": 76,
+          "turns": 25,
+          "completedBatches": 18,
+          "saveChecks": 98
+        },
+        {
+          "seed": 29,
+          "outcome": "victory",
+          "hp": 48,
+          "kills": 76,
+          "turns": 23,
+          "completedBatches": 18,
+          "saveChecks": 96
+        },
+        {
+          "seed": 30,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 71,
+          "turns": 23,
+          "completedBatches": 18,
+          "saveChecks": 93
+        },
+        {
+          "seed": 31,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 68,
+          "turns": 22,
+          "completedBatches": 18,
+          "saveChecks": 92
+        },
+        {
+          "seed": 32,
+          "outcome": "victory",
+          "hp": 62,
+          "kills": 76,
+          "turns": 25,
+          "completedBatches": 18,
+          "saveChecks": 101
+        },
+        {
+          "seed": 33,
+          "outcome": "victory",
+          "hp": 32,
+          "kills": 76,
+          "turns": 25,
+          "completedBatches": 18,
+          "saveChecks": 99
+        },
+        {
+          "seed": 34,
+          "outcome": "victory",
+          "hp": 100,
+          "kills": 76,
+          "turns": 21,
+          "completedBatches": 18,
+          "saveChecks": 94
+        },
+        {
+          "seed": 35,
+          "outcome": "victory",
+          "hp": 14,
+          "kills": 76,
+          "turns": 25,
+          "completedBatches": 18,
+          "saveChecks": 102
+        },
+        {
+          "seed": 36,
+          "outcome": "victory",
+          "hp": 46,
+          "kills": 76,
+          "turns": 26,
+          "completedBatches": 18,
+          "saveChecks": 103
+        },
+        {
+          "seed": 37,
+          "outcome": "victory",
+          "hp": 110,
+          "kills": 76,
+          "turns": 21,
+          "completedBatches": 18,
+          "saveChecks": 94
+        },
+        {
+          "seed": 38,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 70,
+          "turns": 24,
+          "completedBatches": 18,
+          "saveChecks": 101
+        },
+        {
+          "seed": 39,
+          "outcome": "victory",
+          "hp": 71,
+          "kills": 76,
+          "turns": 23,
+          "completedBatches": 18,
+          "saveChecks": 96
+        },
+        {
+          "seed": 40,
+          "outcome": "victory",
+          "hp": 81,
+          "kills": 76,
+          "turns": 24,
+          "completedBatches": 18,
+          "saveChecks": 98
+        },
+        {
+          "seed": 41,
+          "outcome": "victory",
+          "hp": 90,
+          "kills": 76,
+          "turns": 23,
+          "completedBatches": 18,
+          "saveChecks": 98
+        },
+        {
+          "seed": 42,
+          "outcome": "victory",
+          "hp": 17,
+          "kills": 76,
+          "turns": 25,
+          "completedBatches": 18,
+          "saveChecks": 100
+        },
+        {
+          "seed": 43,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 70,
+          "turns": 24,
+          "completedBatches": 18,
+          "saveChecks": 99
+        },
+        {
+          "seed": 44,
+          "outcome": "victory",
+          "hp": 100,
+          "kills": 76,
+          "turns": 21,
+          "completedBatches": 18,
+          "saveChecks": 91
+        },
+        {
+          "seed": 45,
+          "outcome": "victory",
+          "hp": 110,
+          "kills": 76,
+          "turns": 21,
+          "completedBatches": 18,
+          "saveChecks": 94
+        },
+        {
+          "seed": 46,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 73,
+          "turns": 25,
+          "completedBatches": 18,
+          "saveChecks": 101
+        },
+        {
+          "seed": 47,
+          "outcome": "victory",
+          "hp": 17,
+          "kills": 76,
+          "turns": 26,
+          "completedBatches": 18,
+          "saveChecks": 101
+        },
+        {
+          "seed": 48,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 67,
+          "turns": 23,
+          "completedBatches": 18,
+          "saveChecks": 94
+        },
+        {
+          "seed": 49,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 69,
+          "turns": 24,
+          "completedBatches": 18,
+          "saveChecks": 98
+        },
+        {
+          "seed": 50,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 66,
+          "turns": 23,
+          "completedBatches": 18,
+          "saveChecks": 99
+        },
+        {
+          "seed": 51,
+          "outcome": "victory",
+          "hp": 100,
+          "kills": 76,
+          "turns": 22,
+          "completedBatches": 18,
+          "saveChecks": 96
+        },
+        {
+          "seed": 52,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 69,
+          "turns": 23,
+          "completedBatches": 18,
+          "saveChecks": 96
+        },
+        {
+          "seed": 53,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 67,
+          "turns": 23,
+          "completedBatches": 18,
+          "saveChecks": 96
+        },
+        {
+          "seed": 54,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 67,
+          "turns": 22,
+          "completedBatches": 18,
+          "saveChecks": 93
+        },
+        {
+          "seed": 55,
+          "outcome": "victory",
+          "hp": 19,
+          "kills": 76,
+          "turns": 26,
+          "completedBatches": 18,
+          "saveChecks": 105
+        },
+        {
+          "seed": 56,
+          "outcome": "victory",
+          "hp": 6,
+          "kills": 76,
+          "turns": 27,
+          "completedBatches": 18,
+          "saveChecks": 101
+        },
+        {
+          "seed": 57,
+          "outcome": "victory",
+          "hp": 67,
+          "kills": 76,
+          "turns": 24,
+          "completedBatches": 18,
+          "saveChecks": 99
+        },
+        {
+          "seed": 58,
+          "outcome": "victory",
+          "hp": 33,
+          "kills": 76,
+          "turns": 27,
+          "completedBatches": 18,
+          "saveChecks": 105
+        },
+        {
+          "seed": 59,
+          "outcome": "victory",
+          "hp": 54,
+          "kills": 76,
+          "turns": 24,
+          "completedBatches": 18,
+          "saveChecks": 98
+        },
+        {
+          "seed": 60,
+          "outcome": "victory",
+          "hp": 102,
+          "kills": 76,
+          "turns": 23,
+          "completedBatches": 18,
+          "saveChecks": 97
+        },
+        {
+          "seed": 61,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 70,
+          "turns": 23,
+          "completedBatches": 18,
+          "saveChecks": 96
+        },
+        {
+          "seed": 62,
+          "outcome": "victory",
+          "hp": 32,
+          "kills": 76,
+          "turns": 25,
+          "completedBatches": 18,
+          "saveChecks": 100
+        },
+        {
+          "seed": 63,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 69,
+          "turns": 23,
+          "completedBatches": 18,
+          "saveChecks": 94
+        },
+        {
+          "seed": 64,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 70,
+          "turns": 24,
+          "completedBatches": 18,
+          "saveChecks": 99
+        },
+        {
+          "seed": 65,
+          "outcome": "victory",
+          "hp": 10,
+          "kills": 76,
+          "turns": 26,
+          "completedBatches": 18,
+          "saveChecks": 103
+        },
+        {
+          "seed": 66,
+          "outcome": "victory",
+          "hp": 100,
+          "kills": 76,
+          "turns": 22,
+          "completedBatches": 18,
+          "saveChecks": 94
+        },
+        {
+          "seed": 67,
+          "outcome": "victory",
+          "hp": 14,
+          "kills": 76,
+          "turns": 24,
+          "completedBatches": 18,
+          "saveChecks": 101
+        },
+        {
+          "seed": 68,
+          "outcome": "victory",
+          "hp": 110,
+          "kills": 76,
+          "turns": 19,
+          "completedBatches": 18,
+          "saveChecks": 89
+        },
+        {
+          "seed": 69,
+          "outcome": "victory",
+          "hp": 31,
+          "kills": 76,
+          "turns": 25,
+          "completedBatches": 18,
+          "saveChecks": 100
+        },
+        {
+          "seed": 70,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 69,
+          "turns": 23,
+          "completedBatches": 18,
+          "saveChecks": 95
+        },
+        {
+          "seed": 71,
+          "outcome": "victory",
+          "hp": 88,
+          "kills": 76,
+          "turns": 23,
+          "completedBatches": 18,
+          "saveChecks": 98
+        },
+        {
+          "seed": 72,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 69,
+          "turns": 23,
+          "completedBatches": 18,
+          "saveChecks": 94
+        },
+        {
+          "seed": 73,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 64,
+          "turns": 22,
+          "completedBatches": 18,
+          "saveChecks": 92
+        },
+        {
+          "seed": 74,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 64,
+          "turns": 23,
+          "completedBatches": 18,
+          "saveChecks": 96
+        },
+        {
+          "seed": 75,
+          "outcome": "victory",
+          "hp": 46,
+          "kills": 76,
+          "turns": 24,
+          "completedBatches": 18,
+          "saveChecks": 100
+        },
+        {
+          "seed": 76,
+          "outcome": "victory",
+          "hp": 49,
+          "kills": 76,
+          "turns": 26,
+          "completedBatches": 18,
+          "saveChecks": 102
+        },
+        {
+          "seed": 77,
+          "outcome": "victory",
+          "hp": 37,
+          "kills": 76,
+          "turns": 25,
+          "completedBatches": 18,
+          "saveChecks": 101
+        },
+        {
+          "seed": 78,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 69,
+          "turns": 23,
+          "completedBatches": 18,
+          "saveChecks": 95
+        },
+        {
+          "seed": 79,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 69,
+          "turns": 24,
+          "completedBatches": 18,
+          "saveChecks": 97
+        },
+        {
+          "seed": 80,
+          "outcome": "victory",
+          "hp": 80,
+          "kills": 76,
+          "turns": 24,
+          "completedBatches": 18,
+          "saveChecks": 97
+        },
+        {
+          "seed": 81,
+          "outcome": "victory",
+          "hp": 102,
+          "kills": 76,
+          "turns": 23,
+          "completedBatches": 18,
+          "saveChecks": 96
+        },
+        {
+          "seed": 82,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 69,
+          "turns": 23,
+          "completedBatches": 18,
+          "saveChecks": 97
+        },
+        {
+          "seed": 83,
+          "outcome": "victory",
+          "hp": 19,
+          "kills": 76,
+          "turns": 25,
+          "completedBatches": 18,
+          "saveChecks": 102
+        },
+        {
+          "seed": 84,
+          "outcome": "victory",
+          "hp": 59,
+          "kills": 76,
+          "turns": 24,
+          "completedBatches": 18,
+          "saveChecks": 98
+        },
+        {
+          "seed": 85,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 69,
+          "turns": 26,
+          "completedBatches": 18,
+          "saveChecks": 104
+        },
+        {
+          "seed": 86,
+          "outcome": "victory",
+          "hp": 110,
+          "kills": 76,
+          "turns": 21,
+          "completedBatches": 18,
+          "saveChecks": 92
+        },
+        {
+          "seed": 87,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 69,
+          "turns": 22,
+          "completedBatches": 18,
+          "saveChecks": 94
+        },
+        {
+          "seed": 88,
+          "outcome": "victory",
+          "hp": 95,
+          "kills": 76,
+          "turns": 22,
+          "completedBatches": 18,
+          "saveChecks": 97
+        },
+        {
+          "seed": 89,
+          "outcome": "victory",
+          "hp": 48,
+          "kills": 76,
+          "turns": 24,
+          "completedBatches": 18,
+          "saveChecks": 99
+        },
+        {
+          "seed": 90,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 66,
+          "turns": 22,
+          "completedBatches": 18,
+          "saveChecks": 94
+        },
+        {
+          "seed": 91,
+          "outcome": "victory",
+          "hp": 26,
+          "kills": 76,
+          "turns": 25,
+          "completedBatches": 18,
+          "saveChecks": 100
+        },
+        {
+          "seed": 92,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 69,
+          "turns": 23,
+          "completedBatches": 18,
+          "saveChecks": 95
+        },
+        {
+          "seed": 93,
+          "outcome": "victory",
+          "hp": 38,
+          "kills": 76,
+          "turns": 26,
+          "completedBatches": 18,
+          "saveChecks": 103
+        },
+        {
+          "seed": 94,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 65,
+          "turns": 23,
+          "completedBatches": 18,
+          "saveChecks": 94
+        },
+        {
+          "seed": 95,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 65,
+          "turns": 22,
+          "completedBatches": 18,
+          "saveChecks": 92
+        },
+        {
+          "seed": 96,
+          "outcome": "victory",
+          "hp": 93,
+          "kills": 76,
+          "turns": 23,
+          "completedBatches": 18,
+          "saveChecks": 96
+        },
+        {
+          "seed": 97,
+          "outcome": "victory",
+          "hp": 71,
+          "kills": 76,
+          "turns": 23,
+          "completedBatches": 18,
+          "saveChecks": 97
+        },
+        {
+          "seed": 98,
+          "outcome": "victory",
+          "hp": 82,
+          "kills": 76,
+          "turns": 22,
+          "completedBatches": 18,
+          "saveChecks": 94
+        },
+        {
+          "seed": 99,
+          "outcome": "victory",
+          "hp": 38,
+          "kills": 76,
+          "turns": 26,
+          "completedBatches": 18,
+          "saveChecks": 102
+        },
+        {
+          "seed": 100,
+          "outcome": "victory",
+          "hp": 56,
+          "kills": 76,
+          "turns": 26,
+          "completedBatches": 18,
+          "saveChecks": 102
+        }
+      ]
+    },
+    {
+      "difficulty": 0,
+      "encounterVersion": 3,
+      "runs": 100,
+      "wins": 77,
+      "winRate": 0.77,
+      "meanFinalHp": 50.72,
+      "meanWinnerHp": 65.87,
+      "meanKills": 99.59,
+      "meanWinnerKills": 101,
+      "meanTurns": 23.72,
+      "meanCompletedBatches": 18,
+      "rows": [
+        {
+          "seed": 1,
+          "outcome": "victory",
+          "hp": 110,
+          "kills": 101,
+          "turns": 20,
+          "completedBatches": 18,
+          "saveChecks": 92
+        },
+        {
+          "seed": 2,
+          "outcome": "victory",
+          "hp": 72,
+          "kills": 101,
+          "turns": 22,
+          "completedBatches": 18,
+          "saveChecks": 97
+        },
+        {
+          "seed": 3,
+          "outcome": "victory",
+          "hp": 58,
+          "kills": 101,
+          "turns": 23,
+          "completedBatches": 18,
+          "saveChecks": 99
+        },
+        {
+          "seed": 4,
+          "outcome": "victory",
+          "hp": 38,
+          "kills": 101,
+          "turns": 25,
+          "completedBatches": 18,
+          "saveChecks": 105
+        },
+        {
+          "seed": 5,
+          "outcome": "victory",
+          "hp": 65,
+          "kills": 101,
+          "turns": 23,
+          "completedBatches": 18,
+          "saveChecks": 101
+        },
+        {
+          "seed": 6,
+          "outcome": "victory",
+          "hp": 47,
+          "kills": 101,
+          "turns": 25,
+          "completedBatches": 18,
+          "saveChecks": 104
+        },
+        {
+          "seed": 7,
+          "outcome": "victory",
+          "hp": 74,
+          "kills": 101,
+          "turns": 24,
+          "completedBatches": 18,
+          "saveChecks": 99
+        },
+        {
+          "seed": 8,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 95,
+          "turns": 24,
+          "completedBatches": 18,
+          "saveChecks": 101
+        },
+        {
+          "seed": 9,
+          "outcome": "victory",
+          "hp": 45,
+          "kills": 101,
+          "turns": 24,
+          "completedBatches": 18,
+          "saveChecks": 98
+        },
+        {
+          "seed": 10,
+          "outcome": "victory",
+          "hp": 72,
+          "kills": 101,
+          "turns": 24,
+          "completedBatches": 18,
+          "saveChecks": 101
+        },
+        {
+          "seed": 11,
+          "outcome": "victory",
+          "hp": 4,
+          "kills": 101,
+          "turns": 28,
+          "completedBatches": 18,
+          "saveChecks": 111
+        },
+        {
+          "seed": 12,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 94,
+          "turns": 24,
+          "completedBatches": 18,
+          "saveChecks": 100
+        },
+        {
+          "seed": 13,
+          "outcome": "victory",
+          "hp": 34,
+          "kills": 101,
+          "turns": 26,
+          "completedBatches": 18,
+          "saveChecks": 104
+        },
+        {
+          "seed": 14,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 95,
+          "turns": 24,
+          "completedBatches": 18,
+          "saveChecks": 102
+        },
+        {
+          "seed": 15,
+          "outcome": "victory",
+          "hp": 87,
+          "kills": 101,
+          "turns": 24,
+          "completedBatches": 18,
+          "saveChecks": 98
+        },
+        {
+          "seed": 16,
+          "outcome": "victory",
+          "hp": 84,
+          "kills": 101,
+          "turns": 25,
+          "completedBatches": 18,
+          "saveChecks": 100
+        },
+        {
+          "seed": 17,
+          "outcome": "victory",
+          "hp": 38,
+          "kills": 101,
+          "turns": 25,
+          "completedBatches": 18,
+          "saveChecks": 103
+        },
+        {
+          "seed": 18,
+          "outcome": "victory",
+          "hp": 110,
+          "kills": 101,
+          "turns": 22,
+          "completedBatches": 18,
+          "saveChecks": 97
+        },
+        {
+          "seed": 19,
+          "outcome": "victory",
+          "hp": 73,
+          "kills": 101,
+          "turns": 24,
+          "completedBatches": 18,
+          "saveChecks": 101
+        },
+        {
+          "seed": 20,
+          "outcome": "victory",
+          "hp": 110,
+          "kills": 101,
+          "turns": 21,
+          "completedBatches": 18,
+          "saveChecks": 95
+        },
+        {
+          "seed": 21,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 95,
+          "turns": 24,
+          "completedBatches": 18,
+          "saveChecks": 102
+        },
+        {
+          "seed": 22,
+          "outcome": "victory",
+          "hp": 22,
+          "kills": 101,
+          "turns": 25,
+          "completedBatches": 18,
+          "saveChecks": 101
+        },
+        {
+          "seed": 23,
+          "outcome": "victory",
+          "hp": 85,
+          "kills": 101,
+          "turns": 24,
+          "completedBatches": 18,
+          "saveChecks": 100
+        },
+        {
+          "seed": 24,
+          "outcome": "victory",
+          "hp": 88,
+          "kills": 101,
+          "turns": 23,
+          "completedBatches": 18,
+          "saveChecks": 98
+        },
+        {
+          "seed": 25,
+          "outcome": "victory",
+          "hp": 87,
+          "kills": 101,
+          "turns": 22,
+          "completedBatches": 18,
+          "saveChecks": 96
+        },
+        {
+          "seed": 26,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 96,
+          "turns": 25,
+          "completedBatches": 18,
+          "saveChecks": 105
+        },
+        {
+          "seed": 27,
+          "outcome": "victory",
+          "hp": 55,
+          "kills": 101,
+          "turns": 25,
+          "completedBatches": 18,
+          "saveChecks": 101
+        },
+        {
+          "seed": 28,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 95,
+          "turns": 24,
+          "completedBatches": 18,
+          "saveChecks": 101
+        },
+        {
+          "seed": 29,
+          "outcome": "victory",
+          "hp": 20,
+          "kills": 101,
+          "turns": 26,
+          "completedBatches": 18,
+          "saveChecks": 104
+        },
+        {
+          "seed": 30,
+          "outcome": "victory",
+          "hp": 80,
+          "kills": 101,
+          "turns": 23,
+          "completedBatches": 18,
+          "saveChecks": 97
+        },
+        {
+          "seed": 31,
+          "outcome": "victory",
+          "hp": 53,
+          "kills": 101,
+          "turns": 25,
+          "completedBatches": 18,
+          "saveChecks": 102
+        },
+        {
+          "seed": 32,
+          "outcome": "victory",
+          "hp": 14,
+          "kills": 101,
+          "turns": 26,
+          "completedBatches": 18,
+          "saveChecks": 105
+        },
+        {
+          "seed": 33,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 94,
+          "turns": 24,
+          "completedBatches": 18,
+          "saveChecks": 102
+        },
+        {
+          "seed": 34,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 94,
+          "turns": 24,
+          "completedBatches": 18,
+          "saveChecks": 101
+        },
+        {
+          "seed": 35,
+          "outcome": "victory",
+          "hp": 72,
+          "kills": 101,
+          "turns": 24,
+          "completedBatches": 18,
+          "saveChecks": 100
+        },
+        {
+          "seed": 36,
+          "outcome": "victory",
+          "hp": 100,
+          "kills": 101,
+          "turns": 21,
+          "completedBatches": 18,
+          "saveChecks": 96
+        },
+        {
+          "seed": 37,
+          "outcome": "victory",
+          "hp": 86,
+          "kills": 101,
+          "turns": 23,
+          "completedBatches": 18,
+          "saveChecks": 100
+        },
+        {
+          "seed": 38,
+          "outcome": "victory",
+          "hp": 24,
+          "kills": 101,
+          "turns": 25,
+          "completedBatches": 18,
+          "saveChecks": 104
+        },
+        {
+          "seed": 39,
+          "outcome": "victory",
+          "hp": 60,
+          "kills": 101,
+          "turns": 23,
+          "completedBatches": 18,
+          "saveChecks": 100
+        },
+        {
+          "seed": 40,
+          "outcome": "victory",
+          "hp": 94,
+          "kills": 101,
+          "turns": 23,
+          "completedBatches": 18,
+          "saveChecks": 99
+        },
+        {
+          "seed": 41,
+          "outcome": "victory",
+          "hp": 76,
+          "kills": 101,
+          "turns": 25,
+          "completedBatches": 18,
+          "saveChecks": 102
+        },
+        {
+          "seed": 42,
+          "outcome": "victory",
+          "hp": 2,
+          "kills": 101,
+          "turns": 25,
+          "completedBatches": 18,
+          "saveChecks": 102
+        },
+        {
+          "seed": 43,
+          "outcome": "victory",
+          "hp": 74,
+          "kills": 101,
+          "turns": 23,
+          "completedBatches": 18,
+          "saveChecks": 100
+        },
+        {
+          "seed": 44,
+          "outcome": "victory",
+          "hp": 48,
+          "kills": 101,
+          "turns": 24,
+          "completedBatches": 18,
+          "saveChecks": 100
+        },
+        {
+          "seed": 45,
+          "outcome": "victory",
+          "hp": 71,
+          "kills": 101,
+          "turns": 24,
+          "completedBatches": 18,
+          "saveChecks": 101
+        },
+        {
+          "seed": 46,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 96,
+          "turns": 25,
+          "completedBatches": 18,
+          "saveChecks": 104
+        },
+        {
+          "seed": 47,
+          "outcome": "victory",
+          "hp": 87,
+          "kills": 101,
+          "turns": 23,
+          "completedBatches": 18,
+          "saveChecks": 99
+        },
+        {
+          "seed": 48,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 96,
+          "turns": 24,
+          "completedBatches": 18,
+          "saveChecks": 99
+        },
+        {
+          "seed": 49,
+          "outcome": "victory",
+          "hp": 9,
+          "kills": 101,
+          "turns": 25,
+          "completedBatches": 18,
+          "saveChecks": 103
+        },
+        {
+          "seed": 50,
+          "outcome": "victory",
+          "hp": 81,
+          "kills": 101,
+          "turns": 23,
+          "completedBatches": 18,
+          "saveChecks": 99
+        },
+        {
+          "seed": 51,
+          "outcome": "victory",
+          "hp": 91,
+          "kills": 101,
+          "turns": 24,
+          "completedBatches": 18,
+          "saveChecks": 103
+        },
+        {
+          "seed": 52,
+          "outcome": "victory",
+          "hp": 10,
+          "kills": 101,
+          "turns": 26,
+          "completedBatches": 18,
+          "saveChecks": 107
+        },
+        {
+          "seed": 53,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 94,
+          "turns": 24,
+          "completedBatches": 18,
+          "saveChecks": 99
+        },
+        {
+          "seed": 54,
+          "outcome": "victory",
+          "hp": 108,
+          "kills": 101,
+          "turns": 21,
+          "completedBatches": 18,
+          "saveChecks": 96
+        },
+        {
+          "seed": 55,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 95,
+          "turns": 23,
+          "completedBatches": 18,
+          "saveChecks": 100
+        },
+        {
+          "seed": 56,
+          "outcome": "victory",
+          "hp": 96,
+          "kills": 101,
+          "turns": 25,
+          "completedBatches": 18,
+          "saveChecks": 100
+        },
+        {
+          "seed": 57,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 94,
+          "turns": 24,
+          "completedBatches": 18,
+          "saveChecks": 102
+        },
+        {
+          "seed": 58,
+          "outcome": "victory",
+          "hp": 57,
+          "kills": 101,
+          "turns": 24,
+          "completedBatches": 18,
+          "saveChecks": 101
+        },
+        {
+          "seed": 59,
+          "outcome": "victory",
+          "hp": 46,
+          "kills": 101,
+          "turns": 24,
+          "completedBatches": 18,
+          "saveChecks": 101
+        },
+        {
+          "seed": 60,
+          "outcome": "victory",
+          "hp": 110,
+          "kills": 101,
+          "turns": 20,
+          "completedBatches": 18,
+          "saveChecks": 94
+        },
+        {
+          "seed": 61,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 95,
+          "turns": 24,
+          "completedBatches": 18,
+          "saveChecks": 102
+        },
+        {
+          "seed": 62,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 95,
+          "turns": 24,
+          "completedBatches": 18,
+          "saveChecks": 100
+        },
+        {
+          "seed": 63,
+          "outcome": "victory",
+          "hp": 14,
+          "kills": 101,
+          "turns": 24,
+          "completedBatches": 18,
+          "saveChecks": 98
+        },
+        {
+          "seed": 64,
+          "outcome": "victory",
+          "hp": 46,
+          "kills": 101,
+          "turns": 24,
+          "completedBatches": 18,
+          "saveChecks": 102
+        },
+        {
+          "seed": 65,
+          "outcome": "victory",
+          "hp": 51,
+          "kills": 101,
+          "turns": 25,
+          "completedBatches": 18,
+          "saveChecks": 104
+        },
+        {
+          "seed": 66,
+          "outcome": "victory",
+          "hp": 35,
+          "kills": 101,
+          "turns": 25,
+          "completedBatches": 18,
+          "saveChecks": 103
+        },
+        {
+          "seed": 67,
+          "outcome": "victory",
+          "hp": 52,
+          "kills": 101,
+          "turns": 24,
+          "completedBatches": 18,
+          "saveChecks": 103
+        },
+        {
+          "seed": 68,
+          "outcome": "victory",
+          "hp": 110,
+          "kills": 101,
+          "turns": 20,
+          "completedBatches": 18,
+          "saveChecks": 93
+        },
+        {
+          "seed": 69,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 95,
+          "turns": 24,
+          "completedBatches": 18,
+          "saveChecks": 102
+        },
+        {
+          "seed": 70,
+          "outcome": "victory",
+          "hp": 77,
+          "kills": 101,
+          "turns": 23,
+          "completedBatches": 18,
+          "saveChecks": 98
+        },
+        {
+          "seed": 71,
+          "outcome": "victory",
+          "hp": 65,
+          "kills": 101,
+          "turns": 24,
+          "completedBatches": 18,
+          "saveChecks": 101
+        },
+        {
+          "seed": 72,
+          "outcome": "victory",
+          "hp": 62,
+          "kills": 101,
+          "turns": 24,
+          "completedBatches": 18,
+          "saveChecks": 98
+        },
+        {
+          "seed": 73,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 95,
+          "turns": 24,
+          "completedBatches": 18,
+          "saveChecks": 102
+        },
+        {
+          "seed": 74,
+          "outcome": "victory",
+          "hp": 31,
+          "kills": 101,
+          "turns": 25,
+          "completedBatches": 18,
+          "saveChecks": 104
+        },
+        {
+          "seed": 75,
+          "outcome": "victory",
+          "hp": 69,
+          "kills": 101,
+          "turns": 23,
+          "completedBatches": 18,
+          "saveChecks": 100
+        },
+        {
+          "seed": 76,
+          "outcome": "victory",
+          "hp": 67,
+          "kills": 101,
+          "turns": 25,
+          "completedBatches": 18,
+          "saveChecks": 103
+        },
+        {
+          "seed": 77,
+          "outcome": "victory",
+          "hp": 90,
+          "kills": 101,
+          "turns": 23,
+          "completedBatches": 18,
+          "saveChecks": 98
+        },
+        {
+          "seed": 78,
+          "outcome": "victory",
+          "hp": 100,
+          "kills": 101,
+          "turns": 23,
+          "completedBatches": 18,
+          "saveChecks": 99
+        },
+        {
+          "seed": 79,
+          "outcome": "victory",
+          "hp": 91,
+          "kills": 101,
+          "turns": 24,
+          "completedBatches": 18,
+          "saveChecks": 101
+        },
+        {
+          "seed": 80,
+          "outcome": "victory",
+          "hp": 52,
+          "kills": 101,
+          "turns": 25,
+          "completedBatches": 18,
+          "saveChecks": 103
+        },
+        {
+          "seed": 81,
+          "outcome": "victory",
+          "hp": 110,
+          "kills": 101,
+          "turns": 21,
+          "completedBatches": 18,
+          "saveChecks": 94
+        },
+        {
+          "seed": 82,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 96,
+          "turns": 23,
+          "completedBatches": 18,
+          "saveChecks": 100
+        },
+        {
+          "seed": 83,
+          "outcome": "victory",
+          "hp": 100,
+          "kills": 101,
+          "turns": 22,
+          "completedBatches": 18,
+          "saveChecks": 97
+        },
+        {
+          "seed": 84,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 95,
+          "turns": 25,
+          "completedBatches": 18,
+          "saveChecks": 103
+        },
+        {
+          "seed": 85,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 94,
+          "turns": 24,
+          "completedBatches": 18,
+          "saveChecks": 100
+        },
+        {
+          "seed": 86,
+          "outcome": "victory",
+          "hp": 100,
+          "kills": 101,
+          "turns": 22,
+          "completedBatches": 18,
+          "saveChecks": 96
+        },
+        {
+          "seed": 87,
+          "outcome": "victory",
+          "hp": 19,
+          "kills": 101,
+          "turns": 26,
+          "completedBatches": 18,
+          "saveChecks": 105
+        },
+        {
+          "seed": 88,
+          "outcome": "victory",
+          "hp": 53,
+          "kills": 101,
+          "turns": 23,
+          "completedBatches": 18,
+          "saveChecks": 101
+        },
+        {
+          "seed": 89,
+          "outcome": "victory",
+          "hp": 74,
+          "kills": 101,
+          "turns": 22,
+          "completedBatches": 18,
+          "saveChecks": 95
+        },
+        {
+          "seed": 90,
+          "outcome": "victory",
+          "hp": 100,
+          "kills": 101,
+          "turns": 20,
+          "completedBatches": 18,
+          "saveChecks": 93
+        },
+        {
+          "seed": 91,
+          "outcome": "victory",
+          "hp": 110,
+          "kills": 101,
+          "turns": 22,
+          "completedBatches": 18,
+          "saveChecks": 96
+        },
+        {
+          "seed": 92,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 95,
+          "turns": 24,
+          "completedBatches": 18,
+          "saveChecks": 101
+        },
+        {
+          "seed": 93,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 94,
+          "turns": 23,
+          "completedBatches": 18,
+          "saveChecks": 99
+        },
+        {
+          "seed": 94,
+          "outcome": "victory",
+          "hp": 77,
+          "kills": 101,
+          "turns": 23,
+          "completedBatches": 18,
+          "saveChecks": 99
+        },
+        {
+          "seed": 95,
+          "outcome": "victory",
+          "hp": 60,
+          "kills": 101,
+          "turns": 24,
+          "completedBatches": 18,
+          "saveChecks": 98
+        },
+        {
+          "seed": 96,
+          "outcome": "victory",
+          "hp": 29,
+          "kills": 101,
+          "turns": 25,
+          "completedBatches": 18,
+          "saveChecks": 102
+        },
+        {
+          "seed": 97,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 95,
+          "turns": 24,
+          "completedBatches": 18,
+          "saveChecks": 101
+        },
+        {
+          "seed": 98,
+          "outcome": "victory",
+          "hp": 20,
+          "kills": 101,
+          "turns": 25,
+          "completedBatches": 18,
+          "saveChecks": 104
+        },
+        {
+          "seed": 99,
+          "outcome": "victory",
+          "hp": 87,
+          "kills": 101,
+          "turns": 22,
+          "completedBatches": 18,
+          "saveChecks": 95
+        },
+        {
+          "seed": 100,
+          "outcome": "victory",
+          "hp": 94,
+          "kills": 101,
+          "turns": 23,
+          "completedBatches": 18,
+          "saveChecks": 100
+        }
+      ]
+    },
+    {
+      "difficulty": 5,
+      "encounterVersion": 2,
+      "runs": 100,
+      "wins": 0,
+      "winRate": 0,
+      "meanFinalHp": 0,
+      "meanWinnerHp": 0,
+      "meanKills": 45.73,
+      "meanWinnerKills": 0,
+      "meanTurns": 18.17,
+      "meanCompletedBatches": 16.93,
+      "rows": [
+        {
+          "seed": 1,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 42,
+          "turns": 17,
+          "completedBatches": 16,
+          "saveChecks": 76
+        },
+        {
+          "seed": 2,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 39,
+          "turns": 17,
+          "completedBatches": 16,
+          "saveChecks": 76
+        },
+        {
+          "seed": 3,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 49,
+          "turns": 19,
+          "completedBatches": 18,
+          "saveChecks": 86
+        },
+        {
+          "seed": 4,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 51,
+          "turns": 19,
+          "completedBatches": 18,
+          "saveChecks": 85
+        },
+        {
+          "seed": 5,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 38,
+          "turns": 17,
+          "completedBatches": 16,
+          "saveChecks": 76
+        },
+        {
+          "seed": 6,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 56,
+          "turns": 20,
+          "completedBatches": 18,
+          "saveChecks": 86
+        },
+        {
+          "seed": 7,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 45,
+          "turns": 18,
+          "completedBatches": 17,
+          "saveChecks": 82
+        },
+        {
+          "seed": 8,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 41,
+          "turns": 17,
+          "completedBatches": 16,
+          "saveChecks": 76
+        },
+        {
+          "seed": 9,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 46,
+          "turns": 18,
+          "completedBatches": 17,
+          "saveChecks": 82
+        },
+        {
+          "seed": 10,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 39,
+          "turns": 17,
+          "completedBatches": 16,
+          "saveChecks": 77
+        },
+        {
+          "seed": 11,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 38,
+          "turns": 17,
+          "completedBatches": 16,
+          "saveChecks": 78
+        },
+        {
+          "seed": 12,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 36,
+          "turns": 17,
+          "completedBatches": 16,
+          "saveChecks": 77
+        },
+        {
+          "seed": 13,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 31,
+          "turns": 16,
+          "completedBatches": 15,
+          "saveChecks": 74
+        },
+        {
+          "seed": 14,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 39,
+          "turns": 17,
+          "completedBatches": 16,
+          "saveChecks": 78
+        },
+        {
+          "seed": 15,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 57,
+          "turns": 20,
+          "completedBatches": 18,
+          "saveChecks": 89
+        },
+        {
+          "seed": 16,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 50,
+          "turns": 19,
+          "completedBatches": 18,
+          "saveChecks": 83
+        },
+        {
+          "seed": 17,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 39,
+          "turns": 17,
+          "completedBatches": 16,
+          "saveChecks": 78
+        },
+        {
+          "seed": 18,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 58,
+          "turns": 20,
+          "completedBatches": 18,
+          "saveChecks": 89
+        },
+        {
+          "seed": 19,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 52,
+          "turns": 19,
+          "completedBatches": 18,
+          "saveChecks": 87
+        },
+        {
+          "seed": 20,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 38,
+          "turns": 17,
+          "completedBatches": 16,
+          "saveChecks": 78
+        },
+        {
+          "seed": 21,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 52,
+          "turns": 19,
+          "completedBatches": 18,
+          "saveChecks": 87
+        },
+        {
+          "seed": 22,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 55,
+          "turns": 20,
+          "completedBatches": 18,
+          "saveChecks": 86
+        },
+        {
+          "seed": 23,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 45,
+          "turns": 18,
+          "completedBatches": 17,
+          "saveChecks": 81
+        },
+        {
+          "seed": 24,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 64,
+          "turns": 21,
+          "completedBatches": 18,
+          "saveChecks": 91
+        },
+        {
+          "seed": 25,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 42,
+          "turns": 18,
+          "completedBatches": 17,
+          "saveChecks": 83
+        },
+        {
+          "seed": 26,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 45,
+          "turns": 18,
+          "completedBatches": 17,
+          "saveChecks": 83
+        },
+        {
+          "seed": 27,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 52,
+          "turns": 20,
+          "completedBatches": 18,
+          "saveChecks": 88
+        },
+        {
+          "seed": 28,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 49,
+          "turns": 18,
+          "completedBatches": 17,
+          "saveChecks": 81
+        },
+        {
+          "seed": 29,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 42,
+          "turns": 17,
+          "completedBatches": 16,
+          "saveChecks": 75
+        },
+        {
+          "seed": 30,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 48,
+          "turns": 18,
+          "completedBatches": 17,
+          "saveChecks": 79
+        },
+        {
+          "seed": 31,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 37,
+          "turns": 17,
+          "completedBatches": 16,
+          "saveChecks": 76
+        },
+        {
+          "seed": 32,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 59,
+          "turns": 20,
+          "completedBatches": 18,
+          "saveChecks": 89
+        },
+        {
+          "seed": 33,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 33,
+          "turns": 16,
+          "completedBatches": 15,
+          "saveChecks": 72
+        },
+        {
+          "seed": 34,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 75,
+          "turns": 23,
+          "completedBatches": 18,
+          "saveChecks": 97
+        },
+        {
+          "seed": 35,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 46,
+          "turns": 19,
+          "completedBatches": 18,
+          "saveChecks": 87
+        },
+        {
+          "seed": 36,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 44,
+          "turns": 18,
+          "completedBatches": 17,
+          "saveChecks": 84
+        },
+        {
+          "seed": 37,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 56,
+          "turns": 20,
+          "completedBatches": 18,
+          "saveChecks": 89
+        },
+        {
+          "seed": 38,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 59,
+          "turns": 20,
+          "completedBatches": 18,
+          "saveChecks": 87
+        },
+        {
+          "seed": 39,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 51,
+          "turns": 19,
+          "completedBatches": 18,
+          "saveChecks": 86
+        },
+        {
+          "seed": 40,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 50,
+          "turns": 19,
+          "completedBatches": 18,
+          "saveChecks": 85
+        },
+        {
+          "seed": 41,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 42,
+          "turns": 18,
+          "completedBatches": 17,
+          "saveChecks": 83
+        },
+        {
+          "seed": 42,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 50,
+          "turns": 19,
+          "completedBatches": 18,
+          "saveChecks": 85
+        },
+        {
+          "seed": 43,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 45,
+          "turns": 18,
+          "completedBatches": 17,
+          "saveChecks": 82
+        },
+        {
+          "seed": 44,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 46,
+          "turns": 18,
+          "completedBatches": 17,
+          "saveChecks": 82
+        },
+        {
+          "seed": 45,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 50,
+          "turns": 19,
+          "completedBatches": 18,
+          "saveChecks": 86
+        },
+        {
+          "seed": 46,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 45,
+          "turns": 18,
+          "completedBatches": 17,
+          "saveChecks": 82
+        },
+        {
+          "seed": 47,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 45,
+          "turns": 18,
+          "completedBatches": 17,
+          "saveChecks": 80
+        },
+        {
+          "seed": 48,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 40,
+          "turns": 17,
+          "completedBatches": 16,
+          "saveChecks": 77
+        },
+        {
+          "seed": 49,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 35,
+          "turns": 17,
+          "completedBatches": 16,
+          "saveChecks": 79
+        },
+        {
+          "seed": 50,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 39,
+          "turns": 17,
+          "completedBatches": 16,
+          "saveChecks": 78
+        },
+        {
+          "seed": 51,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 39,
+          "turns": 17,
+          "completedBatches": 16,
+          "saveChecks": 77
+        },
+        {
+          "seed": 52,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 44,
+          "turns": 18,
+          "completedBatches": 17,
+          "saveChecks": 82
+        },
+        {
+          "seed": 53,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 38,
+          "turns": 17,
+          "completedBatches": 16,
+          "saveChecks": 76
+        },
+        {
+          "seed": 54,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 38,
+          "turns": 17,
+          "completedBatches": 16,
+          "saveChecks": 75
+        },
+        {
+          "seed": 55,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 39,
+          "turns": 17,
+          "completedBatches": 16,
+          "saveChecks": 78
+        },
+        {
+          "seed": 56,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 35,
+          "turns": 17,
+          "completedBatches": 16,
+          "saveChecks": 73
+        },
+        {
+          "seed": 57,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 35,
+          "turns": 17,
+          "completedBatches": 16,
+          "saveChecks": 78
+        },
+        {
+          "seed": 58,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 41,
+          "turns": 18,
+          "completedBatches": 17,
+          "saveChecks": 82
+        },
+        {
+          "seed": 59,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 44,
+          "turns": 18,
+          "completedBatches": 17,
+          "saveChecks": 81
+        },
+        {
+          "seed": 60,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 45,
+          "turns": 18,
+          "completedBatches": 17,
+          "saveChecks": 83
+        },
+        {
+          "seed": 61,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 40,
+          "turns": 17,
+          "completedBatches": 16,
+          "saveChecks": 77
+        },
+        {
+          "seed": 62,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 50,
+          "turns": 19,
+          "completedBatches": 18,
+          "saveChecks": 85
+        },
+        {
+          "seed": 63,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 37,
+          "turns": 17,
+          "completedBatches": 16,
+          "saveChecks": 76
+        },
+        {
+          "seed": 64,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 40,
+          "turns": 17,
+          "completedBatches": 16,
+          "saveChecks": 77
+        },
+        {
+          "seed": 65,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 43,
+          "turns": 18,
+          "completedBatches": 17,
+          "saveChecks": 82
+        },
+        {
+          "seed": 66,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 48,
+          "turns": 18,
+          "completedBatches": 17,
+          "saveChecks": 83
+        },
+        {
+          "seed": 67,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 41,
+          "turns": 17,
+          "completedBatches": 16,
+          "saveChecks": 77
+        },
+        {
+          "seed": 68,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 66,
+          "turns": 22,
+          "completedBatches": 18,
+          "saveChecks": 95
+        },
+        {
+          "seed": 69,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 35,
+          "turns": 17,
+          "completedBatches": 16,
+          "saveChecks": 76
+        },
+        {
+          "seed": 70,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 41,
+          "turns": 17,
+          "completedBatches": 16,
+          "saveChecks": 76
+        },
+        {
+          "seed": 71,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 58,
+          "turns": 20,
+          "completedBatches": 18,
+          "saveChecks": 90
+        },
+        {
+          "seed": 72,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 39,
+          "turns": 17,
+          "completedBatches": 16,
+          "saveChecks": 75
+        },
+        {
+          "seed": 73,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 46,
+          "turns": 18,
+          "completedBatches": 17,
+          "saveChecks": 80
+        },
+        {
+          "seed": 74,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 40,
+          "turns": 17,
+          "completedBatches": 16,
+          "saveChecks": 77
+        },
+        {
+          "seed": 75,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 43,
+          "turns": 17,
+          "completedBatches": 16,
+          "saveChecks": 78
+        },
+        {
+          "seed": 76,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 50,
+          "turns": 19,
+          "completedBatches": 18,
+          "saveChecks": 84
+        },
+        {
+          "seed": 77,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 51,
+          "turns": 19,
+          "completedBatches": 18,
+          "saveChecks": 86
+        },
+        {
+          "seed": 78,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 38,
+          "turns": 17,
+          "completedBatches": 16,
+          "saveChecks": 76
+        },
+        {
+          "seed": 79,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 39,
+          "turns": 17,
+          "completedBatches": 16,
+          "saveChecks": 77
+        },
+        {
+          "seed": 80,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 44,
+          "turns": 18,
+          "completedBatches": 17,
+          "saveChecks": 80
+        },
+        {
+          "seed": 81,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 60,
+          "turns": 20,
+          "completedBatches": 18,
+          "saveChecks": 86
+        },
+        {
+          "seed": 82,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 37,
+          "turns": 17,
+          "completedBatches": 16,
+          "saveChecks": 77
+        },
+        {
+          "seed": 83,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 45,
+          "turns": 18,
+          "completedBatches": 17,
+          "saveChecks": 81
+        },
+        {
+          "seed": 84,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 47,
+          "turns": 19,
+          "completedBatches": 18,
+          "saveChecks": 85
+        },
+        {
+          "seed": 85,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 37,
+          "turns": 17,
+          "completedBatches": 16,
+          "saveChecks": 78
+        },
+        {
+          "seed": 86,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 60,
+          "turns": 20,
+          "completedBatches": 18,
+          "saveChecks": 86
+        },
+        {
+          "seed": 87,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 40,
+          "turns": 17,
+          "completedBatches": 16,
+          "saveChecks": 75
+        },
+        {
+          "seed": 88,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 56,
+          "turns": 20,
+          "completedBatches": 18,
+          "saveChecks": 89
+        },
+        {
+          "seed": 89,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 59,
+          "turns": 20,
+          "completedBatches": 18,
+          "saveChecks": 88
+        },
+        {
+          "seed": 90,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 47,
+          "turns": 18,
+          "completedBatches": 17,
+          "saveChecks": 82
+        },
+        {
+          "seed": 91,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 48,
+          "turns": 19,
+          "completedBatches": 18,
+          "saveChecks": 84
+        },
+        {
+          "seed": 92,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 41,
+          "turns": 17,
+          "completedBatches": 16,
+          "saveChecks": 75
+        },
+        {
+          "seed": 93,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 52,
+          "turns": 19,
+          "completedBatches": 18,
+          "saveChecks": 84
+        },
+        {
+          "seed": 94,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 40,
+          "turns": 17,
+          "completedBatches": 16,
+          "saveChecks": 76
+        },
+        {
+          "seed": 95,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 38,
+          "turns": 17,
+          "completedBatches": 16,
+          "saveChecks": 76
+        },
+        {
+          "seed": 96,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 47,
+          "turns": 18,
+          "completedBatches": 17,
+          "saveChecks": 82
+        },
+        {
+          "seed": 97,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 45,
+          "turns": 18,
+          "completedBatches": 17,
+          "saveChecks": 82
+        },
+        {
+          "seed": 98,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 60,
+          "turns": 20,
+          "completedBatches": 18,
+          "saveChecks": 87
+        },
+        {
+          "seed": 99,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 51,
+          "turns": 19,
+          "completedBatches": 18,
+          "saveChecks": 85
+        },
+        {
+          "seed": 100,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 51,
+          "turns": 20,
+          "completedBatches": 18,
+          "saveChecks": 87
+        }
+      ]
+    },
+    {
+      "difficulty": 5,
+      "encounterVersion": 3,
+      "runs": 100,
+      "wins": 0,
+      "winRate": 0,
+      "meanFinalHp": 0,
+      "meanWinnerHp": 0,
+      "meanKills": 71.08,
+      "meanWinnerKills": 0,
+      "meanTurns": 19.04,
+      "meanCompletedBatches": 17.35,
+      "rows": [
+        {
+          "seed": 1,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 94,
+          "turns": 22,
+          "completedBatches": 18,
+          "saveChecks": 94
+        },
+        {
+          "seed": 2,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 81,
+          "turns": 20,
+          "completedBatches": 18,
+          "saveChecks": 90
+        },
+        {
+          "seed": 3,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 73,
+          "turns": 19,
+          "completedBatches": 18,
+          "saveChecks": 88
+        },
+        {
+          "seed": 4,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 90,
+          "turns": 22,
+          "completedBatches": 18,
+          "saveChecks": 95
+        },
+        {
+          "seed": 5,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 69,
+          "turns": 19,
+          "completedBatches": 18,
+          "saveChecks": 89
+        },
+        {
+          "seed": 6,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 81,
+          "turns": 20,
+          "completedBatches": 18,
+          "saveChecks": 91
+        },
+        {
+          "seed": 7,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 51,
+          "turns": 17,
+          "completedBatches": 16,
+          "saveChecks": 76
+        },
+        {
+          "seed": 8,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 55,
+          "turns": 17,
+          "completedBatches": 16,
+          "saveChecks": 79
+        },
+        {
+          "seed": 9,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 80,
+          "turns": 20,
+          "completedBatches": 18,
+          "saveChecks": 89
+        },
+        {
+          "seed": 10,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 71,
+          "turns": 19,
+          "completedBatches": 18,
+          "saveChecks": 86
+        },
+        {
+          "seed": 11,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 57,
+          "turns": 18,
+          "completedBatches": 17,
+          "saveChecks": 86
+        },
+        {
+          "seed": 12,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 53,
+          "turns": 17,
+          "completedBatches": 16,
+          "saveChecks": 79
+        },
+        {
+          "seed": 13,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 67,
+          "turns": 19,
+          "completedBatches": 18,
+          "saveChecks": 89
+        },
+        {
+          "seed": 14,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 64,
+          "turns": 18,
+          "completedBatches": 17,
+          "saveChecks": 85
+        },
+        {
+          "seed": 15,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 75,
+          "turns": 20,
+          "completedBatches": 18,
+          "saveChecks": 88
+        },
+        {
+          "seed": 16,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 84,
+          "turns": 21,
+          "completedBatches": 18,
+          "saveChecks": 92
+        },
+        {
+          "seed": 17,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 65,
+          "turns": 18,
+          "completedBatches": 17,
+          "saveChecks": 84
+        },
+        {
+          "seed": 18,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 93,
+          "turns": 22,
+          "completedBatches": 18,
+          "saveChecks": 96
+        },
+        {
+          "seed": 19,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 80,
+          "turns": 20,
+          "completedBatches": 18,
+          "saveChecks": 90
+        },
+        {
+          "seed": 20,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 88,
+          "turns": 21,
+          "completedBatches": 18,
+          "saveChecks": 94
+        },
+        {
+          "seed": 21,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 52,
+          "turns": 17,
+          "completedBatches": 16,
+          "saveChecks": 80
+        },
+        {
+          "seed": 22,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 86,
+          "turns": 21,
+          "completedBatches": 18,
+          "saveChecks": 93
+        },
+        {
+          "seed": 23,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 87,
+          "turns": 21,
+          "completedBatches": 18,
+          "saveChecks": 93
+        },
+        {
+          "seed": 24,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 59,
+          "turns": 17,
+          "completedBatches": 16,
+          "saveChecks": 79
+        },
+        {
+          "seed": 25,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 79,
+          "turns": 20,
+          "completedBatches": 18,
+          "saveChecks": 89
+        },
+        {
+          "seed": 26,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 66,
+          "turns": 19,
+          "completedBatches": 18,
+          "saveChecks": 90
+        },
+        {
+          "seed": 27,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 64,
+          "turns": 18,
+          "completedBatches": 17,
+          "saveChecks": 82
+        },
+        {
+          "seed": 28,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 64,
+          "turns": 18,
+          "completedBatches": 17,
+          "saveChecks": 83
+        },
+        {
+          "seed": 29,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 62,
+          "turns": 18,
+          "completedBatches": 17,
+          "saveChecks": 83
+        },
+        {
+          "seed": 30,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 78,
+          "turns": 20,
+          "completedBatches": 18,
+          "saveChecks": 89
+        },
+        {
+          "seed": 31,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 87,
+          "turns": 21,
+          "completedBatches": 18,
+          "saveChecks": 94
+        },
+        {
+          "seed": 32,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 72,
+          "turns": 20,
+          "completedBatches": 18,
+          "saveChecks": 90
+        },
+        {
+          "seed": 33,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 63,
+          "turns": 18,
+          "completedBatches": 17,
+          "saveChecks": 84
+        },
+        {
+          "seed": 34,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 49,
+          "turns": 16,
+          "completedBatches": 15,
+          "saveChecks": 73
+        },
+        {
+          "seed": 35,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 79,
+          "turns": 20,
+          "completedBatches": 18,
+          "saveChecks": 90
+        },
+        {
+          "seed": 36,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 70,
+          "turns": 19,
+          "completedBatches": 18,
+          "saveChecks": 89
+        },
+        {
+          "seed": 37,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 88,
+          "turns": 21,
+          "completedBatches": 18,
+          "saveChecks": 95
+        },
+        {
+          "seed": 38,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 69,
+          "turns": 19,
+          "completedBatches": 18,
+          "saveChecks": 87
+        },
+        {
+          "seed": 39,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 86,
+          "turns": 21,
+          "completedBatches": 18,
+          "saveChecks": 93
+        },
+        {
+          "seed": 40,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 84,
+          "turns": 20,
+          "completedBatches": 18,
+          "saveChecks": 89
+        },
+        {
+          "seed": 41,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 59,
+          "turns": 18,
+          "completedBatches": 17,
+          "saveChecks": 83
+        },
+        {
+          "seed": 42,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 64,
+          "turns": 18,
+          "completedBatches": 17,
+          "saveChecks": 83
+        },
+        {
+          "seed": 43,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 72,
+          "turns": 19,
+          "completedBatches": 18,
+          "saveChecks": 87
+        },
+        {
+          "seed": 44,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 65,
+          "turns": 18,
+          "completedBatches": 17,
+          "saveChecks": 83
+        },
+        {
+          "seed": 45,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 73,
+          "turns": 19,
+          "completedBatches": 18,
+          "saveChecks": 88
+        },
+        {
+          "seed": 46,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 68,
+          "turns": 19,
+          "completedBatches": 18,
+          "saveChecks": 88
+        },
+        {
+          "seed": 47,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 64,
+          "turns": 18,
+          "completedBatches": 17,
+          "saveChecks": 83
+        },
+        {
+          "seed": 48,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 57,
+          "turns": 17,
+          "completedBatches": 16,
+          "saveChecks": 77
+        },
+        {
+          "seed": 49,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 63,
+          "turns": 18,
+          "completedBatches": 17,
+          "saveChecks": 84
+        },
+        {
+          "seed": 50,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 67,
+          "turns": 18,
+          "completedBatches": 17,
+          "saveChecks": 83
+        },
+        {
+          "seed": 51,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 52,
+          "turns": 17,
+          "completedBatches": 16,
+          "saveChecks": 80
+        },
+        {
+          "seed": 52,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 54,
+          "turns": 17,
+          "completedBatches": 16,
+          "saveChecks": 81
+        },
+        {
+          "seed": 53,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 74,
+          "turns": 19,
+          "completedBatches": 18,
+          "saveChecks": 87
+        },
+        {
+          "seed": 54,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 95,
+          "turns": 24,
+          "completedBatches": 18,
+          "saveChecks": 101
+        },
+        {
+          "seed": 55,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 77,
+          "turns": 20,
+          "completedBatches": 18,
+          "saveChecks": 92
+        },
+        {
+          "seed": 56,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 69,
+          "turns": 20,
+          "completedBatches": 18,
+          "saveChecks": 87
+        },
+        {
+          "seed": 57,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 52,
+          "turns": 17,
+          "completedBatches": 16,
+          "saveChecks": 81
+        },
+        {
+          "seed": 58,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 63,
+          "turns": 18,
+          "completedBatches": 17,
+          "saveChecks": 85
+        },
+        {
+          "seed": 59,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 46,
+          "turns": 16,
+          "completedBatches": 15,
+          "saveChecks": 73
+        },
+        {
+          "seed": 60,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 93,
+          "turns": 22,
+          "completedBatches": 18,
+          "saveChecks": 97
+        },
+        {
+          "seed": 61,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 69,
+          "turns": 19,
+          "completedBatches": 18,
+          "saveChecks": 89
+        },
+        {
+          "seed": 62,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 60,
+          "turns": 17,
+          "completedBatches": 16,
+          "saveChecks": 78
+        },
+        {
+          "seed": 63,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 66,
+          "turns": 18,
+          "completedBatches": 17,
+          "saveChecks": 81
+        },
+        {
+          "seed": 64,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 52,
+          "turns": 17,
+          "completedBatches": 16,
+          "saveChecks": 79
+        },
+        {
+          "seed": 65,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 81,
+          "turns": 20,
+          "completedBatches": 18,
+          "saveChecks": 90
+        },
+        {
+          "seed": 66,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 76,
+          "turns": 20,
+          "completedBatches": 18,
+          "saveChecks": 91
+        },
+        {
+          "seed": 67,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 72,
+          "turns": 19,
+          "completedBatches": 18,
+          "saveChecks": 90
+        },
+        {
+          "seed": 68,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 86,
+          "turns": 21,
+          "completedBatches": 18,
+          "saveChecks": 94
+        },
+        {
+          "seed": 69,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 57,
+          "turns": 17,
+          "completedBatches": 16,
+          "saveChecks": 80
+        },
+        {
+          "seed": 70,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 60,
+          "turns": 17,
+          "completedBatches": 16,
+          "saveChecks": 78
+        },
+        {
+          "seed": 71,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 54,
+          "turns": 17,
+          "completedBatches": 16,
+          "saveChecks": 78
+        },
+        {
+          "seed": 72,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 88,
+          "turns": 21,
+          "completedBatches": 18,
+          "saveChecks": 93
+        },
+        {
+          "seed": 73,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 56,
+          "turns": 17,
+          "completedBatches": 16,
+          "saveChecks": 80
+        },
+        {
+          "seed": 74,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 75,
+          "turns": 20,
+          "completedBatches": 18,
+          "saveChecks": 92
+        },
+        {
+          "seed": 75,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 69,
+          "turns": 19,
+          "completedBatches": 18,
+          "saveChecks": 88
+        },
+        {
+          "seed": 76,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 52,
+          "turns": 17,
+          "completedBatches": 16,
+          "saveChecks": 80
+        },
+        {
+          "seed": 77,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 84,
+          "turns": 20,
+          "completedBatches": 18,
+          "saveChecks": 90
+        },
+        {
+          "seed": 78,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 71,
+          "turns": 19,
+          "completedBatches": 18,
+          "saveChecks": 85
+        },
+        {
+          "seed": 79,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 57,
+          "turns": 17,
+          "completedBatches": 16,
+          "saveChecks": 80
+        },
+        {
+          "seed": 80,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 83,
+          "turns": 20,
+          "completedBatches": 18,
+          "saveChecks": 89
+        },
+        {
+          "seed": 81,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 83,
+          "turns": 20,
+          "completedBatches": 18,
+          "saveChecks": 89
+        },
+        {
+          "seed": 82,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 80,
+          "turns": 20,
+          "completedBatches": 18,
+          "saveChecks": 91
+        },
+        {
+          "seed": 83,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 91,
+          "turns": 21,
+          "completedBatches": 18,
+          "saveChecks": 94
+        },
+        {
+          "seed": 84,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 82,
+          "turns": 20,
+          "completedBatches": 18,
+          "saveChecks": 91
+        },
+        {
+          "seed": 85,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 86,
+          "turns": 21,
+          "completedBatches": 18,
+          "saveChecks": 94
+        },
+        {
+          "seed": 86,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 96,
+          "turns": 23,
+          "completedBatches": 18,
+          "saveChecks": 98
+        },
+        {
+          "seed": 87,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 66,
+          "turns": 18,
+          "completedBatches": 17,
+          "saveChecks": 84
+        },
+        {
+          "seed": 88,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 88,
+          "turns": 21,
+          "completedBatches": 18,
+          "saveChecks": 96
+        },
+        {
+          "seed": 89,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 81,
+          "turns": 20,
+          "completedBatches": 18,
+          "saveChecks": 88
+        },
+        {
+          "seed": 90,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 84,
+          "turns": 20,
+          "completedBatches": 18,
+          "saveChecks": 90
+        },
+        {
+          "seed": 91,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 85,
+          "turns": 20,
+          "completedBatches": 18,
+          "saveChecks": 91
+        },
+        {
+          "seed": 92,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 69,
+          "turns": 19,
+          "completedBatches": 18,
+          "saveChecks": 88
+        },
+        {
+          "seed": 93,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 56,
+          "turns": 17,
+          "completedBatches": 16,
+          "saveChecks": 79
+        },
+        {
+          "seed": 94,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 62,
+          "turns": 18,
+          "completedBatches": 17,
+          "saveChecks": 84
+        },
+        {
+          "seed": 95,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 74,
+          "turns": 19,
+          "completedBatches": 18,
+          "saveChecks": 85
+        },
+        {
+          "seed": 96,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 63,
+          "turns": 18,
+          "completedBatches": 17,
+          "saveChecks": 83
+        },
+        {
+          "seed": 97,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 55,
+          "turns": 17,
+          "completedBatches": 16,
+          "saveChecks": 79
+        },
+        {
+          "seed": 98,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 56,
+          "turns": 17,
+          "completedBatches": 16,
+          "saveChecks": 80
+        },
+        {
+          "seed": 99,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 67,
+          "turns": 18,
+          "completedBatches": 17,
+          "saveChecks": 83
+        },
+        {
+          "seed": 100,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 74,
+          "turns": 20,
+          "completedBatches": 18,
+          "saveChecks": 91
+        }
+      ]
+    },
+    {
+      "difficulty": 10,
+      "encounterVersion": 2,
+      "runs": 100,
+      "wins": 0,
+      "winRate": 0,
+      "meanFinalHp": 0,
+      "meanWinnerHp": 0,
+      "meanKills": 25.43,
+      "meanWinnerKills": 0,
+      "meanTurns": 14.22,
+      "meanCompletedBatches": 13.22,
+      "rows": [
+        {
+          "seed": 1,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 33,
+          "turns": 16,
+          "completedBatches": 15,
+          "saveChecks": 72
+        },
+        {
+          "seed": 2,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 16,
+          "turns": 12,
+          "completedBatches": 11,
+          "saveChecks": 55
+        },
+        {
+          "seed": 3,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 26,
+          "turns": 14,
+          "completedBatches": 13,
+          "saveChecks": 63
+        },
+        {
+          "seed": 4,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 36,
+          "turns": 16,
+          "completedBatches": 15,
+          "saveChecks": 73
+        },
+        {
+          "seed": 5,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 20,
+          "turns": 13,
+          "completedBatches": 12,
+          "saveChecks": 58
+        },
+        {
+          "seed": 6,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 29,
+          "turns": 15,
+          "completedBatches": 14,
+          "saveChecks": 68
+        },
+        {
+          "seed": 7,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 20,
+          "turns": 13,
+          "completedBatches": 12,
+          "saveChecks": 58
+        },
+        {
+          "seed": 8,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 23,
+          "turns": 14,
+          "completedBatches": 13,
+          "saveChecks": 62
+        },
+        {
+          "seed": 9,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 29,
+          "turns": 15,
+          "completedBatches": 14,
+          "saveChecks": 68
+        },
+        {
+          "seed": 10,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 21,
+          "turns": 13,
+          "completedBatches": 12,
+          "saveChecks": 59
+        },
+        {
+          "seed": 11,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 23,
+          "turns": 14,
+          "completedBatches": 13,
+          "saveChecks": 63
+        },
+        {
+          "seed": 12,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 19,
+          "turns": 13,
+          "completedBatches": 12,
+          "saveChecks": 59
+        },
+        {
+          "seed": 13,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 22,
+          "turns": 14,
+          "completedBatches": 13,
+          "saveChecks": 63
+        },
+        {
+          "seed": 14,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 21,
+          "turns": 13,
+          "completedBatches": 12,
+          "saveChecks": 59
+        },
+        {
+          "seed": 15,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 29,
+          "turns": 15,
+          "completedBatches": 14,
+          "saveChecks": 68
+        },
+        {
+          "seed": 16,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 24,
+          "turns": 14,
+          "completedBatches": 13,
+          "saveChecks": 62
+        },
+        {
+          "seed": 17,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 28,
+          "turns": 15,
+          "completedBatches": 14,
+          "saveChecks": 69
+        },
+        {
+          "seed": 18,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 24,
+          "turns": 14,
+          "completedBatches": 13,
+          "saveChecks": 63
+        },
+        {
+          "seed": 19,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 22,
+          "turns": 13,
+          "completedBatches": 12,
+          "saveChecks": 59
+        },
+        {
+          "seed": 20,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 20,
+          "turns": 13,
+          "completedBatches": 12,
+          "saveChecks": 59
+        },
+        {
+          "seed": 21,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 21,
+          "turns": 13,
+          "completedBatches": 12,
+          "saveChecks": 59
+        },
+        {
+          "seed": 22,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 27,
+          "turns": 15,
+          "completedBatches": 14,
+          "saveChecks": 67
+        },
+        {
+          "seed": 23,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 27,
+          "turns": 15,
+          "completedBatches": 14,
+          "saveChecks": 68
+        },
+        {
+          "seed": 24,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 29,
+          "turns": 15,
+          "completedBatches": 14,
+          "saveChecks": 67
+        },
+        {
+          "seed": 25,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 23,
+          "turns": 14,
+          "completedBatches": 13,
+          "saveChecks": 63
+        },
+        {
+          "seed": 26,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 24,
+          "turns": 14,
+          "completedBatches": 13,
+          "saveChecks": 63
+        },
+        {
+          "seed": 27,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 30,
+          "turns": 15,
+          "completedBatches": 14,
+          "saveChecks": 68
+        },
+        {
+          "seed": 28,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 21,
+          "turns": 13,
+          "completedBatches": 12,
+          "saveChecks": 58
+        },
+        {
+          "seed": 29,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 25,
+          "turns": 14,
+          "completedBatches": 13,
+          "saveChecks": 63
+        },
+        {
+          "seed": 30,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 24,
+          "turns": 14,
+          "completedBatches": 13,
+          "saveChecks": 62
+        },
+        {
+          "seed": 31,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 17,
+          "turns": 12,
+          "completedBatches": 11,
+          "saveChecks": 55
+        },
+        {
+          "seed": 32,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 24,
+          "turns": 14,
+          "completedBatches": 13,
+          "saveChecks": 63
+        },
+        {
+          "seed": 33,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 19,
+          "turns": 13,
+          "completedBatches": 12,
+          "saveChecks": 58
+        },
+        {
+          "seed": 34,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 48,
+          "turns": 18,
+          "completedBatches": 17,
+          "saveChecks": 82
+        },
+        {
+          "seed": 35,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 31,
+          "turns": 16,
+          "completedBatches": 15,
+          "saveChecks": 75
+        },
+        {
+          "seed": 36,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 24,
+          "turns": 14,
+          "completedBatches": 13,
+          "saveChecks": 63
+        },
+        {
+          "seed": 37,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 30,
+          "turns": 15,
+          "completedBatches": 14,
+          "saveChecks": 69
+        },
+        {
+          "seed": 38,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 35,
+          "turns": 16,
+          "completedBatches": 15,
+          "saveChecks": 74
+        },
+        {
+          "seed": 39,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 31,
+          "turns": 15,
+          "completedBatches": 14,
+          "saveChecks": 68
+        },
+        {
+          "seed": 40,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 24,
+          "turns": 14,
+          "completedBatches": 13,
+          "saveChecks": 63
+        },
+        {
+          "seed": 41,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 24,
+          "turns": 14,
+          "completedBatches": 13,
+          "saveChecks": 62
+        },
+        {
+          "seed": 42,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 33,
+          "turns": 16,
+          "completedBatches": 15,
+          "saveChecks": 73
+        },
+        {
+          "seed": 43,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 21,
+          "turns": 13,
+          "completedBatches": 12,
+          "saveChecks": 59
+        },
+        {
+          "seed": 44,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 25,
+          "turns": 14,
+          "completedBatches": 13,
+          "saveChecks": 63
+        },
+        {
+          "seed": 45,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 36,
+          "turns": 16,
+          "completedBatches": 15,
+          "saveChecks": 75
+        },
+        {
+          "seed": 46,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 30,
+          "turns": 15,
+          "completedBatches": 14,
+          "saveChecks": 69
+        },
+        {
+          "seed": 47,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 20,
+          "turns": 13,
+          "completedBatches": 12,
+          "saveChecks": 57
+        },
+        {
+          "seed": 48,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 26,
+          "turns": 14,
+          "completedBatches": 13,
+          "saveChecks": 62
+        },
+        {
+          "seed": 49,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 19,
+          "turns": 13,
+          "completedBatches": 12,
+          "saveChecks": 59
+        },
+        {
+          "seed": 50,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 22,
+          "turns": 14,
+          "completedBatches": 13,
+          "saveChecks": 63
+        },
+        {
+          "seed": 51,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 24,
+          "turns": 14,
+          "completedBatches": 13,
+          "saveChecks": 63
+        },
+        {
+          "seed": 52,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 24,
+          "turns": 14,
+          "completedBatches": 13,
+          "saveChecks": 63
+        },
+        {
+          "seed": 53,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 21,
+          "turns": 13,
+          "completedBatches": 12,
+          "saveChecks": 59
+        },
+        {
+          "seed": 54,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 24,
+          "turns": 14,
+          "completedBatches": 13,
+          "saveChecks": 62
+        },
+        {
+          "seed": 55,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 20,
+          "turns": 13,
+          "completedBatches": 12,
+          "saveChecks": 59
+        },
+        {
+          "seed": 56,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 21,
+          "turns": 14,
+          "completedBatches": 13,
+          "saveChecks": 61
+        },
+        {
+          "seed": 57,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 20,
+          "turns": 13,
+          "completedBatches": 12,
+          "saveChecks": 59
+        },
+        {
+          "seed": 58,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 20,
+          "turns": 14,
+          "completedBatches": 13,
+          "saveChecks": 63
+        },
+        {
+          "seed": 59,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 21,
+          "turns": 13,
+          "completedBatches": 12,
+          "saveChecks": 58
+        },
+        {
+          "seed": 60,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 27,
+          "turns": 15,
+          "completedBatches": 14,
+          "saveChecks": 68
+        },
+        {
+          "seed": 61,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 27,
+          "turns": 15,
+          "completedBatches": 14,
+          "saveChecks": 68
+        },
+        {
+          "seed": 62,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 30,
+          "turns": 15,
+          "completedBatches": 14,
+          "saveChecks": 68
+        },
+        {
+          "seed": 63,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 20,
+          "turns": 13,
+          "completedBatches": 12,
+          "saveChecks": 58
+        },
+        {
+          "seed": 64,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 20,
+          "turns": 13,
+          "completedBatches": 12,
+          "saveChecks": 57
+        },
+        {
+          "seed": 65,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 29,
+          "turns": 15,
+          "completedBatches": 14,
+          "saveChecks": 69
+        },
+        {
+          "seed": 66,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 29,
+          "turns": 15,
+          "completedBatches": 14,
+          "saveChecks": 69
+        },
+        {
+          "seed": 67,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 23,
+          "turns": 14,
+          "completedBatches": 13,
+          "saveChecks": 63
+        },
+        {
+          "seed": 68,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 42,
+          "turns": 17,
+          "completedBatches": 16,
+          "saveChecks": 77
+        },
+        {
+          "seed": 69,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 20,
+          "turns": 13,
+          "completedBatches": 12,
+          "saveChecks": 59
+        },
+        {
+          "seed": 70,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 23,
+          "turns": 14,
+          "completedBatches": 13,
+          "saveChecks": 62
+        },
+        {
+          "seed": 71,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 26,
+          "turns": 14,
+          "completedBatches": 13,
+          "saveChecks": 63
+        },
+        {
+          "seed": 72,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 21,
+          "turns": 13,
+          "completedBatches": 12,
+          "saveChecks": 57
+        },
+        {
+          "seed": 73,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 22,
+          "turns": 14,
+          "completedBatches": 13,
+          "saveChecks": 61
+        },
+        {
+          "seed": 74,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 26,
+          "turns": 14,
+          "completedBatches": 13,
+          "saveChecks": 63
+        },
+        {
+          "seed": 75,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 23,
+          "turns": 14,
+          "completedBatches": 13,
+          "saveChecks": 63
+        },
+        {
+          "seed": 76,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 22,
+          "turns": 14,
+          "completedBatches": 13,
+          "saveChecks": 63
+        },
+        {
+          "seed": 77,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 29,
+          "turns": 15,
+          "completedBatches": 14,
+          "saveChecks": 69
+        },
+        {
+          "seed": 78,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 21,
+          "turns": 13,
+          "completedBatches": 12,
+          "saveChecks": 58
+        },
+        {
+          "seed": 79,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 20,
+          "turns": 13,
+          "completedBatches": 12,
+          "saveChecks": 59
+        },
+        {
+          "seed": 80,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 17,
+          "turns": 12,
+          "completedBatches": 11,
+          "saveChecks": 54
+        },
+        {
+          "seed": 81,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 38,
+          "turns": 16,
+          "completedBatches": 15,
+          "saveChecks": 72
+        },
+        {
+          "seed": 82,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 25,
+          "turns": 14,
+          "completedBatches": 13,
+          "saveChecks": 63
+        },
+        {
+          "seed": 83,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 24,
+          "turns": 14,
+          "completedBatches": 13,
+          "saveChecks": 61
+        },
+        {
+          "seed": 84,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 33,
+          "turns": 16,
+          "completedBatches": 15,
+          "saveChecks": 73
+        },
+        {
+          "seed": 85,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 19,
+          "turns": 13,
+          "completedBatches": 12,
+          "saveChecks": 59
+        },
+        {
+          "seed": 86,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 37,
+          "turns": 17,
+          "completedBatches": 16,
+          "saveChecks": 75
+        },
+        {
+          "seed": 87,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 29,
+          "turns": 15,
+          "completedBatches": 14,
+          "saveChecks": 67
+        },
+        {
+          "seed": 88,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 25,
+          "turns": 14,
+          "completedBatches": 13,
+          "saveChecks": 63
+        },
+        {
+          "seed": 89,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 28,
+          "turns": 15,
+          "completedBatches": 14,
+          "saveChecks": 66
+        },
+        {
+          "seed": 90,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 29,
+          "turns": 15,
+          "completedBatches": 14,
+          "saveChecks": 69
+        },
+        {
+          "seed": 91,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 30,
+          "turns": 15,
+          "completedBatches": 14,
+          "saveChecks": 66
+        },
+        {
+          "seed": 92,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 29,
+          "turns": 15,
+          "completedBatches": 14,
+          "saveChecks": 67
+        },
+        {
+          "seed": 93,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 25,
+          "turns": 14,
+          "completedBatches": 13,
+          "saveChecks": 63
+        },
+        {
+          "seed": 94,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 23,
+          "turns": 13,
+          "completedBatches": 12,
+          "saveChecks": 58
+        },
+        {
+          "seed": 95,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 27,
+          "turns": 15,
+          "completedBatches": 14,
+          "saveChecks": 68
+        },
+        {
+          "seed": 96,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 25,
+          "turns": 14,
+          "completedBatches": 13,
+          "saveChecks": 62
+        },
+        {
+          "seed": 97,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 23,
+          "turns": 14,
+          "completedBatches": 13,
+          "saveChecks": 63
+        },
+        {
+          "seed": 98,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 33,
+          "turns": 16,
+          "completedBatches": 15,
+          "saveChecks": 74
+        },
+        {
+          "seed": 99,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 24,
+          "turns": 14,
+          "completedBatches": 13,
+          "saveChecks": 63
+        },
+        {
+          "seed": 100,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 30,
+          "turns": 16,
+          "completedBatches": 15,
+          "saveChecks": 71
+        }
+      ]
+    },
+    {
+      "difficulty": 10,
+      "encounterVersion": 3,
+      "runs": 100,
+      "wins": 0,
+      "winRate": 0,
+      "meanFinalHp": 0,
+      "meanWinnerHp": 0,
+      "meanKills": 39.55,
+      "meanWinnerKills": 0,
+      "meanTurns": 14.67,
+      "meanCompletedBatches": 13.67,
+      "rows": [
+        {
+          "seed": 1,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 54,
+          "turns": 17,
+          "completedBatches": 16,
+          "saveChecks": 76
+        },
+        {
+          "seed": 2,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 57,
+          "turns": 17,
+          "completedBatches": 16,
+          "saveChecks": 78
+        },
+        {
+          "seed": 3,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 35,
+          "turns": 14,
+          "completedBatches": 13,
+          "saveChecks": 63
+        },
+        {
+          "seed": 4,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 49,
+          "turns": 16,
+          "completedBatches": 15,
+          "saveChecks": 73
+        },
+        {
+          "seed": 5,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 45,
+          "turns": 15,
+          "completedBatches": 14,
+          "saveChecks": 69
+        },
+        {
+          "seed": 6,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 37,
+          "turns": 14,
+          "completedBatches": 13,
+          "saveChecks": 63
+        },
+        {
+          "seed": 7,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 23,
+          "turns": 12,
+          "completedBatches": 11,
+          "saveChecks": 54
+        },
+        {
+          "seed": 8,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 31,
+          "turns": 13,
+          "completedBatches": 12,
+          "saveChecks": 59
+        },
+        {
+          "seed": 9,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 43,
+          "turns": 15,
+          "completedBatches": 14,
+          "saveChecks": 67
+        },
+        {
+          "seed": 10,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 45,
+          "turns": 16,
+          "completedBatches": 15,
+          "saveChecks": 73
+        },
+        {
+          "seed": 11,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 27,
+          "turns": 13,
+          "completedBatches": 12,
+          "saveChecks": 59
+        },
+        {
+          "seed": 12,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 28,
+          "turns": 13,
+          "completedBatches": 12,
+          "saveChecks": 59
+        },
+        {
+          "seed": 13,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 41,
+          "turns": 15,
+          "completedBatches": 14,
+          "saveChecks": 69
+        },
+        {
+          "seed": 14,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 32,
+          "turns": 14,
+          "completedBatches": 13,
+          "saveChecks": 63
+        },
+        {
+          "seed": 15,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 39,
+          "turns": 15,
+          "completedBatches": 14,
+          "saveChecks": 68
+        },
+        {
+          "seed": 16,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 40,
+          "turns": 15,
+          "completedBatches": 14,
+          "saveChecks": 67
+        },
+        {
+          "seed": 17,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 27,
+          "turns": 13,
+          "completedBatches": 12,
+          "saveChecks": 58
+        },
+        {
+          "seed": 18,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 42,
+          "turns": 15,
+          "completedBatches": 14,
+          "saveChecks": 69
+        },
+        {
+          "seed": 19,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 43,
+          "turns": 15,
+          "completedBatches": 14,
+          "saveChecks": 69
+        },
+        {
+          "seed": 20,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 54,
+          "turns": 17,
+          "completedBatches": 16,
+          "saveChecks": 79
+        },
+        {
+          "seed": 21,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 30,
+          "turns": 13,
+          "completedBatches": 12,
+          "saveChecks": 59
+        },
+        {
+          "seed": 22,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 51,
+          "turns": 17,
+          "completedBatches": 16,
+          "saveChecks": 77
+        },
+        {
+          "seed": 23,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 42,
+          "turns": 15,
+          "completedBatches": 14,
+          "saveChecks": 69
+        },
+        {
+          "seed": 24,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 34,
+          "turns": 14,
+          "completedBatches": 13,
+          "saveChecks": 62
+        },
+        {
+          "seed": 25,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 40,
+          "turns": 15,
+          "completedBatches": 14,
+          "saveChecks": 69
+        },
+        {
+          "seed": 26,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 47,
+          "turns": 16,
+          "completedBatches": 15,
+          "saveChecks": 75
+        },
+        {
+          "seed": 27,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 36,
+          "turns": 14,
+          "completedBatches": 13,
+          "saveChecks": 62
+        },
+        {
+          "seed": 28,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 39,
+          "turns": 15,
+          "completedBatches": 14,
+          "saveChecks": 68
+        },
+        {
+          "seed": 29,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 36,
+          "turns": 14,
+          "completedBatches": 13,
+          "saveChecks": 63
+        },
+        {
+          "seed": 30,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 54,
+          "turns": 16,
+          "completedBatches": 15,
+          "saveChecks": 73
+        },
+        {
+          "seed": 31,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 31,
+          "turns": 13,
+          "completedBatches": 12,
+          "saveChecks": 58
+        },
+        {
+          "seed": 32,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 38,
+          "turns": 15,
+          "completedBatches": 14,
+          "saveChecks": 68
+        },
+        {
+          "seed": 33,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 36,
+          "turns": 14,
+          "completedBatches": 13,
+          "saveChecks": 62
+        },
+        {
+          "seed": 34,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 27,
+          "turns": 13,
+          "completedBatches": 12,
+          "saveChecks": 59
+        },
+        {
+          "seed": 35,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 50,
+          "turns": 16,
+          "completedBatches": 15,
+          "saveChecks": 73
+        },
+        {
+          "seed": 36,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 45,
+          "turns": 15,
+          "completedBatches": 14,
+          "saveChecks": 69
+        },
+        {
+          "seed": 37,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 41,
+          "turns": 15,
+          "completedBatches": 14,
+          "saveChecks": 69
+        },
+        {
+          "seed": 38,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 36,
+          "turns": 14,
+          "completedBatches": 13,
+          "saveChecks": 63
+        },
+        {
+          "seed": 39,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 50,
+          "turns": 16,
+          "completedBatches": 15,
+          "saveChecks": 73
+        },
+        {
+          "seed": 40,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 53,
+          "turns": 17,
+          "completedBatches": 16,
+          "saveChecks": 78
+        },
+        {
+          "seed": 41,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 41,
+          "turns": 15,
+          "completedBatches": 14,
+          "saveChecks": 68
+        },
+        {
+          "seed": 42,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 29,
+          "turns": 13,
+          "completedBatches": 12,
+          "saveChecks": 58
+        },
+        {
+          "seed": 43,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 36,
+          "turns": 14,
+          "completedBatches": 13,
+          "saveChecks": 63
+        },
+        {
+          "seed": 44,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 37,
+          "turns": 14,
+          "completedBatches": 13,
+          "saveChecks": 63
+        },
+        {
+          "seed": 45,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 43,
+          "turns": 15,
+          "completedBatches": 14,
+          "saveChecks": 68
+        },
+        {
+          "seed": 46,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 40,
+          "turns": 15,
+          "completedBatches": 14,
+          "saveChecks": 69
+        },
+        {
+          "seed": 47,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 33,
+          "turns": 14,
+          "completedBatches": 13,
+          "saveChecks": 62
+        },
+        {
+          "seed": 48,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 39,
+          "turns": 14,
+          "completedBatches": 13,
+          "saveChecks": 62
+        },
+        {
+          "seed": 49,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 34,
+          "turns": 14,
+          "completedBatches": 13,
+          "saveChecks": 63
+        },
+        {
+          "seed": 50,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 36,
+          "turns": 14,
+          "completedBatches": 13,
+          "saveChecks": 63
+        },
+        {
+          "seed": 51,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 31,
+          "turns": 14,
+          "completedBatches": 13,
+          "saveChecks": 64
+        },
+        {
+          "seed": 52,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 29,
+          "turns": 13,
+          "completedBatches": 12,
+          "saveChecks": 59
+        },
+        {
+          "seed": 53,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 43,
+          "turns": 15,
+          "completedBatches": 14,
+          "saveChecks": 69
+        },
+        {
+          "seed": 54,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 48,
+          "turns": 16,
+          "completedBatches": 15,
+          "saveChecks": 73
+        },
+        {
+          "seed": 55,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 34,
+          "turns": 14,
+          "completedBatches": 13,
+          "saveChecks": 63
+        },
+        {
+          "seed": 56,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 36,
+          "turns": 15,
+          "completedBatches": 14,
+          "saveChecks": 65
+        },
+        {
+          "seed": 57,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 27,
+          "turns": 13,
+          "completedBatches": 12,
+          "saveChecks": 59
+        },
+        {
+          "seed": 58,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 30,
+          "turns": 14,
+          "completedBatches": 13,
+          "saveChecks": 63
+        },
+        {
+          "seed": 59,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 25,
+          "turns": 13,
+          "completedBatches": 12,
+          "saveChecks": 58
+        },
+        {
+          "seed": 60,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 51,
+          "turns": 17,
+          "completedBatches": 16,
+          "saveChecks": 80
+        },
+        {
+          "seed": 61,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 35,
+          "turns": 14,
+          "completedBatches": 13,
+          "saveChecks": 62
+        },
+        {
+          "seed": 62,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 35,
+          "turns": 14,
+          "completedBatches": 13,
+          "saveChecks": 63
+        },
+        {
+          "seed": 63,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 30,
+          "turns": 13,
+          "completedBatches": 12,
+          "saveChecks": 57
+        },
+        {
+          "seed": 64,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 35,
+          "turns": 14,
+          "completedBatches": 13,
+          "saveChecks": 62
+        },
+        {
+          "seed": 65,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 43,
+          "turns": 15,
+          "completedBatches": 14,
+          "saveChecks": 69
+        },
+        {
+          "seed": 66,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 53,
+          "turns": 17,
+          "completedBatches": 16,
+          "saveChecks": 80
+        },
+        {
+          "seed": 67,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 51,
+          "turns": 16,
+          "completedBatches": 15,
+          "saveChecks": 74
+        },
+        {
+          "seed": 68,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 36,
+          "turns": 14,
+          "completedBatches": 13,
+          "saveChecks": 63
+        },
+        {
+          "seed": 69,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 29,
+          "turns": 13,
+          "completedBatches": 12,
+          "saveChecks": 59
+        },
+        {
+          "seed": 70,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 35,
+          "turns": 14,
+          "completedBatches": 13,
+          "saveChecks": 62
+        },
+        {
+          "seed": 71,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 29,
+          "turns": 13,
+          "completedBatches": 12,
+          "saveChecks": 59
+        },
+        {
+          "seed": 72,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 54,
+          "turns": 17,
+          "completedBatches": 16,
+          "saveChecks": 76
+        },
+        {
+          "seed": 73,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 40,
+          "turns": 15,
+          "completedBatches": 14,
+          "saveChecks": 67
+        },
+        {
+          "seed": 74,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 36,
+          "turns": 14,
+          "completedBatches": 13,
+          "saveChecks": 63
+        },
+        {
+          "seed": 75,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 48,
+          "turns": 16,
+          "completedBatches": 15,
+          "saveChecks": 73
+        },
+        {
+          "seed": 76,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 33,
+          "turns": 14,
+          "completedBatches": 13,
+          "saveChecks": 63
+        },
+        {
+          "seed": 77,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 47,
+          "turns": 16,
+          "completedBatches": 15,
+          "saveChecks": 73
+        },
+        {
+          "seed": 78,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 30,
+          "turns": 13,
+          "completedBatches": 12,
+          "saveChecks": 57
+        },
+        {
+          "seed": 79,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 28,
+          "turns": 13,
+          "completedBatches": 12,
+          "saveChecks": 59
+        },
+        {
+          "seed": 80,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 39,
+          "turns": 14,
+          "completedBatches": 13,
+          "saveChecks": 63
+        },
+        {
+          "seed": 81,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 37,
+          "turns": 14,
+          "completedBatches": 13,
+          "saveChecks": 62
+        },
+        {
+          "seed": 82,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 37,
+          "turns": 14,
+          "completedBatches": 13,
+          "saveChecks": 63
+        },
+        {
+          "seed": 83,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 44,
+          "turns": 15,
+          "completedBatches": 14,
+          "saveChecks": 69
+        },
+        {
+          "seed": 84,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 46,
+          "turns": 16,
+          "completedBatches": 15,
+          "saveChecks": 74
+        },
+        {
+          "seed": 85,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 51,
+          "turns": 16,
+          "completedBatches": 15,
+          "saveChecks": 75
+        },
+        {
+          "seed": 86,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 58,
+          "turns": 17,
+          "completedBatches": 16,
+          "saveChecks": 78
+        },
+        {
+          "seed": 87,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 45,
+          "turns": 16,
+          "completedBatches": 15,
+          "saveChecks": 71
+        },
+        {
+          "seed": 88,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 46,
+          "turns": 16,
+          "completedBatches": 15,
+          "saveChecks": 74
+        },
+        {
+          "seed": 89,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 47,
+          "turns": 16,
+          "completedBatches": 15,
+          "saveChecks": 71
+        },
+        {
+          "seed": 90,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 64,
+          "turns": 17,
+          "completedBatches": 16,
+          "saveChecks": 77
+        },
+        {
+          "seed": 91,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 69,
+          "turns": 18,
+          "completedBatches": 17,
+          "saveChecks": 83
+        },
+        {
+          "seed": 92,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 34,
+          "turns": 14,
+          "completedBatches": 13,
+          "saveChecks": 63
+        },
+        {
+          "seed": 93,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 33,
+          "turns": 14,
+          "completedBatches": 13,
+          "saveChecks": 63
+        },
+        {
+          "seed": 94,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 25,
+          "turns": 12,
+          "completedBatches": 11,
+          "saveChecks": 55
+        },
+        {
+          "seed": 95,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 41,
+          "turns": 15,
+          "completedBatches": 14,
+          "saveChecks": 66
+        },
+        {
+          "seed": 96,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 42,
+          "turns": 15,
+          "completedBatches": 14,
+          "saveChecks": 68
+        },
+        {
+          "seed": 97,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 28,
+          "turns": 13,
+          "completedBatches": 12,
+          "saveChecks": 59
+        },
+        {
+          "seed": 98,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 35,
+          "turns": 14,
+          "completedBatches": 13,
+          "saveChecks": 63
+        },
+        {
+          "seed": 99,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 37,
+          "turns": 14,
+          "completedBatches": 13,
+          "saveChecks": 63
+        },
+        {
+          "seed": 100,
+          "outcome": "defeat",
+          "hp": 0,
+          "kills": 40,
+          "turns": 15,
+          "completedBatches": 14,
+          "saveChecks": 68
+        }
+      ]
+    }
+  ]
+}

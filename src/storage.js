@@ -44,7 +44,7 @@ function validRun(run){
   if(run===null)return true;
   if(!run||run.version!==1||!['supply','prepare','locked','ended'].includes(run.phase)||typeof run.id!=='string'||!numericTreeValid(run))return false;
   if(run.difficulty!==undefined&&(!integer(run.difficulty)||run.difficulty>MAX_DIFFICULTY))return false;
-  if(run.encounterVersion!==undefined&&![1,2].includes(run.encounterVersion))return false;
+  if(run.encounterVersion!==undefined&&![1,2,3].includes(run.encounterVersion))return false;
   if(run.bannedElement!==undefined&&!validElementBan(run.bannedElement))return false;
   if(!integer(run.rng)||!integer(run.nextUid)||!Number.isInteger(run.batch)||run.batch<1||run.batch>18||!Number.isInteger(run.round)||run.round<1)return false;
   if(!finite(run.hp)||!finite(run.maxHp)||run.maxHp<=0||!finite(run.shield))return false;
