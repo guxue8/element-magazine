@@ -1,0 +1,33 @@
+.actor-art{display:inline-block;position:relative;width:100%;height:100%;vertical-align:bottom;pointer-events:none}
+.actor-art:before{content:'';position:absolute;left:50%;bottom:0;width:var(--actor-w);height:var(--actor-h);transform:translateX(-50%);background-image:var(--actor-image);background-size:var(--actor-bg-size);background-position:var(--actor-bg-position);background-repeat:no-repeat;image-rendering:pixelated}
+.actor-cannon:before{clip-path:polygon(0 0,70% 0,70% 17%,100% 17%,100% 45%,91% 45%,91% 100%,0 100%)}
+.actor-waterDragon:before{clip-path:polygon(0 0,100% 0,100% 35%,97% 35%,97% 100%,0 100%,0 63%,12% 63%,12% 44%,0 44%)}
+.actor-eruption:before{clip-path:polygon(12% 0,100% 0,100% 100%,5% 100%,5% 45%,12% 45%)}
+.warden-poses{display:block;position:relative;width:100%;height:100%}
+.warden-poses>.actor-art{position:absolute;inset:0}.warden-release{visibility:hidden}
+.player-character>span.warden-poses{display:block;position:relative;inset:auto;transform:none;width:100%;height:100%}
+.player-character{width:148px;height:142px;left:11%;bottom:26px}
+.casting .warden-idle{visibility:hidden}.casting .warden-release{visibility:visible;animation:warden-release var(--fx-duration) steps(8) both}
+.player-character.casting{animation:warden-invoke var(--fx-duration) steps(8) both}
+.home-seal{width:300px;height:350px;bottom:22%;right:13%;border:0;box-shadow:none;background:none;transform:none}
+.home-seal>span.warden-poses{display:block;position:relative;inset:auto;margin:0;width:100%;height:100%;filter:drop-shadow(0 8px 6px #07151c)}
+.home-seal span.actor-art{display:block;margin:0}.home-seal>span:last-child:not(.warden-poses){margin-top:6px}
+.warden-medallion>.warden-poses{width:70px;height:100px;transform:translate(-13px,-12px)}
+.summon{width:82px;height:86px;bottom:27px!important;border:0!important;background:transparent!important;box-shadow:none!important;pointer-events:auto;z-index:4;transform:translateX(-50%);overflow:visible;padding:0;opacity:1}
+.summon>.actor-art{width:100%;height:100%;filter:drop-shadow(0 3px 2px #051b24)}
+.summon small{position:absolute;bottom:-5px;left:50%;transform:translateX(-50%);background:#10242cbb;color:#d3ddcf;min-width:14px;padding:1px 3px;border:0;font-size:9px}
+.summon-spring>.actor-art{animation:spirit-hover 2200ms steps(12) infinite}
+.summon.acting>.actor-art{animation:familiar-act var(--fx-duration) steps(6) both}
+.summon-portrait{width:80px;height:85px;float:left;margin-right:12px}.summon-detail{min-height:100px}
+@keyframes spirit-hover{0%,100%{translate:0 0}50%{translate:0 -5px}}
+@keyframes familiar-act{0%,100%{translate:0}25%{translate:-4px -3px}45%{translate:7px -2px}70%{translate:2px}}
+@keyframes warden-release{0%,15%{opacity:.55;translate:-3px 0}30%,65%{opacity:1;translate:2px 0}100%{opacity:1;translate:0}}
+@keyframes warden-invoke{0%{translate:0}18%{translate:-3px -2px}42%{translate:4px 0}100%{translate:0}}
+.talent-graph{grid-template-rows:repeat(var(--talent-rows,6),72px);height:calc(var(--talent-rows,6)*86px - 14px)}
+.talent-focus{position:sticky;bottom:-14px;z-index:5;background:#172c35;box-shadow:0 -8px 16px #07151b88;border-top:1px solid #b1a16d}
+.effect-copy,.bond-summary,.rule-details p{white-space:pre-line}
+.fx-fire .detonation-cloud>svg{inset:auto 22% 10%;width:56%;height:56%}
+.form-dragon .detonation-cloud>svg,.form-avatar .detonation-cloud>svg{opacity:.7}
+@media(max-height:650px) and (orientation:landscape){.player-character{width:124px;height:118px}.summon{width:65px;height:70px}.home-seal{width:230px;height:260px;right:11%;bottom:21%}}
+@media(max-height:450px) and (orientation:landscape){.player-character{width:91px;height:87px;bottom:17px}.summon{width:48px;height:53px;bottom:18px!important}.summon small{font-size:7px;bottom:-3px}.home-seal{width:160px;height:185px;bottom:25%;right:13%}.warden-medallion>.warden-poses{width:44px;height:63px;transform:translate(-9px,-8px)}.talent-focus{bottom:-12px}}
+@media(prefers-reduced-motion:reduce){.warden-poses *,.player-character.casting,.summon>.actor-art{animation:none!important}.casting .warden-idle{visibility:visible}.casting .warden-release{visibility:hidden}}

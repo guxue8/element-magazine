@@ -11,7 +11,7 @@ function combat(id,positions=[4],lanes=positions.map((_,i)=>i%3)){
  const c=new Combat(run);c.slot=0;c.current=c.layout[0];c.currentDef=BULLET_MAP[id];c.hitTargets=[];return c;
 }
 const damage=c=>c.s.enemies.map(e=>100-e.hp);
-const cases=[['F08',[6,4,4,4]],['H02',[10,0,0,0]],['L01',[6,5,5,0]],['W08',[6,6,6,0]],['R02',[8,0,0,0]]];
+const cases=[['F08',[6,2,2,2]],['H02',[10,0,0,0]],['L01',[6,5,5,0]],['W08',[6,6,6,0]],['R02',[12,0,0,0]]];
 for(const [id,expected] of cases){
  test(`${id}: intended isolated damage and overlap targets independent of legacy lanes`,()=>{
   const solo=combat(id);effects[id](solo);assert.deepEqual(damage(solo),[expected[0]]);
@@ -33,7 +33,7 @@ test('chain can advance horizontally but never revisit or exceed two jumps',()=>
 });
 test('splash respects horizontal radius and captures targets before primary death',()=>{
  const c=combat('F08',[3,4,5]);c.s.enemies[0].hp=1;effects.F08(c);
- assert.equal(c.s.enemies[0].hp,0);assert.equal(c.s.enemies[1].hp,96);assert.equal(c.s.enemies[2].hp,100);
+ assert.equal(c.s.enemies[0].hp,0);assert.equal(c.s.enemies[1].hp,98);assert.equal(c.s.enemies[2].hp,100);
 });
 test('H02 wets only its surviving primary target when a spring exists',()=>{
  const c=combat('H02',[4,4,4,4]);c.s.summons=[{kind:'spring'}];effects.H02(c);
@@ -42,7 +42,7 @@ test('H02 wets only its surviving primary target when a spring exists',()=>{
 });
 test('R02 removes shield and damages only its primary target',()=>{
  const c=combat('R02',[4,4]);c.s.enemies.forEach(e=>e.shield=6);effects.R02(c);
- assert.deepEqual(damage(c),[8,0]);assert.deepEqual(c.s.enemies.map(e=>e.shield),[0,6]);
+ assert.deepEqual(damage(c),[12,0]);assert.deepEqual(c.s.enemies.map(e=>e.shield),[0,6]);
 });
 test('W10 selects one nearby enemy without requiring a hidden lane',()=>{
  const c=combat('W10',[4,4,4],[0,0,0]);effects.W10(c);assert.deepEqual(damage(c),[10,6,0]);

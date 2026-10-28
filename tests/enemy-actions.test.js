@@ -93,12 +93,14 @@ test('counter splash kills a later enemy before it can move and stays after the 
   assert.equal(result.presentationFrames.find(f=>f.killed).targetId,'victim');
 });
 
-test('lethal attacks stop later movement, counters and bomber self-destruction as before',()=>{
+test('lethal attacks stop later movement and counters but complete bomber self-destruction',()=>{
   const c=new combatModule.Combat(run([enemy('blast',{typeId:'bomber',position:0}),enemy('later',{wet:1,slow:true})],{hp:5}));
   c.counterPool.push('R11');const result=c.execute();
   assert.equal(result.frames.length,1);assert.equal(result.frames[0].action,'explode');
-  assert.equal(result.state.hp,0);assert.equal(result.state.enemies[0].hp,100);
-  assert.equal(result.state.enemies[1].position,6);assert.equal(result.state.enemies[1].wet,0);assert.equal(result.state.enemies[1].slow,false);
+  assert.equal(result.state.hp,0);assert.equal(result.state.enemies.some(e=>e.uid==='blast'),false);
+  const later=result.state.enemies.find(e=>e.uid==='later');assert.equal(later.hp,100);
+  assert.equal(later.position,6);assert.equal(later.wet,0);assert.equal(later.slow,false);
+  assert.equal(result.state.stats.kills,0);
   assert.ok(!result.presentationFrames.some(f=>f.action==='move'));
   assert.deepEqual(result.presentationFrames.at(-1).board,result.enemyPhase.endBoard);
 });

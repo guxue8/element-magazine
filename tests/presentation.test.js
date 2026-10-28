@@ -34,24 +34,24 @@ test('evolution summaries show the base effect separately from growth', () => {
 test('network and empty-slot summaries retain decision-making boundaries', () => {
   const network = bondSummary('D09');
   assert.match(network, /潮湿/);
-  assert.match(network, /建网.*首击|首击.*建网/);
+  assert.match(network, /建网.*首击|首击.*建网/s);
   assert.match(network, /3 次/);
   assert.match(network, /6 雷伤/);
 
   const emptySlot = bondSummary('Q05');
-  assert.match(emptySlot, /常驻弹/);
+  assert.match(emptySlot, /常驻法术/);
   assert.match(emptySlot, /不补抽/);
   assert.match(emptySlot, /75%/);
-  assert.match(emptySlot, /每夹最多 2 次/);
-  assert.match(emptySlot, /同源.*1 次/);
+  assert.match(emptySlot, /每轮限 2 次/);
+  assert.match(emptySlot, /同源限一次/);
 });
 
 test('summaries distinguish natural expiry, direct hits, and capped triggers', () => {
   assert.match(bondSummary('D07'), /自然到期/);
-  assert.match(bondSummary('D07'), /前 2/);
-  assert.match(bondSummary('D07'), /替换无效/);
+  assert.match(bondSummary('D07'), /每轮限 2 次/);
+  assert.match(bondSummary('D07'), /替换不触发/);
   assert.match(bondSummary('D15'), /雷→风→雷/);
-  assert.match(bondSummary('T05'), /归零.*成功执行/);
+  assert.match(bondSummary('T05'), /自然就绪并施放/);
   assert.match(bondSummary('E07'), /正常行动/);
   assert.match(bondSummary('E08'), /首次直接命中/);
 });

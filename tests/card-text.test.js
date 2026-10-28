@@ -40,8 +40,8 @@ test('keywords are relevant, unique, and include precise shared rules',()=>{
   assert.match(cardText(BULLET_MAP.H01).keywords.find(x=>x.id==='spring').description,/6/);
   assert.match(keywordsForText('护盾')[0].description,/上限 20/);
   assert.match(keywordsForText('护盾')[0].description,/保留到下一回合/);
-  assert.match(cardText(BULLET_MAP.F13).text,/爆炸半径 2.*48/);
-  assert.match(cardText(BULLET_MAP.H21).text,/本回合.*刷新|战斗刷新/);
+  assert.match(cardText(BULLET_MAP.F13).text,/爆炸半径 2.*20/);
+  assert.match(cardText(BULLET_MAP.H21).text,/本轮.*刷新|战斗刷新/);
 });
 test('bond copy follows the live definition and preserves condition thresholds',()=>{
   const changed={...BONDS[0],description:'火弹命中燃烧目标：附加 2 层燃烧，每夹最多 2 次。'};
@@ -57,6 +57,24 @@ test('formatting leaves definitions immutable and gracefully accepts missing des
   cardText(def);
   assert.equal(JSON.stringify(def),before);
   assert.deepEqual(cardText(null),{text:'暂无说明',keywords:[],stats:[],direction:null,directionLabel:'',details:''});
+});
+
+test('card bodies state damage in resolution order and separate primary from splash',()=>{
+  for(const def of BULLETS){
+    const card=cardText(def),primary=card.stats.find(x=>x.kind==='damage');
+    if(primary)assert.ok(card.text.includes(String(primary.value).split(' ')[0]),`${def.id}: primary damage appears in body`);
+    if(def.trigger==='consumable')assert.match(card.text,/一次性。$/);
+  }
+  for(const id of ['F09','R02','R20']){
+    const text=cardText(BULLET_MAP[id]).text;
+    assert.ok(text.indexOf('破盾')<text.indexOf('造成'),id);
+  }
+  for(const id of ['F06','F08','F12','F13','F14','H06','H07','H13','R06','R07']){
+    const card=cardText(BULLET_MAP[id]);
+    assert.equal(card.stats.find(x=>x.kind==='damage').label,'主目标伤害',id);
+    assert.ok(card.stats.some(x=>x.label==='溅射伤害'),id);
+    assert.match(card.keywords.find(x=>x.id==='explosion').description,/超过 1 格.*减半/);
+  }
 });
 
 test('first strike keyword is precise and does not duplicate the full phrase tooltip',()=>{

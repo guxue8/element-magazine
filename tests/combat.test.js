@@ -31,7 +31,7 @@ export function fixture(ids=['F15'],enemies=[{
   const a=resolveRound(r);
   assert.deepEqual(r,before);
   assert.deepEqual(a,resolveRound(r));
-  assert.equal(a.state.enemies[0].hp,88);
+  assert.equal(a.state.enemies[0].hp,84);
   assert.equal(a.state.enemies[0].position,5);
   assert.equal(a.state.round,1);
   assert.equal(a.state.resources.draft,0);
@@ -66,7 +66,7 @@ test('scroll buffs left before shots and removes only used inventory',()=>{
   let r=fixture(['F15','C01','C04']);
   r.magazine[2]=null;
   let a=resolveRound(r).state;
-  assert.equal(a.enemies[0].hp,86);
+  assert.equal(a.enemies[0].hp,81);
   assert.deepEqual(a.inventory.map(x=>x.typeId),['F15','C04']);
 });
 test('controls reject previous round and enemies do not attack after moving',()=>{
@@ -201,7 +201,7 @@ test('basic multishot receives locked pierce on each segment',()=>{
 });
 test('isolated lightning uses pre-hit neighborhood without counting itself',()=>{
   const a=resolveRound(fixture(['L02'])).state;
-  assert.equal(a.enemies[0].hp,86);
+  assert.equal(a.enemies[0].hp,78);
 });
 test('damage percentages round once over a native conditional segment',()=>{
   // R10 spends 3 shield: (8 + 9) * 1.15 rounds to 20, not 9 + 10.
@@ -275,7 +275,7 @@ test('consumed element counts remain locked until round end',()=>{
   const a=resolveRound(r).state;
   // The consumed fire scroll still satisfies S01 for both later fire shots.
   assert.equal(a.enemies[0].burn,3);
-  assert.equal(a.enemies[0].hp,68);
+  assert.equal(a.enemies[0].hp,59);
   assert.equal(a.inventory.length,2);
 });
 test('burn-consuming conditional damage is native, amplified, and grants native kill listeners',()=>{

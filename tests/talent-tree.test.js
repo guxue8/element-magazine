@@ -11,9 +11,9 @@ const memory=()=>{const data=new Map();return {getItem:k=>data.get(k)??null,setI
 function peaceful(run){run.enemies=[];run.offers=null;run.pending=[];return next(run,{type:'load'});}
 function emptyRound(run){run=peaceful(run);run.magazine.fill(null);return next(run,{type:'execute'});}
 
-test('talent tree has three complete branches and five new non-stat mechanics',()=>{
+test('talent tree has three complete branches of ten nodes',()=>{
   assert.equal(TALENT_BRANCHES.length,3);
-  for(const branch of TALENT_BRANCHES)assert.equal(TALENTS.filter(t=>getTalentNode(t.id)?.branch===branch.id).length,5);
+  for(const branch of TALENT_BRANCHES)assert.equal(TALENTS.filter(t=>getTalentNode(t.id)?.branch===branch.id).length,10);
   for(const id of ['freeSwap','freeRefresh','skipRefresh','scrollCache','rescueScroll'])assert.ok(getTalentNode(id));
   for(const t of TALENTS)for(const parent of getTalentNode(t.id).requires)assert.ok(TALENTS.some(t=>t.id===parent));
 });

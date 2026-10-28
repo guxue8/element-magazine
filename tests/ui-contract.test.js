@@ -310,6 +310,28 @@ test('spell keyword highlighting preserves complete magic vocabulary',async()=>{
   }finally{h.close();}
 });
 
+test('early elite talent opens the third charge bar and the actual draft together',async()=>{
+ const meta={...createMeta(),talents:{deepStudy:1}};
+ const run=newRun(914,meta);run.batch=10;run.round=10;run.completedBatches=9;run.resources.draft=300;
+ const h=await harness(run,meta);
+ try{
+  h.click({ui:'continue'});
+  const bars=h.html().match(/<span class="charge-bars recruit-bars">([^]*?)<\/span>/)?.[1]||'';
+  assert.equal((bars.match(/<i>/g)||[]).length,3);
+  h.click({ui:'shop'});h.click({draft:'300'});
+  assert.equal(h.saved().offers.cost,300);
+ }finally{h.close();}
+});
+
+test('evolved directional spells describe the same expanded neighbors as their arrows',async()=>{
+ for(const [id,bond,progress,expected] of [['F16','E01',2,'右邻与下邻法术'],['L14','E05',2,'上下邻与左邻蓄力法术'],['L14','E05',9,'同行同列其他蓄力法术']]){
+  const run=arranged([id,id,id,id,id]);run.bonds=[bond];run.evolutions[bond]={progress};
+  const h=await harness(run);
+  try{h.click({ui:'continue'});h.click({slot:'0'});const text=h.html().match(/<p class="effect-copy">([^]*?)<\/p>/)?.[1].replace(/<[^>]*>/g,'');assert.ok(text.includes(expected),text);}
+  finally{h.close();}
+ }
+});
+
 test('codex accepts old names and new spell names without rewriting typed search text',async()=>{
   const h=await harness(newRun(903));
   try{

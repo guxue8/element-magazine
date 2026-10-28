@@ -24,10 +24,10 @@ const shotAmounts=result=>result.frames.filter(f=>f.type==='shot').map(f=>f.amou
 
 test('火苗初燃 only fans existing burns, at most three times per magazine',()=>{
   const dry=resolveRound(runWith(['F15','F15','F15','F15'],'S01'));
-  assert.deepEqual(shotAmounts(dry),[12,12,12,12]);
+  assert.deepEqual(shotAmounts(dry),[16,16,16,16]);
   assert.equal(dry.state.enemies[0].burn,0);
   const lit=resolveRound(runWith(['F15','F15','F15','F15'],'S01',{burn:1,burnTurns:2}));
-  assert.deepEqual(shotAmounts(lit),[12,12,12,12]);
+  assert.deepEqual(shotAmounts(lit),[16,16,16,16]);
   assert.equal(lit.state.enemies[0].burn,4);
 });
 test('涓流护身 requires a pre-existing wet target and caps at two grants',()=>{
@@ -38,7 +38,7 @@ test('涓流护身 requires a pre-existing wet target and caps at two grants',()
 });
 test('电荷追击 boosts later lightning bullets, never its own returning jump',()=>{
   const repeated=resolveRound(runWith(['L15','L15'],'S07'));
-  assert.deepEqual(shotAmounts(repeated),[12,15]);
+  assert.deepEqual(shotAmounts(repeated),[16,20]);
   const r=runWith(['L05'],'S07');
   r.enemies.push({...r.enemies[0],uid:'e1',position:5});
   const bounce=resolveRound(r);
@@ -55,14 +55,14 @@ test('电荷追击 records secondary lightning targets and resets next magazine'
 });
 test('轻风起势 requires a hit from the left neighboring slot in the same row',()=>{
   const adjacent=resolveRound(runWith(['F15','W08'],'S10'));
-  assert.deepEqual(shotAmounts(adjacent),[12,7]);
+  assert.deepEqual(shotAmounts(adjacent),[16,7]);
   assert.deepEqual(shotAmounts(resolveRound(runWith(['W08'],'S10'))),[6]);
-  assert.deepEqual(shotAmounts(resolveRound(runWith(['F15','W08'],'S10',{},[0,2]))),[12,6]);
-  assert.deepEqual(shotAmounts(resolveRound(runWith(['F15','W08'],'S10',{},[3,4]))),[12,6]);
+  assert.deepEqual(shotAmounts(resolveRound(runWith(['F15','W08'],'S10',{},[0,2]))),[16,6]);
+  assert.deepEqual(shotAmounts(resolveRound(runWith(['F15','W08'],'S10',{},[3,4]))),[16,6]);
 });
 test('岩石弹头 is a themed earth damage bonus, without the old free shield',()=>{
   const result=resolveRound(runWith(['R15','F15'],'S13'));
-  assert.deepEqual(shotAmounts(result),[14,12]);
+  assert.deepEqual(shotAmounts(result),[18,16]);
   assert.equal(result.state.shield,0);
 });
 test('basic bond descriptions expose the condition and keep only one generic elemental damage bonus',()=>{

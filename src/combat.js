@@ -580,12 +580,14 @@ export class Combat {
           this.frame('enemy',`${def.name}攻击 ${damage}`,{
             targetId:e.uid,amount:damage,action:e.typeId==='bomber'?'explode':def.range>0?'ranged':'melee',actor,absorbed,playerDamage:hpBefore-this.s.hp
           });
+          // Self-destruction also completes on a lethal hit that may be revived.
+          if(e.typeId==='bomber')e.hp=0;
           if(this.s.hp<=0)break;
           this.bonds.attacked(e,absorbed);
           if(this.counterPool.length){
             const source=this.counterPool.shift();
             this.bonds.counter(e,source);
-          }if(e.typeId==='bomber')e.hp=0;
+          }
           if(this.s.traits.emergency&&!this.s.emergencyUsed&&this.s.hp<30){
             this.s.emergencyUsed=true;
             this.shield(10);

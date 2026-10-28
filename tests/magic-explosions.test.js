@@ -15,13 +15,13 @@ function setup(id,positions=[3],hp=500){
 test('a small explosion hits every crowded target inside its inclusive radius once',()=>{
   const positions=[3,...Array(10).fill(3),2,4,1,5];
   const c=setup('F08',positions);c.s.selectedTarget='e0';effects.F08(c);
-  assert.deepEqual(c.s.enemies.map(e=>500-e.hp),[6,...Array(12).fill(4),0,0]);
+  assert.deepEqual(c.s.enemies.map(e=>500-e.hp),[6,...Array(12).fill(2),0,0]);
   assert.equal(c.frames.filter(f=>f.hpDamage>0).length,13);
   const before=structuredClone(c.frames),frames=combatPresentationFrames({frames:c.frames});
   assert.deepEqual(c.frames,before);assert.equal(frames.length,1);
   assert.equal(frames[0].type,'explosion');assert.equal(frames[0].blast.victims.length,13);
   assert.equal(frames[0].blast.radius,1);assert.equal(frames[0].blast.center.position,3);
-  assert.equal(frames[0].hpDamage,54);
+  assert.equal(frames[0].hpDamage,30);
 });
 
 test('killing the explosion center preserves its footprint; kill blasts cannot recursively detonate',()=>{
@@ -39,15 +39,15 @@ test('explosion snapshots include burn and crowd control on every surviving vict
     const c=setup(id,Array(12).fill(3));effects[id](c);
     const frame=combatPresentationFrames({frames:c.frames})[0];
     assert.equal(frame.blast.victims.length,12);
-    for(const {target} of frame.blast.victims)assert.equal(id==='F06'?target.burn:target.slow,id==='F06'?3:true);
-    for(const enemy of frame.board.enemies)assert.equal(id==='F06'?enemy.burn:enemy.slow,id==='F06'?3:true);
+    for(const {target} of frame.blast.victims)assert.equal(id==='F06'?target.burn:target.slow,id==='F06'?(target.uid==='e0'?3:1):true);
+    for(const enemy of frame.board.enemies)assert.equal(id==='F06'?enemy.burn:enemy.slow,id==='F06'?(enemy.uid==='e0'?3:1):true);
   }
 });
 
 test('legendary detonation locks a single footprint and consumes burn independently per victim',()=>{
   const c=setup('F14',[0,1,2,3,4,5,6]);c.s.enemies[3].burn=3;
   effects.F14(c);
-  assert.deepEqual(c.s.enemies.map(e=>500-e.hp),[60,60,60,78,60,60,60]);
+  assert.deepEqual(c.s.enemies.map(e=>500-e.hp),[15,15,30,78,30,15,15]);
   assert.ok(c.s.enemies.every(e=>e.burn===0));
   assert.equal(combatPresentationFrames({frames:c.frames})[0].blast.center.uid,'e3');
 });
@@ -75,7 +75,7 @@ test('green summons keep two-load cycles with frontloaded tide-spirit payoff',()
 test('amplified explosion preserves empowered feedback after merging',()=>{
   const c=setup('F08',[3,3]);c.current.imprints={ember:1};effects.F08(c);
   const frame=combatPresentationFrames({frames:c.frames})[0];
-  assert.equal(frame.empowered,true);assert.equal(frame.hpDamage,12);
+  assert.equal(frame.empowered,true);assert.equal(frame.hpDamage,9);
 });
 
 test('blast playback never resurrects a victim killed by the first-hit hook',()=>{
@@ -84,7 +84,7 @@ test('blast playback never resurrects a victim killed by the first-hit hook',()=
   effects.F08(c);
   const frame=combatPresentationFrames({frames:c.frames})[0];
   assert.deepEqual(frame.board.enemies.map(e=>e.uid),['e2']);
-  assert.equal(frame.board.enemies[0].hp,1);assert.equal(frame.board.enemies[0].wet,2);
+  assert.equal(frame.board.enemies[0].hp,3);assert.equal(frame.board.enemies[0].wet,2);
   const dead=frame.blast.victims.find(v=>v.target.uid==='e1');
   assert.equal(dead.hpDamage,5);assert.equal(dead.killed,true);assert.equal(dead.target.hp,0);
   assert.equal(c.s.stats.kills,2);assert.equal(c.s.resources.draft,20);
@@ -92,7 +92,7 @@ test('blast playback never resurrects a victim killed by the first-hit hook',()=
 
 test('permanent base improvement still works after normal synergy bonuses reach their cap',()=>{
   const c=setup('F15');c.bonds.multiplier=()=>1.5;c.current.imprints={ember:3};
-  effects.F15(c);assert.equal(c.frames[0].amount,31); // round(12 * (1 + capped 1 + 0.6))
+  effects.F15(c);assert.equal(c.frames[0].amount,42); // round(16 * (1 + capped 1 + 0.6))
   assert.equal(c.frames[0].empowered,true);
   const conditional=setup('F11');conditional.bonds.multiplier=()=>1;conditional.current.imprints={ember:1};
   conditional.s.enemies[0].burn=2;effects.F11(conditional);
@@ -107,17 +107,17 @@ test('three-load fire finisher waits twice then delivers large primary and uncap
     assert.ok(result.presentationFrames.some(f=>f.action==='charge'&&f.counter===remaining));
   }
   const result=resolveRound(run),blast=result.presentationFrames.find(f=>f.type==='explosion');
-  assert.equal(blast.blast.victims[0].hpDamage,100);
-  assert.ok(blast.blast.victims.slice(1).every(v=>v.hpDamage===48));
-  assert.equal(blast.hpDamage,532);assert.equal(result.state.inventory[0].counter,3);
+  assert.equal(blast.blast.victims[0].hpDamage,80);
+  assert.ok(blast.blast.victims.slice(1).every(v=>v.hpDamage===20));
+  assert.equal(blast.hpDamage,260);assert.equal(result.state.inventory[0].counter,3);
 });
 
 test('charged lightning excess becomes a capped spatial explosion, not wasted overkill',()=>{
   const c=setup('L13',[3,3,4,5]);c.s.selectedTarget='e0';c.s.enemies[0].hp=10;
   effects.L13(c);
-  assert.deepEqual(c.s.enemies.map(e=>e.hp),[0,440,440,500]);
+  assert.deepEqual(c.s.enemies.map(e=>e.hp),[0,464,464,500]);
   const blast=combatPresentationFrames({frames:c.frames}).find(f=>f.type==='explosion');
-  assert.equal(blast.hpDamage,120);assert.equal(blast.element,'lightning');
+  assert.equal(blast.hpDamage,72);assert.equal(blast.element,'lightning');
 });
 
 test('ready charge stays banked without targets, while off-grid spells never advance',()=>{

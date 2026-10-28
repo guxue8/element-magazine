@@ -31,14 +31,14 @@ test('fire scroll is consumed but its bonus survives subsequent rounds and savin
   let run=fixture(['F15','C01','F15','F15']);
   run.magazine[2]=run.magazine[3]=null;
   const first=resolveRound(run);
-  assert.equal(first.frames.find(f=>f.sourceId==='F15'&&f.hpDamage)?.amount,14);
+  assert.equal(first.frames.find(f=>f.sourceId==='F15'&&f.hpDamage)?.amount,19);
   run=first.state;
   assert.deepEqual(run.inventory[0].imprints,{ember:1});
   assert.equal(run.inventory.some(b=>b.typeId==='C01'),false);
   const store=memory();assert.equal(saveGame(run,createMeta(),store),null);
   run=loadGame(store).run;assert.ok(run);
   run.round++;
-  assert.equal(resolveRound(run).frames.find(f=>f.sourceId==='F15'&&f.hpDamage)?.amount,14);
+  assert.equal(resolveRound(run).frames.find(f=>f.sourceId==='F15'&&f.hpDamage)?.amount,19);
   assert.equal(run.inventory[1].imprints,undefined);
 });
 
@@ -58,7 +58,7 @@ test('fire imprints are kept while a timer is still charging',()=>{
 test('magnetic and lurking scrolls persist across repeated loads; duplicate sources do not multiply',()=>{
   let run=fixture(['F15','C07','F15','F15','C06']);
   const first=resolveRound(run);
-  assert.equal(first.frames.find(f=>f.sourceId==='F15'&&f.hpDamage)?.amount,12,'new lurking starts next load');
+  assert.equal(first.frames.find(f=>f.sourceId==='F15'&&f.hpDamage)?.amount,16,'new lurking starts next load');
   run=first.state;
   const target=run.inventory.find(b=>b.uid==='b0');
   assert.deepEqual(imprintDrawFlags(target),{magnet:true,lurk:true});

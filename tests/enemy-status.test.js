@@ -76,7 +76,7 @@ test('real fire, water and wind bullets show their new state on the applying hit
     assert.deepEqual(ids(hit.target),[status],`${bullet} target snapshot stays in sync`);
     assert.deepEqual(ids(result.frames[0].board.enemies[0]),[],'preceding hit stays untouched');
     assert.equal(hit.amount,damage);assert.equal(hit.hpDamage,damage);
-    assert.equal(hit.target.hp,20-damage);assert.equal(hit.target.position,6);
+    assert.equal(hit.target.hp,16-damage);assert.equal(hit.target.position,6);
     assert.equal(result.frames.length,3,'status attachment adds no playback delay frames');
     assert.equal(result.state.enemies.length,0);assert.equal(result.state.stats.damage,32);
     assert.equal(result.state.stats.kills,1);assert.deepEqual(run,before,'input run remains immutable');

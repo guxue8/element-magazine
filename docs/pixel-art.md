@@ -31,3 +31,7 @@
 | `boss3` | 巨龙 | 1060, 695, 388, 360 |
 
 实际显示尺寸由容器控制。spriteStyle 输出 --sprite-image、--sprite-size、--sprite-position、--sprite-width、--sprite-height 和 --sprite-clip 自定义属性，由 .pixel-sprite::before 在方形容器内等比例绘制，并贴齐容器底边。图集是静态图，未含逐帧动画。背景为不透明 RGB 图，不应用于角色透明层。
+
+## v0.4 法师与造物
+
+新增 `assets/pixel/spellwarden-atlas-v4.png`（1254 × 1254，RGBA）由内置 imagegen 生成。需求为透明背景、统一的靛蓝金纹银发法师待机与施法两姿态，以及泉灵、岩卫、珊瑚岩炮、水龙、岩石法相和火焰爆炸。原生成位图保持原样；`src/actor-art.js` 用独立窗口取出人物，`src/actors.css` 去除邻接图形边角，使用最近邻渲染。封面、头像和战场均调用 `wardenArt()`；原图集继续承担敌人素材。新图集的两种姿态配合位移、冲击和渐隐动画，不宣称为完整逐帧骨骼动画。

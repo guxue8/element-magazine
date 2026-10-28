@@ -2,11 +2,12 @@ import {BULLETS,BULLET_MAP,BONDS,BOND_MAP,ENCHANTMENTS,ENCHANTMENT_MAP,ENEMIES,W
 import {random,shuffle,sample} from './random.js';
 import {resolveRound} from './combat.js';
 import {RESOURCE_COSTS,normalizeResources,addResource} from './resources.js';
-import {canBuyTalent,createTalentState,ensureTalentState,getSwapCost,getRefreshCost} from './talent-tree.js';
+import {canBuyTalent,createTalentState,ensureTalentState,getSwapCost,getRefreshCost,getEliteDraftBatch} from './talent-tree.js';
 import {getUnlockedDifficulty,selectDifficulty,getWaveIds,getEnemyPreview} from './difficulty.js';
 import {ELEMENT_KEYS,validElementBan,allowedElements,bulletAllowed,bondAllowed,enchantmentAllowed} from './element-pool.js';
-import {imprintDrawFlags} from './spell-imprints.js';
+import {imprintDrawFlags,canReceiveImprint,imprintSpell} from './spell-imprints.js';
 export {rollElementBan} from './element-pool.js';
+export {getEliteDraftBatch} from './talent-tree.js';
 
 const BOND_ROUNDS=[2,4,6,9,12,15,17];
 const EVENT_ROUNDS=[4,10,16];
@@ -30,6 +31,13 @@ function bondGap(run,bond,{includeTarget=true}={}){
   return gap;
 }
 export function getActiveBonds(run){return run.bonds.filter(id=>bondAllowed(run,BOND_MAP[id])&&bondGap(run,BOND_MAP[id])===0);}
+export function canRest(run){return Boolean(run.traits.quietSlot||getActiveBonds(run).includes('Q05'));}
+function grantTalentShield(run,amount){run.shield=Math.min(getActiveBonds(run).includes('Q02')?28:20,run.shield+amount);}
+function eventHeal(run,amount){
+  const overflow=Math.max(0,run.hp+amount-run.maxHp);
+  run.hp=Math.min(run.maxHp,run.hp+amount);
+  if(run.traits.safeCamp&&overflow)grantTalentShield(run,Math.min(8,overflow));
+}
 export function previewWave(batch,difficulty=0,encounterVersion=4){
   let bugIndex=0;
   return getWaveIds(batch,encounterVersion).map(id=>{
@@ -85,7 +93,8 @@ function addBullet(run,id){
   const def=BULLET_MAP[id];
   requireRule(Boolean(def),'未知子弹');
   requireRule(bulletAllowed(run,def),'本局已禁用该元素');
-  const instance={uid:`b${run.nextUid++}`,typeId:id,counter:def.counter||0,mark:null,temp:{}};
+  const counter=def.trigger==='timer'&&run.traits.patientStudy?Math.max(1,def.counter-1):def.counter||0;
+  const instance={uid:`b${run.nextUid++}`,typeId:id,counter,mark:null,temp:{}};
   run.inventory.push(instance);return instance;
 }
 function starter(run){
@@ -106,6 +115,10 @@ function spawnBatch(run){
     const position=preview.position;
     run.enemies.push({uid:`e${run.nextUid++}`,typeId,hp,maxHp:hp,heal:typeId==='healer'?(run.batch<=6?6:run.batch<=12?9:12):0,shield:preview.shield,difficultyDamage:preview.difficultyDamage,...(preview.draftReward===undefined?{}:{draftReward:preview.draftReward}),lane:(random(run),0),position,burn:0,burnTurns:0,wet:0,slow:false,controlledAt:-2,attackCount:0,boost:0});
   }
+  if(run.traits.wardReserve&&[6,12,18].includes(run.batch)){
+    grantTalentShield(run,6);
+    run.logs.push('破关仪式：首领批次入场，获得 6 护盾。');
+  }
 }
 export function newRun(seed=Date.now(),meta=createMeta(),difficulty=0,bannedElement=null){
   requireRule(validElementBan(bannedElement),'禁用元素无效');
@@ -116,6 +129,10 @@ export function newRun(seed=Date.now(),meta=createMeta(),difficulty=0,bannedElem
   run.resources=normalizeResources(run.resources);
   run.talentState=createTalentState();
   starter(run);
+  if(traits.preparedSigil){
+    const engraving=pick(run,ENCHANTMENTS.filter(e=>e.kind==='slot'&&enchantmentAllowed(run,e)));
+    run.slots[0].engraving=engraving.id;
+  }
   run.eventOrder=shuffle(run,EVENTS.map(x=>x.id));
   // Retain RNG consumption and save fields; all enemies share one ground line.
   run.waveLanes=WAVES.map(w=>w.map(()=>(random(run),0)));
@@ -132,8 +149,9 @@ function primaryElement(run){
   const counts=getCounts(run),max=Math.max(...Object.values(counts));
   return pick(run,allowedElements(run).filter(e=>counts[e]===max));
 }
-function draftCards(run,cost,focus){
+function draftCards(run,cost,focus,talentFloor=0){
   const tiers=Array.from({length:3},()=>rarity(run,cost)),used=new Set();
+  tiers[0]=Math.max(tiers[0],talentFloor);
   const selected=[];
   const elements=allowedElements(run);
   let elems=run.batch<=3?sample(run,elements,3):[];
@@ -157,7 +175,12 @@ function draftCards(run,cost,focus){
         pool=pool.filter(x=>x.style===style);
       }
     }
-    const chosen=pick(run,pool.length?pool:all);
+    if(!pool.length)pool=all;
+    if(i===2&&run.traits.freshInk){
+      const unowned=pool.filter(x=>!run.inventory.some(item=>item.typeId===x.id));
+      if(unowned.length)pool=unowned;
+    }
+    const chosen=pick(run,pool);
     used.add(chosen.id);selected.push(chosen.id);
   }
   return selected;
@@ -264,10 +287,15 @@ function chooseOffer(run,action){
     if(id==='refresh10')run.resources.refresh+=10;
     else if(id==='remove30')addResource(run.resources,'remove',30);
     else if(id==='swap20')addResource(run.resources,'swap',20);
-    else if(id==='heal25')run.hp=Math.min(run.maxHp,run.hp+25+(run.traits.medicine?5:0));
-    else if(id==='max10'){run.maxHp+=10;run.hp=Math.min(run.maxHp,run.hp+10+(run.traits.medicine?5:0));}
+    else if(id==='heal25')eventHeal(run,25+(run.traits.medicine?5:0));
+    else if(id==='max10'){run.maxHp+=10;eventHeal(run,10+(run.traits.medicine?5:0));}
     else if(id==='scroll-box'){run.offers={kind:'scroll',source:offer.source,cards:scrollCards(run)};return;}
     else throw new Error('未知事件选项');
+  }
+  if(offer.kind==='bullet'&&[200,300].includes(offer.cost)&&run.traits.scrollMerchant&&run.talentState.scrollMerchantUses<2){
+    const scroll=pick(run,BULLETS.filter(x=>bulletAllowed(run,x)&&x.trigger==='consumable'));
+    addBullet(run,scroll.id);run.talentState.scrollMerchantUses++;
+    run.logs.push(`书商赠礼：额外获得${scroll.name}。`);
   }
   finishOffer(run);
 }
@@ -294,6 +322,10 @@ function advanceAfterCombat(run,previousBosses){
     run.resources.refresh+=2+([6,12].includes(run.batch)?10:0);
     if([3,6,9,12,15].includes(run.batch))addResource(run.resources,'remove',30);
     addResource(run.resources,'swap',5);
+    if(run.traits.fieldCare&&run.batch%3===0){
+      run.hp=Math.min(run.maxHp,run.hp+4);
+      run.logs.push('行军药包：完成三批挑战，回复 4 生命。');
+    }
     if(run.traits.scrollCache&&[6,12,18].includes(run.batch)&&!talentState.scrollBatches.includes(run.batch)){
       const element=pick(run,allowedElements(run));
       const scroll=pick(run,BULLETS.filter(x=>x.trigger==='consumable'&&x.element===element));
@@ -327,11 +359,14 @@ export function act(input,action){
       case 'draft': {
         requireRule(!run.offers&&!run.pending.length,'请先处理当前选择');
         requireRule([100,200,300].includes(action.cost),'招募档位无效');
-        requireRule(action.cost!==300||run.batch>=13,'三倍招募在第 13 批解锁');
+        requireRule(action.cost!==300||run.batch>=getEliteDraftBatch(run),`三倍招募在第 ${getEliteDraftBatch(run)} 批解锁`);
         requireRule(run.resources.draft>=action.cost,'选弹值不足');
         const focus=action.focus&&run.traits.focus&&!run.draftCount&&getCounts(run)[action.focus]>0?action.focus:null;
+        let talentFloor=0;
+        if(action.cost===100&&run.traits.scout&&!run.talentState.scoutUsed){talentFloor=1;run.talentState.scoutUsed=true;}
+        if(action.cost===200&&run.traits.scholar&&!run.talentState.scholarUsed){talentFloor=2;run.talentState.scholarUsed=true;}
         run.resources.draft-=action.cost;run.draftCount++;
-        run.offers={kind:'bullet',source:`draft-${run.draftCount}`,cost:action.cost,focus,cards:draftCards(run,action.cost,focus)};
+        run.offers={kind:'bullet',source:`draft-${run.draftCount}`,cost:action.cost,focus,talentFloor,cards:draftCards(run,action.cost,focus,talentFloor)};
         break;
       }
       case 'choose':chooseOffer(run,action);break;
@@ -341,6 +376,9 @@ export function act(input,action){
           run.talentState.skipRefunds++;
           run.resources.refresh+=5;
         }
+        if(run.traits.renewal&&run.offers.kind==='bond'&&run.talentState.renewalUses<3){
+          run.hp=Math.min(run.maxHp,run.hp+4);run.talentState.renewalUses++;
+        }
         finishOffer(run);break;
       }
       case 'refresh': {
@@ -348,7 +386,7 @@ export function act(input,action){
         const cost=getRefreshCost(run);
         requireRule(run.resources.refresh>=cost,'刷新值不足');run.resources.refresh-=cost;
         if(cost===0)run.talentState.freeRefreshUsed=true;
-        offer.cards=offer.kind==='bullet'?draftCards(run,offer.cost,offer.focus):offer.kind==='bond'?bondCards(run,offer.core):scrollCards(run);
+        offer.cards=offer.kind==='bullet'?draftCards(run,offer.cost,offer.focus,offer.talentFloor||0):offer.kind==='bond'?bondCards(run,offer.core):scrollCards(run);
         break;
       }
       case 'load':requireRule(!run.offers&&!run.pending.length,'请先选择或跳过当前奖励');loadMagazine(run);break;
@@ -366,12 +404,20 @@ export function act(input,action){
         const remaining=run.inventory.filter(x=>x.uid!==uid);
         requireRule(remaining.filter(permanent).length>=3&&remaining.filter(x=>permanent(x)&&card(x).trigger==='shot').length>=2,'至少保留 3 枚常驻子弹，其中 2 枚普通发射弹');
         const candidate={...run,inventory:remaining};
-        requireRule(!run.rest||getActiveBonds(candidate).includes('Q05'),'这次删除会使空槽交响失效，请先撤销休止');
+        requireRule(!run.rest||canRest(candidate),'这次删除会使空槽交响失效，请先撤销休止');
         requireRule(run.resources.remove>=RESOURCE_COSTS.remove,'删除值不足');run.resources.remove-=RESOURCE_COSTS.remove;
+        const removed=run.inventory.find(item=>item.uid===uid);
+        if(run.traits.recycleCharge&&permanent(removed)&&run.talentState.recycleUses<2){
+          run.resources.refresh+=10;run.talentState.recycleUses++;
+        }
+        if(run.traits.succession&&removed.imprints?.ember){
+          const heir=remaining.find(item=>canReceiveImprint(item,'ember'));
+          if(heir){imprintSpell(heir,'ember');run.logs.push(`火印传承：${card(heir).name}获得 1 层火印。`);}
+        }
         run.inventory=remaining;run.magazine[action.slot]=null;break;
       }
       case 'rest': {
-        requireRule(getActiveBonds(run).includes('Q05'),'需要激活空槽交响');requireRule(!run.rest,'本夹已经有一枚休止子弹');
+        requireRule(canRest(run),'需要激活空槽交响或解锁留白之术');requireRule(!run.rest,'本夹已经有一枚休止子弹');
         const uid=run.magazine[action.slot],item=run.inventory.find(x=>x.uid===uid);
         requireRule(item&&permanent(item),'休止只能选择常驻子弹');run.rest={uid,slot:action.slot};run.magazine[action.slot]=null;break;
       }
@@ -384,6 +430,11 @@ export function act(input,action){
         requireRule(['prepare','locked'].includes(run.phase),'请先装填');
         const previousBosses=[...run.defeatedBosses];
         const result=resolveRound(run);run=result.state;frames=result.presentationFrames||result.frames||[];
+        if(run.hp<=0&&run.traits.lastLight&&!ensureTalentState(run).lastLightUsed){
+          run.hp=Math.min(15,run.maxHp);run.talentState.lastLightUsed=true;
+          const text='不灭烛火：免于本次死亡，回复至 15 生命。';run.logs.push(text);
+          frames.push({type:'status',action:'revive',text,duration:650,board:clone({enemies:run.enemies,summons:run.summons,hp:run.hp,shield:run.shield})});
+        }
         advanceAfterCombat(run,previousBosses);break;
       }
       default:throw new Error('未知操作');

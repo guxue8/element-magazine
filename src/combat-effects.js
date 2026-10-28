@@ -21,8 +21,12 @@ const area=(c,n,side,radius,max)=>{
 };
 const explosion=(c,n,side,radius,after=()=>{})=>{
   const t=c.target();
-  return c.blast(t,radius,(x,i)=>{c.hit(x,i?side:n);after(x);});
+  const origin=t?.position;
+  return c.blast(t,radius,(x,i)=>{c.hit(x,i?splash(side,x.position,origin):n);after(x,i);});
 };
+// The outer ring still hits every enemy, but density should not turn one spell
+// into equally strong attacks across the entire front. Lock the origin first.
+const splash=(damage,position,origin)=>Math.abs(position-origin)>1?Math.ceil(damage/2):damage;
 const pierce=(c,n,side,max,opts={
 })=>{
   const t=c.target();
@@ -85,7 +89,7 @@ export const effects={
   },  F05:c=>{
     const a=shot(c,6);
     if(a)c.burn(a.t,2);
-  },  F06:c=>explosion(c,30,30,2,t=>c.burn(t,3)),  F07:c=>{
+  },  F06:c=>explosion(c,24,12,2,(t,i)=>c.burn(t,i?1:3)),  F07:c=>{
     const a=shot(c,10);
     if(a&&!c.replay){
       const n=Math.min(5,a.snap.burn||0);
@@ -94,9 +98,9 @@ export const effects={
       });
       for(const t of c.near(a.t,2,2))c.derived(t,2*n,'fire');
     }
-  },  F08:c=>explosion(c,6,4,1),  F09:c=>{
+  },  F08:c=>explosion(c,6,2,1),  F09:c=>{
     c.removeShield(c.target(),4);
-    shot(c,10);
+    shot(c,14);
   },  F10:c=>{
     const a=shot(c,9);
     if(a?.killed)c.blast(a.t,1,t=>c.derived(t,6,'fire'),{includeCenter:false,secondary:true});
@@ -112,14 +116,15 @@ export const effects={
       if(c.stage('E02',2)&&c.once('E02.refill',2))c.burn(t,1);
       if(c.stage('E02',9)&&c.once('E02.splash'))for(const x of c.near(t,1,2))c.derived(x,6,'fire');
     }
-  },  F12:c=>explosion(c,40,20,1),  F13:c=>{
+  },  F12:c=>explosion(c,32,12,1),  F13:c=>{
     const t=c.target();if(!t)return;
-    const n=c.replay?0:t.burn;
-    c.blast(t,2,(x,i)=>{c.hit(x,i?48:100,i?0:8*n);if(!i)c.consumeBurn(t,n);});
+    const n=c.replay?0:t.burn,origin=t.position;
+    c.blast(t,2,(x,i)=>{c.hit(x,i?splash(20,x.position,origin):80,i?0:8*n);if(!i)c.consumeBurn(t,n);});
   },  F14:c=>{
     const center=c.sorted().sort((a,b)=>(b.burn||0)-(a.burn||0))[0];
-    c.blast(center,3,t=>{const n=c.replay?0:Math.min(t.burn||0,3);c.hit(t,60,6*n);c.consumeBurn(t,n);});
-  },  F15:c=>shot(c,12),F16:c=>shot(c,7),  F17:c=>{
+    const origin=center?.position;
+    c.blast(center,3,(t,i)=>{const n=c.replay?0:Math.min(t.burn||0,3);c.hit(t,i?splash(30,t.position,origin):60,6*n);c.consumeBurn(t,n);});
+  },  F15:c=>shot(c,16),F16:c=>shot(c,7),  F17:c=>{
     const a=shot(c,9);
     if(a?.snap.burn)c.advance(c.slot+4);
   },  F18:c=>shot(c,6),F19:()=>{
@@ -140,9 +145,9 @@ export const effects={
   },H05:c=>{const spirit=c.summon('spring',2,'mist');c.command(spirit);},  H06:c=>{
     c.summon('spring',3);
     c.summon('cannon',3);
-    explosion(c,30,30,1);
+    explosion(c,24,12,1);
   },  H07:c=>{
-    explosion(c,42,24,2);
+    explosion(c,36,12,2);
     const a=c.summon('spring',3),b=c.summon('spring',3);
     c.command(a);
     c.command(b);
@@ -161,8 +166,8 @@ export const effects={
       a.t.wet=0;
       if(a.t.hp>0&&!c.control(a.t,'slow'))c.derived(a.t,8,'water');
     }
-  },  H13:c=>explosion(c,42,42,2,t=>c.control(t,'slow')),H14:()=>{
-  },H15:c=>shot(c,12),  H16:c=>{
+  },  H13:c=>explosion(c,30,15,2,t=>c.control(t,'slow')),H14:()=>{
+  },H15:c=>shot(c,16),  H16:c=>{
     if(!c.replay&&c.once('H16'))c.resource('refresh',2);
     const a=shot(c,8);
     if(a)c.wet(a.t);
@@ -197,7 +202,7 @@ export const effects={
     for(let i=0;
     i<n;
     i++)c.derived(c.target(),24,'water');
-  },  L01:c=>chain(c,6,5,2,2),L02:c=>shot(c,10,t=>c.near(t,2).length?0:4),L03:c=>chain(c,7,3,3,2),L04:c=>chain(c,6,4,2,2,true),  L05:c=>{
+  },  L01:c=>chain(c,6,5,2,2),L02:c=>shot(c,14,t=>c.near(t,2).length?0:8),L03:c=>chain(c,7,3,3,2),L04:c=>chain(c,6,4,2,2,true),  L05:c=>{
     const ts=chain(c,8,6,1,2);
     if(ts.length===2&&ts[0].hp>0)c.hit(ts[0],6,0,{
       jump:true
@@ -223,14 +228,14 @@ export const effects={
         from=x;
       }
     }
-  },  L08:c=>shot(c,36),  L09:c=>{
+  },  L08:c=>shot(c,48),  L09:c=>{
     const a=shot(c,12);
     if(a&&c.waiting.some(b=>b.uid!==c.current.uid&&BULLET_MAP[b.typeId].element==='lightning')&&!c.replay&&c.once('L09',3))c.shield(1);
   },  L10:c=>{
     const a=shot(c,7);
     if(a?.killed)c.advance(c.right(c.slot));
   },  L11:c=>{
-    const a=shot(c,84);
+    const a=shot(c,104);
     if(a&&!c.replay){
       if(a.killed&&c.stage('E04',2)&&c.once('E04.kill'))c.derived(c.target(),12,'lightning');
       if(!a.killed&&c.stage('E04',9)&&c.once('E04.shield'))c.shield(4);
@@ -242,10 +247,10 @@ export const effects={
       c.shield(n);
     }
   },  L13:c=>{
-    const a=shot(c,132,Math.min(2,c.success.length)*24);
-    if(a?.killed&&a.overflow>0)c.blast(a.t,1,t=>c.derived(t,Math.min(60,a.overflow),'lightning'),{includeCenter:false,secondary:true});
+    const a=shot(c,168,Math.min(2,c.success.length)*24);
+    if(a?.killed&&a.overflow>0)c.blast(a.t,1,t=>c.derived(t,Math.min(36,a.overflow),'lightning'),{includeCenter:false,secondary:true});
   },L14:()=>{
-  },L15:c=>shot(c,12),L16:c=>shot(c,7),  L17:c=>{
+  },L15:c=>shot(c,16),L16:c=>shot(c,7),  L17:c=>{
     const a=shot(c,10);
     if(a&&c.layout.some((b,i)=>b&&i%4===c.slot%4&&BULLET_MAP[b.typeId].trigger==='passive'))c.control(a.t,'slow');
   },L18:()=>{
@@ -338,16 +343,16 @@ export const effects={
     }
   },  R01:c=>c.summon('guard',2),R02:c=>{
     c.removeShield(c.target(),6);
-    shot(c,8);
+    shot(c,12);
   },R03:c=>c.summon('cannon',2),R04:c=>{
     shot(c,6);
     command(c,'rock');
   },R05:c=>c.summon('cannon',2,'scatter'),  R06:c=>{
-    explosion(c,60,24,1);
+    explosion(c,48,12,1);
     c.summon('guard',3);
     c.summon('cannon',3);
   },  R07:c=>{
-    explosion(c,60,36,2);
+    explosion(c,48,18,2);
     const a=c.summon('guard',3),b=c.summon('cannon',3);
     c.command(b);
     c.command(a);
@@ -368,7 +373,7 @@ export const effects={
       c.shield(12);
       c.counter('R13',2);
     }
-  },R14:c=>c.shield(3),R15:c=>shot(c,12),  R16:c=>{
+  },R14:c=>c.shield(3),R15:c=>shot(c,16),  R16:c=>{
     const a=shot(c,8,t=>t.hp===t.maxHp?8:0);
     if(a?.killed)c.resource('remove',1);
   },  R17:c=>{
@@ -380,7 +385,7 @@ export const effects={
     shot(c,36);
     c.resource('remove',Math.floor(n/4));
   },  R21:c=>{
-    const a=shot(c,108);
+    const a=shot(c,150);
     if(a?.killed)c.resource('remove',3);
     if(a)for(let i=0;
     i<Math.min(3,c.layout.filter(b=>!b).length);

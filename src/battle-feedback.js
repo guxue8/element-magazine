@@ -1,5 +1,7 @@
+import {wardenArt} from './actor-art.js';
 import {enemyPoint} from './view-utils.js';
 import {ELEMENTS,BULLET_MAP} from './catalog.js';
+import {spellDelivery,deliveryArt,detonationArt,shockwaveArt} from './epic-spell-art.js';
 const PALETTES={
  fire:['#ffd780','#fff3c0','#ed793c','#a83d30'],water:['#80d6ef','#e0ffff','#379fc4','#28608e'],
  lightning:['#e2b1ff','#fff4c9','#a36ae0','#644199'],wind:['#a8ecc5','#eaffd9','#54b39b','#326d77'],earth:['#deb684','#fff0c2','#ad7953','#694c42'],
@@ -45,11 +47,17 @@ export function spellProfile(frame){
  const def=BULLET_MAP[frame?.sourceId];
  const cast=Boolean(frame&&!frame.secondary&&(['shot','explosion','summon'].includes(frame.type)));
  const tier=Math.max(0,Math.min(4,def?.rarity??0));
- return {cast,tier,element:frame?.element||def?.element||'earth',ritual:cast&&(tier>=3||def?.trigger==='timer'),resonance:Boolean(frame?.sourceBond||frame?.empowered)};
+ const element=frame?.element||def?.element||'earth';
+ return {cast,tier,element,delivery:spellDelivery(frame?.sourceId,element,tier),ritual:cast&&(tier>=3||def?.trigger==='timer'),resonance:Boolean(frame?.sourceBond||frame?.empowered)};
 }
-export function mageSprite(){
- return `<svg class="mage-sprite" viewBox="0 0 48 64" shape-rendering="crispEdges" aria-hidden="true"><g class="mage-cloak">${path('M 16 28 H 29 V 36 H 32 V 46 H 35 V 58 H 9 V 52 H 12 V 40 H 16 Z','#202e48')+path('M 18 32 H 25 V 45 H 28 V 57 H 14 V 51 H 16 V 40 H 18 Z','#48617a')+rect(18,33,3,20,'#8293a2')+rect(9,57,11,4,'#152235')+rect(25,57,10,4,'#152235')}</g><g class="mage-head">${path('M 17 13 H 28 V 17 H 31 V 29 H 27 V 33 H 18 V 29 H 14 V 19 H 17 Z','#172638')+rect(19,22,9,8,'#d9b58b')+rect(23,24,7,2,'#fff0c7')+path('M 22 3 H 26 V 9 H 29 V 16 H 34 V 20 H 10 V 17 H 16 V 11 H 20 V 7 H 22 Z','#526e87')+rect(17,16,15,3,'#a5bbc0')}</g><g class="mage-casting-arm">${rect(25,33,7,7,'#657d93')+rect(30,35,7,5,'#d9b58b')+rect(38,22,3,34,'#75654e')+rect(38,24,1,30,'#b59f70')+path('M 36 14 H 43 V 18 H 45 V 24 H 42 V 28 H 37 V 24 H 34 V 18 H 36 Z','#668792')+rect(37,16,5,7,'#b3e6df')+rect(38,17,2,4,'#efffe0')}</g></svg>`;
+export function feedbackDuration(frame){
+ if(!frame)return 420;
+ const profile=spellProfile(frame);
+ if(profile.cast&&profile.delivery!=='bolt'&&(frame.blast||Number.isFinite(frame.hpDamage)))return Math.max(frame.duration||420,profile.tier>=3?900:520);
+ return frame.duration||420;
 }
+export function mageSprite(){return wardenArt();}
+
 function sigil(element){
  const [c,hi,shade]=PALETTES[element];
  return svg(path('M 12 2 H 20 V 6 H 26 V 12 H 30 V 20 H 26 V 26 H 20 V 30 H 12 V 26 H 6 V 20 H 2 V 12 H 6 V 6 H 12 V 2 M 13 5 V 8 H 8 V 13 H 5 V 19 H 8 V 24 H 13 V 27 H 19 V 24 H 24 V 19 H 27 V 13 H 24 V 8 H 19 V 5 Z',shade)+rect(14,9,4,14,c)+rect(9,14,14,4,c)+rect(14,14,4,4,hi));
@@ -58,32 +66,21 @@ function castingArt(profile){
  if(!profile.cast)return '';
  return `<span class="casting-seal">${sigil(profile.element)}</span>${profile.ritual?`<span class="ritual-column">${svg(rect(8,0,3,32,PALETTES[profile.element][2])+rect(14,6,4,26,PALETTES[profile.element][0])+rect(23,0,2,32,PALETTES[profile.element][1]))}</span>`:''}`;
 }
-function grandSpell(element){
- const [c,hi,shade]=PALETTES[element];
- const art={
-  lightning:path('M 16 0 H 22 V 8 H 18 V 14 H 23 V 18 H 17 V 25 H 12 V 32 H 8 V 23 H 12 V 16 H 8 V 12 H 13 V 5 H 16 Z',c)+rect(14,14,3,12,hi)+rect(3,7,3,6,shade)+rect(25,12,3,8,shade),
-  earth:path('M 3 32 V 20 H 5 V 15 H 9 V 20 H 11 V 32 M 12 32 V 13 H 14 V 5 H 18 V 13 H 20 V 32 M 23 32 V 23 H 25 V 17 H 28 V 23 H 30 V 32',shade)+rect(14,15,3,17,c)+rect(5,22,2,10,hi)+rect(25,24,2,8,c),
-  water:path('M 0 27 H 5 V 22 H 10 V 16 H 15 V 10 H 21 V 6 H 28 V 10 H 24 V 15 H 22 V 22 H 27 V 26 H 32 V 32 H 0 Z',shade)+path('M 2 25 H 8 V 20 H 14 V 15 H 19 V 10 H 25 V 12 H 22 V 17 H 17 V 22 H 12 V 27 H 2 Z',c)+rect(19,10,5,2,hi),
-  wind:path('M 4 2 H 21 V 5 H 27 V 9 H 30 V 14 H 26 V 18 H 20 V 21 H 7 V 18 H 18 V 15 H 24 V 11 H 20 V 7 H 4 Z',c)+path('M 2 13 H 6 V 23 H 12 V 27 H 29 V 30 H 10 V 27 H 5 V 23 H 2 Z',shade)+rect(12,12,8,2,hi),
-  fire:path('M 5 32 V 22 H 9 V 13 H 13 V 19 H 17 V 3 H 21 V 12 H 24 V 23 H 28 V 17 H 31 V 32 Z',shade)+path('M 10 32 V 25 H 14 V 22 H 17 V 17 H 21 V 25 H 25 V 32 Z',c)+rect(16,26,6,6,hi),
- };
- return `<span class="grand-spell grand-${element}">${svg(art[element])}</span>`;
-}
 export function spellVictims(frame){return frame?.blast?.victims||(frame?.target&&Number.isFinite(frame.hpDamage)?[frame]:[]);}
 function explosionFeedback(frame,speed){
  const p=spellProfile(frame),blast=frame.blast,center=blast.center,element=p.element;
  const x=enemyPoint(center).x,radius=blast.radius*10.8;
  const numbers=blast.victims.map((v,i)=>`<span class="combat-number blast-number" style="left:${enemyPoint(v.target).x}%;--number-row:${i%3}">${v.hpDamage||'格挡'}</span>`).join('');
- return `<div class="combat-fx fx-${element} spell-tier-${p.tier} fx-explosion${p.resonance?' fx-resonance':''}${frame.secondary?' fx-instant':''}" style="--impact-x:${x}%;--blast-width:${2*radius}%;--fx-color:${PALETTES[element][0]};--fx-duration:${(frame.duration||640)/speed}ms" aria-hidden="true">${castingArt(p)}${p.tier>=3?grandSpell(element):''}${p.cast?`<span class="rune-projectile">${bolt(element)}</span>`:''}${p.resonance?`<span class="greater-impact">${sigil(element)}</span>`:''}<span class="blast-footprint"></span><span class="blast-wave">${burst(element)}</span><span class="impact-flare">${burst(element)}</span><span class="impact-particles">${particles(element,true)}</span>${numbers}</div>`;
+ return `<div class="combat-fx fx-${element} spell-tier-${p.tier} fx-explosion form-${p.delivery}${p.resonance?' fx-resonance':''}${frame.secondary?' fx-instant':''}" style="--impact-x:${x}%;--blast-width:${2*radius}%;--fx-color:${PALETTES[element][0]};--fx-duration:${feedbackDuration(frame)/speed}ms" aria-hidden="true">${castingArt(p)}${deliveryArt(p)}${p.cast&&p.delivery==='bolt'?`<span class="rune-projectile">${bolt(element)}</span>`:''}${p.resonance?`<span class="greater-impact">${sigil(element)}</span>`:''}<span class="blast-footprint"></span><span class="blast-wave">${shockwaveArt(PALETTES[element][0])}</span><span class="detonation-cloud">${detonationArt(element,!(p.cast&&p.delivery==='eruption'))}</span><span class="impact-flare">${burst(element)}</span><span class="impact-particles">${particles(element,true)}</span>${numbers}</div>`;
 }
 export function battleFeedback(frame,speed=1){
  if(frame?.blast)return explosionFeedback(frame,speed);
  if(frame?.type==='summon'&&!Number.isFinite(frame.hpDamage)){const p=spellProfile(frame);return `<div class="combat-fx spell-tier-${p.tier} fx-summoning" style="--fx-color:${PALETTES[p.element][0]};--fx-duration:${(frame.duration||420)/speed}ms" aria-hidden="true">${castingArt(p)}<span class="summoning-seal">${sigil(p.element)}</span></div>`;}
  if(!frame?.target||!Number.isFinite(frame.hpDamage))return '';
  const {x}=enemyPoint(frame.target),element=ELEMENTS[frame.element]?frame.element:'earth';
- const travel=frame.type==='shot'&&!frame.secondary;
  const p=spellProfile(frame);
- return `<div class="combat-fx fx-${element} spell-tier-${p.tier}${p.resonance?' fx-resonance':''}${p.ritual?' fx-ritual':''}${frame.killed?' fx-kill':''}${travel?'':' fx-instant'}" style="--impact-x:${x}%;--fx-color:${PALETTES[element][0]};--fx-duration:${(frame.duration||420)/speed}ms" aria-hidden="true">${castingArt(p)}${p.ritual?grandSpell(element):''}${travel?`<span class="muzzle-flash">${sigil(element)}</span><span class="rune-projectile">${bolt(element)}</span>`:''}${p.ritual||p.resonance?`<span class="greater-impact">${sigil(element)}</span>`:''}<span class="impact-flare">${burst(element)}</span><span class="impact-particles">${particles(element,frame.killed)}</span><span class="combat-number">${frame.hpDamage>0?frame.hpDamage:'格挡'}${frame.absorbed?`<small>盾 −${frame.absorbed}</small>`:''}${frame.killed?'<b>击破</b>':''}</span></div>`;
+ const travel=p.cast&&p.delivery==='bolt';
+ return `<div class="combat-fx fx-${element} spell-tier-${p.tier} form-${p.delivery}${p.resonance?' fx-resonance':''}${p.ritual?' fx-ritual':''}${frame.killed?' fx-kill':''}${p.cast?'':' fx-instant'}" style="--impact-x:${x}%;--fx-color:${PALETTES[element][0]};--fx-duration:${feedbackDuration(frame)/speed}ms" aria-hidden="true">${castingArt(p)}${deliveryArt(p)}${travel?`<span class="muzzle-flash">${sigil(element)}</span><span class="rune-projectile">${bolt(element)}</span>`:''}${p.ritual||p.resonance?`<span class="greater-impact">${sigil(element)}</span>`:''}<span class="impact-flare">${burst(element)}</span><span class="impact-particles">${particles(element,frame.killed)}</span><span class="combat-number">${frame.hpDamage>0?frame.hpDamage:'格挡'}${frame.absorbed?`<small>盾 −${frame.absorbed}</small>`:''}${frame.killed?'<b>击破</b>':''}</span></div>`;
 }
 
 export function enemyActionFeedback(frame){

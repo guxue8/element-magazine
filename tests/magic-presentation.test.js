@@ -12,7 +12,9 @@ test('rarity and casting kind distinguish humble spells from rituals without amp
  assert.equal(spellProfile({type:'shot',sourceId:'F07'}).tier,4);
  assert.equal(spellProfile({type:'shot',sourceId:'F07',secondary:true}).cast,false);
  assert.equal(spellProfile({type:'summon',sourceId:'H01'}).ritual,true);
- assert.match(mageSprite(),/mage-casting-arm/);
+ assert.match(mageSprite(),/warden-poses/);
+ assert.match(mageSprite(),/data-actor="hero"/);
+ assert.match(mageSprite(),/data-actor="cast"/);
 });
 test('explosion shows one area footprint and every victim together',()=>{
  const target=i=>({uid:'e'+i,typeId:'bug',position:3});

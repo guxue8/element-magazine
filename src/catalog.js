@@ -115,7 +115,7 @@ export const BULLETS = [
     "style": "灼烧",
     "trigger": "timer",
     "counter": 2,
-    "description": "爆炸半径 2：范围内所有敌人各受 30 火伤，并附加 3 层燃烧。每敌仅命中一次，不限制目标数。"
+    "description": "主目标 24 火伤、3 层燃烧；爆炸半径 2，其余敌人受 12 火伤、1 层燃烧。距爆心超过 1 格的溅射基础伤害减半，向上取整。不限目标数。"
   },
   {
     "id": "F07",
@@ -135,7 +135,7 @@ export const BULLETS = [
     "style": "引爆",
     "trigger": "shot",
     "counter": 0,
-    "description": "主目标 6 火伤；爆炸半径 1 内其余所有敌人各受 4 火伤。范围在施放时锁定，每敌仅命中一次。"
+    "description": "主目标 6 火伤；爆炸半径 1 内其余所有敌人各受 2 火伤。范围在施放时锁定，每敌仅命中一次。"
   },
   {
     "id": "F09",
@@ -145,7 +145,7 @@ export const BULLETS = [
     "style": "引爆",
     "trigger": "shot",
     "counter": 0,
-    "description": "先移除主目标最多 4 点护盾，再造成 10 火伤。移除护盾不伤生命、不算命中，不触发反击、击杀或其他移盾效果；每实体每夹只移除 1 次。"
+    "description": "先移除主目标最多 4 点护盾，再造成 14 火伤。移除护盾不伤生命、不算命中，不触发反击、击杀或其他移盾效果；每实体每夹只移除 1 次。"
   },
   {
     "id": "F10",
@@ -175,7 +175,7 @@ export const BULLETS = [
     "style": "引爆",
     "trigger": "timer",
     "counter": 2,
-    "description": "主目标 40 火伤；爆炸半径 1 内其余所有敌人各受 20 火伤。每敌仅命中一次。"
+    "description": "主目标 32 火伤；爆炸半径 1 内其余所有敌人各受 12 火伤。每敌仅命中一次。"
   },
   {
     "id": "F13",
@@ -185,7 +185,7 @@ export const BULLETS = [
     "style": "引爆",
     "trigger": "timer",
     "counter": 3,
-    "description": "主目标 100 火伤，消耗其全部燃烧，每层追加 8 火伤；爆炸半径 2 内其余所有敌人各受 48 火伤。每敌仅命中一次，无固有潜伏。"
+    "description": "主目标 80 火伤，消耗其全部燃烧，每层追加 8 火伤；爆炸半径 2 内其余所有敌人各受 20 火伤。距爆心超过 1 格的溅射基础伤害减半，向上取整。无固有潜伏。"
   },
   {
     "id": "F14",
@@ -195,7 +195,7 @@ export const BULLETS = [
     "style": "引爆",
     "trigger": "timer",
     "counter": 3,
-    "description": "以燃烧层数最多的敌人为中心，爆炸半径 3 内所有敌人各受 60 火伤；分别消耗至多 3 层燃烧，每层追加 6 火伤。每敌仅命中一次，无目标数限制。平局按选敌顺序。"
+    "description": "以燃烧层数最多的敌人为中心，造成 60 火伤；爆炸半径 3，其余敌人受 30 火伤。距爆心超过 1 格的溅射基础伤害减半，向上取整。每名目标分别消耗至多 3 层燃烧，每层另追加 6 火伤。不限目标数。平局按选敌顺序。"
   },
   {
     "id": "F15",
@@ -205,7 +205,7 @@ export const BULLETS = [
     "style": "锻炉",
     "trigger": "shot",
     "counter": 0,
-    "description": "12 火伤。稳定承接方向强化。"
+    "description": "16 火伤。稳定承接方向强化。"
   },
   {
     "id": "F16",
@@ -325,7 +325,7 @@ export const BULLETS = [
     "style": "潮灵召唤",
     "trigger": "timer",
     "counter": 2,
-    "description": "召唤泉灵与礁炮各 1，寿命 3 次正常行动；爆炸半径 1 内所有敌人各受 30 水伤。任一召唤成功即重置；无敌人时只跳过伤害。"
+    "description": "召唤泉灵与礁炮各 1，寿命 3 次正常行动。主目标 24 水伤；爆炸半径 1 内其余敌人各受 12 水伤。任一召唤成功即重置；无敌人时只跳过伤害。"
   },
   {
     "id": "H07",
@@ -335,7 +335,7 @@ export const BULLETS = [
     "style": "潮灵召唤",
     "trigger": "timer",
     "counter": 2,
-    "description": "主目标 42 水伤；爆炸半径 2 内其余所有敌人各受 24 水伤。召唤 2 泉灵，寿命 3，并立即指令本次仍在场的两只行动。召唤成功即重置。"
+    "description": "主目标 36 水伤；爆炸半径 2，其余敌人受 12 水伤，距爆心超过 1 格的溅射基础伤害减半。召唤 2 泉灵，寿命 3，并分别立即指令；无敌人也可召唤。"
   },
   {
     "id": "H08",
@@ -395,7 +395,7 @@ export const BULLETS = [
     "style": "寒潮",
     "trigger": "timer",
     "counter": 2,
-    "description": "爆炸半径 2 内所有敌人各受 42 水伤，并分别尝试缓行。每敌仅伤害和控制一次；控制抗性无效时不补伤，无目标保持就绪。"
+    "description": "主目标 30 水伤；爆炸半径 2，其余敌人受 15 水伤，距爆心超过 1 格的溅射基础伤害减半，向上取整。所有命中敌人尝试施加缓行，不限目标数。"
   },
   {
     "id": "H14",
@@ -415,7 +415,7 @@ export const BULLETS = [
     "style": "循环资源",
     "trigger": "shot",
     "counter": 0,
-    "description": "首目标 12 水伤。 每实体每回合 1 次攻击；没有附加资源条件，是稳定输出载体。"
+    "description": "16 水伤。稳定承接方向强化。"
   },
   {
     "id": "H16",
@@ -495,7 +495,7 @@ export const BULLETS = [
     "style": "链电",
     "trigger": "shot",
     "counter": 0,
-    "description": "首目标 10 雷伤；若命中前该目标距离 2 格内没有其他敌人，本次对主目标额外造成 4 雷伤。每实体每夹判定 1 次，不另算一次本体命中。"
+    "description": "主目标 14 雷伤；若命中前该目标距离 2 格内没有其他敌人，本次额外造成 8 雷伤。每实体每夹判定 1 次，不另算一次本体命中。"
   },
   {
     "id": "L03",
@@ -555,7 +555,7 @@ export const BULLETS = [
     "style": "蓄能",
     "trigger": "timer",
     "counter": 2,
-    "description": "主目标 36 雷伤。每实际入阵两次释放一次，未入阵不消耗蓄力，无目标时保留就绪。"
+    "description": "主目标 48 雷伤。无有效目标时保持就绪，下一次入阵继续尝试施放。"
   },
   {
     "id": "L09",
@@ -585,7 +585,7 @@ export const BULLETS = [
     "style": "蓄能",
     "trigger": "timer",
     "counter": 2,
-    "description": "主目标 84 雷伤。每实际入阵两次施放一次；无目标时保留就绪。"
+    "description": "主目标 104 雷伤。"
   },
   {
     "id": "L12",
@@ -605,7 +605,7 @@ export const BULLETS = [
     "style": "蓄能",
     "trigger": "timer",
     "counter": 3,
-    "description": "主目标 132 雷伤；本阵此前每成功施放一枚其他蓄力魔法，追加 24 雷伤，最多计入 2 枚。若主目标被本体击杀，将至多 60 点溢伤以半径 1 爆炸传给其余所有敌人，不再连爆。"
+    "description": "主目标 168 雷伤；本阵此前每成功施放一枚其他蓄力魔法，追加 24 雷伤，最多计入 2 枚。若主目标被本体击杀，将至多 36 点溢伤以半径 1 爆炸传给其余所有敌人，不再连爆。"
   },
   {
     "id": "L14",
@@ -625,7 +625,7 @@ export const BULLETS = [
     "style": "磁阵",
     "trigger": "shot",
     "counter": 0,
-    "description": "12 雷伤。"
+    "description": "16 雷伤。稳定承接方向强化。"
   },
   {
     "id": "L16",
@@ -915,7 +915,7 @@ export const BULLETS = [
     "style": "构装召唤",
     "trigger": "shot",
     "counter": 0,
-    "description": "对首目标先移除至多 6 点敌方护盾，再造成 8 岩伤。 每实体每回合最多移除 1 个敌人的护盾；移除量不算伤害、击杀或资源收益，不影响敌人独立护甲机制。"
+    "description": "先移除主目标最多 6 点护盾，再造成 12 岩伤。移除护盾不伤生命、不算命中，不触发反击、击杀或其他移盾效果。"
   },
   {
     "id": "R03",
@@ -955,7 +955,7 @@ export const BULLETS = [
     "style": "构装召唤",
     "trigger": "timer",
     "counter": 2,
-    "description": "主目标 60 岩伤；爆炸半径 1 内其余所有敌人各受 24 岩伤。召唤岩卫与礁炮各 1，寿命 3。任一召唤成功即重置，无敌人只跳过爆炸。"
+    "description": "主目标 48 岩伤；爆炸半径 1 内其余敌人受 12 岩伤。召唤岩卫与礁炮各 1，寿命 3 次正常行动。任一召唤成功即重置；无敌人时只跳过伤害。"
   },
   {
     "id": "R07",
@@ -965,7 +965,7 @@ export const BULLETS = [
     "style": "构装召唤",
     "trigger": "timer",
     "counter": 2,
-    "description": "主目标 60 岩伤；爆炸半径 2 内其余所有敌人各受 36 岩伤。召唤岩卫与礁炮各 1，寿命 3；按礁炮、岩卫顺序立即指令本次仍在场的两只行动。"
+    "description": "主目标 48 岩伤；爆炸半径 2 内其余敌人受 18 岩伤，距爆心超过 1 格的溅射基础伤害减半。召唤岩卫与礁炮各 1，寿命 3，并分别立即指令。"
   },
   {
     "id": "R08",
@@ -1045,7 +1045,7 @@ export const BULLETS = [
     "style": "拆解资源",
     "trigger": "shot",
     "counter": 0,
-    "description": "首目标 12 岩伤。 每实体每回合 1 次攻击；没有附加资源条件，是稳定输出载体。"
+    "description": "16 岩伤。稳定承接方向强化。"
   },
   {
     "id": "R16",
@@ -1105,7 +1105,7 @@ export const BULLETS = [
     "style": "拆解资源",
     "trigger": "timer",
     "counter": 3,
-    "description": "主目标 108 岩伤；本阵每有 1 个空槽，追加一发 24 岩伤碎片，最多 3 发。主目标被本体击杀时获得 3 战斗拆解；碎片击杀不重复领取。"
+    "description": "主目标 150 岩伤；本阵每有 1 个空槽，追加一发 24 岩伤碎片，最多 3 发。主目标被本体击杀时获得 3 战斗拆解；碎片击杀不重复领取。"
   },
   {
     "id": "C01",
@@ -2395,7 +2395,7 @@ export const TALENTS = [
   {
     "id": "supply",
     "name": "启动储备",
-    "description": "每级起始选弹值 +25。",
+    "description": "每级起始招募值 +25。",
     "costs": [
       1,
       2
@@ -2420,7 +2420,7 @@ export const TALENTS = [
   {
     "id": "swap",
     "name": "灵巧手套",
-    "description": "每级起始换位值 +5（半次充能）；1/2 级起始为 25/30，最多储存 3 次",
+    "description": "每级起始换位值 +5。满级时起始可换位 3 次。",
     "costs": [
       1,
       2
@@ -2429,7 +2429,7 @@ export const TALENTS = [
   {
     "id": "emergency",
     "name": "应急护板",
-    "description": "每局首次存活且生命低于 30 时获得 10 护盾；不能复活已死亡角色",
+    "description": "每局首次受伤后存活且生命低于 30：获得 10 护盾。",
     "costs": [
       3
     ]
@@ -2437,7 +2437,7 @@ export const TALENTS = [
   {
     "id": "focus",
     "name": "定向补给",
-    "description": "首次招募支付前可指定一个背包已有元素作为第一候选元素，品质仍按档位抽取；前 3 批另外两项仍取不同元素。仅首次可选，跳过也消耗权限，不改变已生成的候选",
+    "description": "首次招募前，可指定已有元素：第一个候选必为该系，品质照常抽取。跳过也消耗。",
     "costs": [
       3
     ]
@@ -2453,7 +2453,7 @@ export const TALENTS = [
   {
     "id": "reroll",
     "name": "准备预案",
-    "description": "第一次进入补给前可整组重抽初始 4 枚一次，仍遵守初始品质、类型、元素与名称约束；不保留部分旧弹，新组替换旧组，不额外发资源",
+    "description": "首次招募前，可重新抽取整组初始 4 个法术。每局 1 次。",
     "costs": [
       1
     ]
@@ -2461,19 +2461,19 @@ export const TALENTS = [
   {
     "id": "freeSwap",
     "name": "灵活编排",
-    "description": "每夹第一次有效换位免费。无效操作不消耗次数。",
+    "description": "每轮第一次有效换位免费。",
     "costs": [3]
   },
   {
     "id": "freeRefresh",
     "name": "再看一次",
-    "description": "每局第一次候选刷新免费。适用于子弹、羁绊和卷轴选择。",
+    "description": "每局第一次候选刷新免费。适用于法术、羁绊和卷轴。",
     "costs": [2]
   },
   {
     "id": "skipRefresh",
     "name": "弃选回收",
-    "description": "跳过付费招募：获得 5 刷新值。每局最多 2 次，不返还选弹值。",
+    "description": "跳过付费招募：获得 5 刷新值。每局最多 2 次。",
     "costs": [3]
   },
   {
@@ -2485,8 +2485,68 @@ export const TALENTS = [
   {
     "id": "rescueScroll",
     "name": "绝境药匣",
-    "description": "应急护板触发后，存活结束该夹：获得 1 枚应急卷轴（回澜；禁水时为岩阵）。每局 1 次，需之后入夹才生效。",
+    "description": "应急护板触发并存活过本轮：获得回澜卷轴，禁水时改为岩阵卷轴。每局 1 次。",
     "costs": [3]
+  },
+  {
+    "id":"fieldCare","name":"行军药包",
+    "description":"完成第 3、6、9、12、15、18 批：回复 4 生命。清场回合不触发。","costs":[4]
+  },
+  {
+    "id":"safeCamp","name":"余温结界",
+    "description":"事件治疗溢出时：将溢出量转为护盾，每次最多 8。受护盾上限限制。","costs":[5]
+  },
+  {
+    "id":"wardReserve","name":"破关仪式",
+    "description":"第 6、12、18 批敌人入场：获得 6 护盾。受护盾上限限制。","costs":[6]
+  },
+  {
+    "id":"renewal","name":"舍取之间",
+    "description":"跳过羁绊选择：回复 4 生命。每局最多 3 次。","costs":[7]
+  },
+  {
+    "id":"lastLight","name":"不灭烛火",
+    "description":"每局首次受到致命伤害：结束本轮敌方行动，回复至 15 生命。","costs":[8]
+  },
+  {
+    "id":"scout","name":"初识秘典",
+    "description":"首次普通招募：第一个候选至少为优良品质。刷新保留此保底；跳过也消耗。","costs":[4]
+  },
+  {
+    "id":"scholar","name":"深卷研读",
+    "description":"首次双倍招募：第一个候选至少为稀有品质。刷新保留此保底；跳过也消耗。","costs":[5]
+  },
+  {
+    "id":"freshInk","name":"未录之术",
+    "description":"招募第三候选优先出现未持有的法术。沿用本次抽中的品质和元素；无新法术时正常抽取。","costs":[6]
+  },
+  {
+    "id":"scrollMerchant","name":"书商赠礼",
+    "description":"选取双倍或三倍招募的法术：额外获得 1 枚随机元素卷轴。每局最多 2 次。","costs":[7]
+  },
+  {
+    "id":"deepStudy","name":"禁书通行",
+    "description":"三倍招募提前至第 10 批解锁。费用和品质概率不变。","costs":[8]
+  },
+  {
+    "id":"preparedSigil","name":"预绘法阵",
+    "description":"开局：第一个法阵槽位获得 1 种随机元素刻印。不会出现本局禁用元素。","costs":[4]
+  },
+  {
+    "id":"patientStudy","name":"预演仪式",
+    "description":"获得蓄能法术时：首次计数减 1，最低为 1。之后的蓄能周期不变。","costs":[5]
+  },
+  {
+    "id":"recycleCharge","name":"拆卷取墨",
+    "description":"删除常驻法术：获得 10 刷新值。每局最多 2 次。","costs":[6]
+  },
+  {
+    "id":"succession","name":"火印传承",
+    "description":"删除带火印的法术：将 1 层火印传给背包中最早获得、可接受火印的法术。","costs":[7]
+  },
+  {
+    "id":"quietSlot","name":"留白之术",
+    "description":"整备时可休止 1 个常驻法术：本轮不施放，下一轮仍可抽取。可以撤销。","costs":[8]
   }
 ];
 

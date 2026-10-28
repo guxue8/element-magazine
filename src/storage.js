@@ -19,6 +19,7 @@ function preserveChargeBackup(storage,saved,raw=JSON.stringify(saved)){
 }
 function validOffer(offer,run){
   if(!record(offer)||typeof offer.source!=='string'||!Array.isArray(offer.cards)||!offer.cards.length)return false;
+  if(offer.talentFloor!==undefined&&(!integer(offer.talentFloor)||offer.talentFloor>2))return false;
   return offer.cards.every(c=>{
     if(offer.kind==='event')return record(c)&&eventChoices.has(c.id)&&typeof c.name==='string'&&typeof c.description==='string';
     if(typeof c!=='string')return false;
@@ -66,6 +67,8 @@ function validRun(run){
   if(run.talentState!==undefined){
     const t=run.talentState;
     if(!record(t)||!integer(t.freeSwapRound)||t.freeSwapRound>run.round||typeof t.freeRefreshUsed!=='boolean'||!integer(t.skipRefunds)||t.skipRefunds>2||typeof t.rescueGranted!=='boolean'||!Array.isArray(t.scrollBatches)||!t.scrollBatches.every(n=>[6,12,18].includes(n))||new Set(t.scrollBatches).size!==t.scrollBatches.length)return false;
+    for(const [key,max] of Object.entries({renewalUses:3,scrollMerchantUses:2,recycleUses:2}))if(t[key]!==undefined&&(!integer(t[key])||t[key]>max))return false;
+    for(const key of ['lastLightUsed','scoutUsed','scholarUsed'])if(t[key]!==undefined&&typeof t[key]!=='boolean')return false;
   }
   if(!Object.entries(run.evolutions).every(([id,value])=>BOND_MAP[id]?.grade==='evolution'&&bondAllowed(run,BOND_MAP[id])&&record(value)&&integer(value.progress)))return false;
   if(!integer(run.completedBatches)||run.completedBatches>18||!integer(run.draftCount)||!integer(run.reward))return false;
