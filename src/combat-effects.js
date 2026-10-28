@@ -1,6 +1,7 @@
 import {
   BULLET_MAP
 } from './catalog.js';
+import {imprintSpell} from './spell-imprints.js';
 const mainHit=(c,t,n,cond=0)=>{
   if(!t)return {
     killed:false,amount:0,overflow:0
@@ -17,6 +18,10 @@ const area=(c,n,side,radius,max)=>{
   const ts=[t,...c.near(t,radius,max)];
   ts.forEach((x,i)=>i?c.hit(x,side):mainHit(c,x,n));
   return ts;
+};
+const explosion=(c,n,side,radius,after=()=>{})=>{
+  const t=c.target();
+  return c.blast(t,radius,(x,i)=>{c.hit(x,i?side:n);after(x);});
 };
 const pierce=(c,n,side,max,opts={
 })=>{
@@ -80,7 +85,7 @@ export const effects={
   },  F05:c=>{
     const a=shot(c,6);
     if(a)c.burn(a.t,2);
-  },  F06:c=>area(c,18,18,2,3).forEach(t=>c.burn(t,3)),  F07:c=>{
+  },  F06:c=>explosion(c,30,30,2,t=>c.burn(t,3)),  F07:c=>{
     const a=shot(c,10);
     if(a&&!c.replay){
       const n=Math.min(5,a.snap.burn||0);
@@ -89,12 +94,12 @@ export const effects={
       });
       for(const t of c.near(a.t,2,2))c.derived(t,2*n,'fire');
     }
-  },  F08:c=>area(c,6,4,1,2),  F09:c=>{
+  },  F08:c=>explosion(c,6,4,1),  F09:c=>{
     c.removeShield(c.target(),4);
     shot(c,10);
   },  F10:c=>{
     const a=shot(c,9);
-    if(a?.killed)for(const t of c.near(a.t,1,3))c.derived(t,6,'fire');
+    if(a?.killed)c.blast(a.t,1,t=>c.derived(t,6,'fire'),{includeCenter:false,secondary:true});
   },  F11:c=>{
     const t=c.target();
     if(!t)return;
@@ -107,29 +112,19 @@ export const effects={
       if(c.stage('E02',2)&&c.once('E02.refill',2))c.burn(t,1);
       if(c.stage('E02',9)&&c.once('E02.splash'))for(const x of c.near(t,1,2))c.derived(x,6,'fire');
     }
-  },  F12:c=>{
-    const a=shot(c,28);
-    if(a?.killed)c.derived(c.near(a.t,1)[0],Math.min(20,a.overflow),'fire');
-  },  F13:c=>{
-    const t=c.target();
-    if(!t)return;
-    const ts=c.near(t,1,3),n=c.replay?0:t.burn;
-    c.hit(t,64,6*n);
-    c.consumeBurn(t,n);
-    for(const x of ts)c.hit(x,24);
+  },  F12:c=>explosion(c,40,20,1),  F13:c=>{
+    const t=c.target();if(!t)return;
+    const n=c.replay?0:t.burn;
+    c.blast(t,2,(x,i)=>{c.hit(x,i?48:100,i?0:8*n);if(!i)c.consumeBurn(t,n);});
   },  F14:c=>{
-    const ts=c.sorted().sort((a,b)=>(b.burn||0)-(a.burn||0)).slice(0,3);
-    for(const t of ts){
-      const n=c.replay?0:Math.min(t.burn||0,3);
-      c.hit(t,36,4*n);
-      c.consumeBurn(t,n);
-    }
+    const center=c.sorted().sort((a,b)=>(b.burn||0)-(a.burn||0))[0];
+    c.blast(center,3,t=>{const n=c.replay?0:Math.min(t.burn||0,3);c.hit(t,60,6*n);c.consumeBurn(t,n);});
   },  F15:c=>shot(c,12),F16:c=>shot(c,7),  F17:c=>{
     const a=shot(c,9);
     if(a?.snap.burn)c.advance(c.slot+4);
   },  F18:c=>shot(c,6),F19:()=>{
   },  F20:c=>{
-    const a=shot(c,48);
+    const a=shot(c,60);
     if(a&&!c.replay)for(let j=c.slot+4;
     j<12;
     j+=4)if(BULLET_MAP[c.layout[j]?.typeId]?.trigger==='shot')c.buffs[j].F20={
@@ -139,15 +134,15 @@ export const effects={
   },  H01:c=>c.summon('spring',2),  H02:c=>{
     const a=shot(c,10);
     if(a&&c.s.summons.some(s=>s.kind==='spring'))c.wet(a.t);
-  },  H03:c=>c.summon('spring',3),H04:c=>{
+  },  H03:c=>{const spirit=c.summon('spring',3);c.command(spirit);},H04:c=>{
     shot(c,6);
     command(c,'spring');
-  },H05:c=>c.summon('spring',2,'mist'),  H06:c=>{
+  },H05:c=>{const spirit=c.summon('spring',2,'mist');c.command(spirit);},  H06:c=>{
     c.summon('spring',3);
     c.summon('cannon',3);
-    area(c,24,24,1,2);
+    explosion(c,30,30,1);
   },  H07:c=>{
-    area(c,36,18,2,2);
+    explosion(c,42,24,2);
     const a=c.summon('spring',3),b=c.summon('spring',3);
     c.command(a);
     c.command(b);
@@ -166,7 +161,7 @@ export const effects={
       a.t.wet=0;
       if(a.t.hp>0&&!c.control(a.t,'slow'))c.derived(a.t,8,'water');
     }
-  },  H13:c=>area(c,36,36,2,5).forEach(t=>c.control(t,'slow')),H14:()=>{
+  },  H13:c=>explosion(c,42,42,2,t=>c.control(t,'slow')),H14:()=>{
   },H15:c=>shot(c,12),  H16:c=>{
     if(!c.replay&&c.once('H16'))c.resource('refresh',2);
     const a=shot(c,8);
@@ -193,15 +188,15 @@ export const effects={
     const t=c.target();
     if(!t)return;
     const back=c.back(t,2);
-    const a=c.hit(t,24);
-    for(const x of back)c.hit(x,12);
+    const a=c.hit(t,36);
+    for(const x of back)c.hit(x,18);
     if(a.killed)c.resource('refresh',2);
   },  H21:c=>{
     const n=c.resources.refresh;
-    shot(c,48);
+    shot(c,60);
     for(let i=0;
     i<n;
-    i++)c.derived(c.target(),20,'water');
+    i++)c.derived(c.target(),24,'water');
   },  L01:c=>chain(c,6,5,2,2),L02:c=>shot(c,10,t=>c.near(t,2).length?0:4),L03:c=>chain(c,7,3,3,2),L04:c=>chain(c,6,4,2,2,true),  L05:c=>{
     const ts=chain(c,8,6,1,2);
     if(ts.length===2&&ts[0].hp>0)c.hit(ts[0],6,0,{
@@ -228,7 +223,7 @@ export const effects={
         from=x;
       }
     }
-  },  L08:c=>shot(c,30),  L09:c=>{
+  },  L08:c=>shot(c,36),  L09:c=>{
     const a=shot(c,12);
     if(a&&c.waiting.some(b=>b.uid!==c.current.uid&&BULLET_MAP[b.typeId].element==='lightning')&&!c.replay&&c.once('L09',3))c.shield(1);
   },  L10:c=>{
@@ -246,7 +241,10 @@ export const effects={
       c.counters['L12.shield']=(c.counters['L12.shield']||0)+n;
       c.shield(n);
     }
-  },  L13:c=>shot(c,96,Math.min(2,c.success.length)*12),L14:()=>{
+  },  L13:c=>{
+    const a=shot(c,132,Math.min(2,c.success.length)*24);
+    if(a?.killed&&a.overflow>0)c.blast(a.t,1,t=>c.derived(t,Math.min(60,a.overflow),'lightning'),{includeCenter:false,secondary:true});
+  },L14:()=>{
   },L15:c=>shot(c,12),L16:c=>shot(c,7),  L17:c=>{
     const a=shot(c,10);
     if(a&&c.layout.some((b,i)=>b&&i%4===c.slot%4&&BULLET_MAP[b.typeId].trigger==='passive'))c.control(a.t,'slow');
@@ -257,7 +255,7 @@ export const effects={
     for(let i=0;
     i<n;
     i++)single(c,20);
-  },  L21:c=>pierce(c,72,36,3,{
+  },  L21:c=>pierce(c,108,54,3,{
     ignoreArmor:!c.replay&&c.layout.some((b,i)=>b&&i%4===c.slot%4&&BULLET_MAP[b.typeId].trigger==='passive')
   }),  W01:c=>{
     single(c,6);
@@ -284,7 +282,7 @@ export const effects={
   },  W06:c=>{
     for(let i=0;
     i<6;
-    i++)single(c,14);
+    i++)single(c,18);
   },  W07:c=>{
     const a=shot(c,30);
     if(a&&!c.replay&&c.once('W07.echo')){
@@ -312,7 +310,7 @@ export const effects={
       if(c.control(a.t,'push'))c.derived(a.t,4,'wind');
       else if(c.once('W12.shield',2))c.shield(2);
     }
-  },  W13:c=>pierce(c,26,26,3).forEach(t=>c.control(t,'push')),W14:()=>{
+  },  W13:c=>pierce(c,36,36,3).forEach(t=>c.control(t,'push')),W14:()=>{
   },  W15:c=>{
     const a=shot(c,9);
     if(a)mark(c,a.t);
@@ -345,11 +343,11 @@ export const effects={
     shot(c,6);
     command(c,'rock');
   },R05:c=>c.summon('cannon',2,'scatter'),  R06:c=>{
-    shot(c,48);
+    explosion(c,60,24,1);
     c.summon('guard',3);
     c.summon('cannon',3);
   },  R07:c=>{
-    shot(c,36);
+    explosion(c,60,36,2);
     const a=c.summon('guard',3),b=c.summon('cannon',3);
     c.command(b);
     c.command(a);
@@ -366,8 +364,8 @@ export const effects={
     if(shot(c,8))c.counter('R11');
   },R12:()=>{
   },  R13:c=>{
-    if(shot(c,48)){
-      c.shield(8);
+    if(shot(c,60)){
+      c.shield(12);
       c.counter('R13',2);
     }
   },R14:c=>c.shield(3),R15:c=>shot(c,12),  R16:c=>{
@@ -382,11 +380,11 @@ export const effects={
     shot(c,36);
     c.resource('remove',Math.floor(n/4));
   },  R21:c=>{
-    const a=shot(c,72);
+    const a=shot(c,108);
     if(a?.killed)c.resource('remove',3);
     if(a)for(let i=0;
     i<Math.min(3,c.layout.filter(b=>!b).length);
-    i++)c.derived(c.target(),12,'earth');
+    i++)c.derived(c.target(),24,'earth');
   }
 };
 export function setupDirections(c){
@@ -448,7 +446,7 @@ export function setupDirections(c){
 } export const scrollEffects={
   C01:c=>{
     const i=c.left(c.slot),b=c.layout[i];
-    if(b&&BULLET_MAP[b.typeId].trigger!=='consumable')c.buffs[i].scroll=.5;
+    if(imprintSpell(b,'ember'))c.frame('status','左邻魔法获得永久火印：基础伤害 +20%',{slot:i});
   },  C02:c=>{
     const ts=c.sorted().filter(t=>t.burn).sort((a,b)=>b.burn-a.burn).slice(0,2);
     for(const t of ts){
@@ -466,11 +464,11 @@ export function setupDirections(c){
   },C05:c=>c.advance(c.right(c.slot)),  C06:c=>{
     for(const i of [c.slot-4,c.slot+4]){
       const b=c.layout[i];
-      if(b&&BULLET_MAP[b.typeId].trigger!=='consumable')b.temp.magnet=true;
+      if(imprintSpell(b,'magnet'))c.frame('status','相邻魔法获得永久磁引',{slot:i});
     }
   },  C07:c=>{
     const b=c.layout[c.left(c.slot)];
-    if(b&&BULLET_MAP[b.typeId].trigger!=='consumable')b.temp.lurk=true;
+    if(imprintSpell(b,'lurk'))c.frame('status','左邻魔法获得永久潜伏',{slot:c.left(c.slot)});
   },C08:c=>{
     c.summon('guard',2);
     c.summon('cannon',2);

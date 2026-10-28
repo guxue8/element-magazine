@@ -16,7 +16,7 @@ test('new players start at difficulty zero and cannot enter a locked tier',()=>{
   const meta=createMeta();
   assert.equal(meta.unlockedDifficulty,0);
   assert.equal(newRun(1,meta,10).difficulty,0);
-  assert.equal(newRun(1,meta).encounterVersion,3);
+  assert.equal(newRun(1,meta).encounterVersion,4);
   assert.equal(newRun(1,{...meta,unlockedDifficulty:3},2).difficulty,2);
   assert.equal(newRun(1,{...meta,unlockedDifficulty:3},9).difficulty,3);
   assert.equal(newRun(1,{...meta,unlockedDifficulty:3},-1).difficulty,0);
@@ -138,6 +138,9 @@ test('v1 and v2 previews retain the original enemy health, counts, attack and sh
 
 test('v3 attack reduction survives save restore and matches both intent and combat',()=>{
   const memory=storage(),meta=createMeta(),run=newRun(31);
+  run.encounterVersion=3;
+  const preview=getEnemyPreview('walker',1,0,3);
+  Object.assign(run.enemies[0],{hp:preview.hp,maxHp:preview.hp,difficultyDamage:preview.difficultyDamage});
   const e=run.enemies[0];e.position=0;
   assert.equal(e.difficultyDamage,-1);
   assert.equal(saveGame(run,meta,memory),null);
@@ -158,7 +161,7 @@ test('v2 saves preserve their current enemies and future encounter rules on rest
   assert.equal(restored.warning,null);
   assert.deepEqual(restored.run,run);
   assert.equal(previewWave(8,0,restored.run.encounterVersion).length,5);
-  assert.ok(saveGame({...run,encounterVersion:4},meta,memory));
+  assert.ok(saveGame({...run,encounterVersion:5},meta,memory));
 });
 
 test('v3 each higher tier keeps health and attack monotone and retains high-tier shields',()=>{

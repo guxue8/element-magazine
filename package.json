@@ -1,9 +1,9 @@
 {
   "name": "element-magazine",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "private": true,
   "type": "module",
-  "description": "弹阵：元素守线 — 静态网页肉鸽游戏",
+  "description": "法阵：元素守线 — 魔法构筑与怪群爆破肉鸽",
   "scripts": {
     "start": "node scripts/start-preview.mjs",
     "dev": "node scripts/serve.mjs",

@@ -58,6 +58,46 @@
 @keyframes support-rise{0%{opacity:0;transform:translateY(8px)}20%,75%{opacity:1}100%{opacity:0;transform:translateY(-16px)}}
 
 .evolution-gift{padding:7px 9px;border-left:3px solid #b7ca89;background:#263b32;color:#d4e5b6;font-size:11px;line-height:1.6}
+.mage-sprite{display:block;width:100%;height:100%;overflow:visible;image-rendering:pixelated}
+.mage-casting-arm{transform-origin:26px 35px}.mage-cloak{transform-origin:22px 33px}
+.player-character.casting{animation:mage-step var(--fx-duration) steps(4) both}
+.casting .mage-casting-arm{animation:mage-invoke var(--fx-duration) steps(5) both}
+.casting .mage-cloak{animation:mage-cloak var(--fx-duration) steps(4) both}
+.player-character.ritual-cast{animation:mage-levitate var(--fx-duration) steps(6) both}
+.combat-fx{--spell-scale:1}.spell-tier-0{--spell-scale:.72}.spell-tier-1{--spell-scale:.86}.spell-tier-2{--spell-scale:1.05}.spell-tier-3{--spell-scale:1.3}.spell-tier-4{--spell-scale:1.6}
+.combat-fx .rune-projectile{scale:var(--spell-scale)}
+.combat-fx .impact-flare{scale:var(--spell-scale)}
+.combat-fx .casting-seal{left:14%;bottom:calc(var(--hit-height) - 34px);width:calc(66px * var(--spell-scale));height:26px;animation:seal-gather var(--fx-duration) steps(5) both}
+.combat-fx .ritual-column{left:14%;width:48px;height:120px;bottom:calc(var(--hit-height) + 10px);animation:ritual-rise var(--fx-duration) steps(5) both}
+.combat-fx .greater-impact{width:150px;height:150px;animation:greater-bloom var(--fx-duration) steps(6) both}
+.spell-tier-0 .impact-particles i:nth-child(n+5){display:none}
+.spell-tier-0 .impact-flare,.spell-tier-0 .rune-projectile{opacity:.82}
+.fx-resonance .greater-impact{width:128px;height:128px;animation-delay:calc(var(--fx-duration) * -.3)}
+.combat-fx .blast-footprint{width:var(--blast-width);height:18px;bottom:28px;background:color-mix(in srgb,var(--fx-color) 14%,transparent);border-bottom:3px solid var(--fx-color);clip-path:polygon(0 40%,3% 40%,3% 0,97% 0,97% 40%,100% 40%,100% 100%,0 100%);animation:blast-footprint var(--fx-duration) steps(2) both}
+.combat-fx .blast-wave{width:var(--blast-width);height:110px;animation:blast-expand var(--fx-duration) steps(6) both}
+.blast-wave svg{opacity:.65}.fx-explosion .impact-flare{width:104px;height:104px}
+.combat-fx .blast-number{bottom:calc(var(--hit-height) + 30px + var(--number-row)*22px);font-size:20px}
+.combat-fx .summoning-seal{left:22%;width:80px;height:64px;animation:greater-bloom var(--fx-duration) steps(5) both}
+.imprint-list{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}.imprint-list span{font-size:11px;color:#e4c7a2;background:#302f34;border:1px solid #807056;padding:5px 8px;border-radius:4px}
+.imprint-dot{position:absolute;left:4px;bottom:4px;color:#ffe0a3;font-size:12px;text-shadow:1px 1px #19202c}
+.combat-fx .grand-spell{width:144px;height:150px;bottom:calc(var(--hit-height) + 38px);animation:grand-manifest var(--fx-duration) steps(5) both;opacity:.85}
+.combat-fx .grand-lightning{width:96px;height:210px;bottom:calc(var(--hit-height) + 78px)}
+.combat-fx .grand-water,.combat-fx .grand-wind{width:180px;height:120px}
+.spell-tier-4 .grand-spell{scale:1.2}
+@keyframes grand-manifest{0%,30%{opacity:0;scale:.7 .4}40%,65%{opacity:.8;scale:1}100%{opacity:0;scale:1.1}}
+@media(max-height:450px) and (orientation:landscape){.combat-fx .grand-spell{width:90px;height:90px;bottom:calc(var(--hit-height) + 24px)}.combat-fx .grand-lightning{height:140px;bottom:calc(var(--hit-height) + 42px)}}
+@media(prefers-reduced-motion:reduce){.combat-fx .grand-spell{display:none}}
+@keyframes mage-step{0%{translate:-3px 0}25%{translate:-1px -2px}42%{translate:3px 0}100%{translate:0}}
+@keyframes mage-invoke{0%{rotate:8deg;translate:0 0}25%{rotate:-22deg;translate:-2px -3px}42%{rotate:15deg;translate:3px 0}100%{rotate:0deg;translate:0 0}}
+@keyframes mage-cloak{0%,100%{transform:skewX(0)}30%{transform:skewX(5deg)}55%{transform:skewX(-5deg)}}
+@keyframes mage-levitate{0%,100%{translate:0}25%,40%{translate:0 -10px}58%{translate:2px -4px}}
+@keyframes seal-gather{0%{opacity:.2;scale:.6}22%{opacity:1;scale:1}48%{opacity:.9}100%{opacity:0;scale:1.25}}
+@keyframes ritual-rise{0%{opacity:0;scale:1 .3}22%{opacity:.65;scale:1 1}44%{opacity:0;scale:1 1.4}100%{opacity:0}}
+@keyframes greater-bloom{0%,30%{opacity:0;scale:.4}40%{opacity:.8;scale:.65}65%{opacity:.7;scale:1}100%{opacity:0;scale:1.2}}
+@keyframes blast-footprint{0%,26%{opacity:.25}30%,70%{opacity:.8}100%{opacity:0}}
+@keyframes blast-expand{0%,30%{opacity:0;scale:.1 .3}38%{opacity:1;scale:.4 .6}65%{opacity:.8;scale:1 1}100%{opacity:0;scale:1 1.1}}
+@media(max-height:450px) and (orientation:landscape){.combat-fx .blast-wave{height:72px}.combat-fx .blast-footprint{bottom:18px}.combat-fx .blast-number{font-size:16px;bottom:calc(var(--hit-height) + 16px + var(--number-row)*16px)}.combat-fx .ritual-column{height:78px}.combat-fx .greater-impact{width:96px;height:96px}}
+@media(prefers-reduced-motion:reduce){.mage-sprite *{animation:none!important}.combat-fx .casting-seal,.combat-fx .ritual-column,.combat-fx .greater-impact,.combat-fx .blast-wave,.combat-fx .summoning-seal{display:none}.combat-fx .blast-footprint{opacity:.45}.combat-fx .blast-number{animation:none;opacity:1}}
 @media(max-height:650px) and (orientation:landscape){.combat-fx,.enemy-action-fx{--hit-height:62px}.fallen-enemy{width:74px;height:74px}.impact-flare{width:56px;height:56px}.fx-kill .impact-flare{width:80px;height:80px}}
 @media(max-height:450px) and (orientation:landscape){.combat-fx,.enemy-action-fx{--hit-height:46px}.combat-fx .rune-projectile{width:48px;height:24px}.impact-flare{width:48px;height:48px}.fx-kill .impact-flare{width:64px;height:64px}.combat-fx .combat-number,.hostile-damage{font-size:18px}.fx-kill .combat-number{font-size:21px}.fallen-enemy{width:58px;height:58px;bottom:19px}.hostile-projectile{width:40px;height:20px}.hostile-impact{width:40px;height:40px}.evolution-gift{font-size:9px;padding:4px 6px}}
 @media(prefers-reduced-motion:reduce){.combat-fx *,.enemy-action-fx *,.fallen-enemy,.creature.hit,.creature.advancing,.creature.advancing::after,.creature .creature-body,.player-character{animation:none!important}.rune-projectile,.muzzle-flash,.impact-particles,.impact-flare,.fallen-enemy,.hostile-projectile,.hostile-impact,.support-spark,.melee-slash,.creature.advancing::after{display:none}.combat-number,.hostile-damage{opacity:1;transform:none}}

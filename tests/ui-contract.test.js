@@ -6,6 +6,7 @@ import {BULLET_MAP,BOND_MAP} from '../src/catalog.js';
 import {bondSummary} from '../src/presentation.js';
 import {escapeHTML} from '../src/view-utils.js';
 import {resolveRound} from '../src/combat.js';
+import {magicText} from '../src/spell-language.js';
 
 let importNumber=0;
 async function harness(run,meta=createMeta()){
@@ -13,9 +14,10 @@ async function harness(run,meta=createMeta()){
   const storage={getItem:k=>values.get(k)??null,setItem:(k,v)=>values.set(k,String(v))};
   assert.equal(saveGame(run,meta,storage),null);
   const app={innerHTML:'',addEventListener:(kind,fn)=>listeners[kind]=fn},scroller={scrollTop:0};
+  const searchInput={value:'',focus(){},setSelectionRange(){}};
   const toast={textContent:'',classList:{add(){},remove(){}}};
   const prior={document:globalThis.document,localStorage:globalThis.localStorage,setTimeout:globalThis.setTimeout};
-  globalThis.document={querySelector:s=>s==='#app'?app:s==='#toast'?toast:s==='.modal-content'&&app.innerHTML.includes('class="modal-content"')?scroller:null,addEventListener(){}};
+  globalThis.document={querySelector:s=>s==='#app'?app:s==='#toast'?toast:s==='#search'&&app.innerHTML.includes('id="search"')?searchInput:s==='.modal-content'&&app.innerHTML.includes('class="modal-content"')?scroller:null,addEventListener(){}};
   globalThis.localStorage=storage;
   globalThis.setTimeout=(fn,ms)=>{const handle=prior.setTimeout(fn,ms);timers.add(handle);return handle;};
   await import(`../src/app.js?ui-review=${++importNumber}`);
@@ -24,6 +26,12 @@ async function harness(run,meta=createMeta()){
     scroll:y=>{scroller.scrollTop=y;},scrollTop:()=>scroller.scrollTop,
     saved:()=>JSON.parse(storage.getItem(GAME_STORAGE_KEY)).run,
     async reload(){await import(`../src/app.js?ui-review=${++importNumber}`);},
+    search(value){
+      assert.match(app.innerHTML,/id="search"/);
+      searchInput.value=value;
+      listeners.input({target:{id:'search',value,selectionStart:value.length}});
+      return searchInput.value;
+    },
     click(dataset){
       const tags=app.innerHTML.match(/<button\b[^>]*>/g)||[];
       const expected=Object.entries(dataset).map(([key,value])=>`data-${key.replace(/[A-Z]/g,c=>'-'+c.toLowerCase())}="${value}"`);
@@ -49,11 +57,11 @@ test('bond details lead with a summary and keep complete rules collapsed',async(
   const h=await harness(newRun(130));
   try{
     h.click({ui:'codex'});h.click({tab:'bonds'});h.click({bond:'D09'});
-    assert.ok(h.html().replace(/<[^>]*>/g,'').includes(escapeHTML(bondSummary('D09'))));
+    assert.ok(h.html().replace(/<[^>]*>/g,'').includes(escapeHTML(magicText(bondSummary('D09')))));
     const rules=h.html().match(/<details class="rule-details"[^>]*>([^]*?)<\/details>/);
     assert.ok(rules,'precise rules remain accessible');
     assert.doesNotMatch(rules[0],/<details[^>]*\sopen/);
-    assert.ok(rules[1].includes(escapeHTML(BOND_MAP.D09.description)));
+    assert.ok(rules[1].includes(escapeHTML(magicText(BOND_MAP.D09.description))));
   }finally{h.close();}
 });
 
@@ -68,7 +76,7 @@ test('evolution offers disclose the missing core gift and selection adds it to t
   h.click({bond:'E01'});assert.match(h.html(),/选择后获赠/);
   h.click({ui:'back'});h.click({choose:'0'});
   assert.equal(h.saved().inventory.filter(x=>x.typeId===b.targetId).length,1);
-  h.click({ui:'bag'});assert.ok(h.html().includes(BULLET_MAP[b.targetId].name));
+  h.click({ui:'bag'});assert.ok(h.html().includes(magicText(BULLET_MAP[b.targetId].name)));
  }finally{h.close();}
 });
 
@@ -134,13 +142,13 @@ test('magazine icons reveal full bullet information only after clicking',async()
     assert.doesNotMatch(h.html(),/role="dialog"/);
     const uid=run.magazine[0],b=BULLET_MAP[run.inventory.find(i=>i.uid===uid).typeId];
     const tile=h.html().match(/<button class="bullet-slot[^]*?<\/button>/)[0];
-    assert.match(tile,/pixel-bullet/);assert.doesNotMatch(tile,new RegExp(`>${b.name}<`));
+    assert.match(tile,/pixel-bullet/);assert.doesNotMatch(tile,new RegExp(`>${magicText(b.name)}<`));
     h.click({slot:'0'});
-    assert.match(h.html(),/aria-label="子弹详情"/);
-    assert.ok(h.html().includes(escapeHTML(b.description)));
+    assert.match(h.html(),/aria-label="法术详情"/);
+    assert.ok(h.html().includes(escapeHTML(magicText(b.description))));
     h.click({ui:'close'});h.click({ui:'bag'});
     assert.match(h.html(),/aria-label="携行背包"/);
-    h.click({inspect:uid});assert.match(h.html(),/aria-label="子弹详情"/);
+    h.click({inspect:uid});assert.match(h.html(),/aria-label="法术详情"/);
     h.click({ui:'back'});assert.match(h.html(),/aria-label="携行背包"/);
   }finally{h.close();}
 });
@@ -182,7 +190,7 @@ test('talent tree shows branches, prerequisites and inspectable locked nodes',as
   try{
     h.click({ui:'talents'});assert.match(h.html(),/talent-tree/);
     for(const name of ['守线','补给','编排'])assert.ok(h.html().includes(name));
-    h.click({talentInfo:'freeSwap'});assert.match(h.html(),/每夹[^<]*免费/);
+    h.click({talentInfo:'freeSwap'});assert.match(h.html(),/每轮[^<]*免费/);
     assert.match(h.html(),/需要先解锁/);
   }finally{h.close();}
 });
@@ -228,11 +236,11 @@ test('a fire scroll warns at the left boundary and clears the warning after movi
   const run=arranged(['C01','F15','F15','H06']),h=await harness(run);
   try{
     h.click({ui:'continue'});h.click({slot:'0'});
-    assert.match(notice(h.html()),/左侧没有常驻弹/);
+    assert.match(notice(h.html()),/左侧没有常驻法术/);
     h.click({detailAction:'swap'});h.click({slot:'2'});h.click({slot:'2'});
     assert.equal(h.saved().magazine[2],run.inventory[0].uid);
     assert.doesNotMatch(notice(h.html()),/无收益|尚未就绪/);
-    assert.match(notice(h.html()),/入夹执行后消耗/);
+    assert.match(notice(h.html()),/入阵执行后消耗/);
   }finally{h.close();}
 });
 
@@ -243,8 +251,8 @@ test('a timer scroll preview accounts for the natural countdown before scroll re
     const h=await harness(run);
     try{
       h.click({ui:'continue'});h.click({slot:'0'});
-      if(counter===1)assert.match(notice(h.html()),/右侧没有自然计时后仍可推进/);
-      else assert.doesNotMatch(notice(h.html()),/右侧没有自然计时后仍可推进/);
+      if(counter===1)assert.match(notice(h.html()),/右侧没有自然蓄力后仍可推进/);
+      else assert.doesNotMatch(notice(h.html()),/右侧没有自然蓄力后仍可推进/);
       const result=resolveRound(run);
       assert.equal(result.frames.filter(f=>f.text==='计时额外推进').length,counter===2?1:0);
     }finally{h.close();}
@@ -255,7 +263,7 @@ test('deletion requires confirmation, removes one instance, charges once and sur
   const run=arranged(['F15','F15','F15','F15']),h=await harness(run),uid=run.magazine[0];
   try{
     h.click({ui:'continue'});h.click({mode:'remove'});h.click({slot:'0'});
-    assert.match(h.html(),/aria-label="删除这枚子弹"/);
+    assert.match(h.html(),/aria-label="删除这枚法术"/);
     assert.equal(h.saved().inventory.length,4);assert.equal(h.saved().resources.remove,30);
     h.click({confirmRemove:'true'});
     assert.equal(h.saved().inventory.length,3);
@@ -281,7 +289,69 @@ test('recruitment shows two charge bars through batch twelve and unlocks the thi
       assert.equal((bars.match(/<i>/g)||[]).length,batch===12?2:3);
       assert.equal((bars.match(/width:100%/g)||[]).length,2);
       assert.equal((bars.match(/width:50%/g)||[]).length,batch===13?1:0);
-      h.click({ui:'shop'});assert.match(h.html(),/招募值 <b>250<\/b>/);
+      h.click({ui:'shop'});assert.match(h.html(),/研习值 <b>250<\/b>/);
+    }finally{h.close();}
+  }
+});
+
+test('spell keyword highlighting preserves complete magic vocabulary',async()=>{
+  const h=await harness(newRun(902));
+  try{
+    h.click({ui:'codex'});
+    for(const id of ['F17','L10','L14']){
+      h.click({type:id});
+      const copy=h.html().match(/<p class="effect-copy">([^]*?)<\/p>/)?.[1];
+      assert.ok(copy,id);
+      assert.match(copy,/<mark class="keyword">蓄力<\/mark>法术/,id);
+      assert.doesNotMatch(copy,/<\/mark>弹|计时弹/,id);
+      assert.match(h.html(),/<aside class="keyword-panel"[^]*?<b>蓄力<\/b>/,id);
+      h.click({ui:'back'});
+    }
+  }finally{h.close();}
+});
+
+test('codex accepts old names and new spell names without rewriting typed search text',async()=>{
+  const h=await harness(newRun(903));
+  try{
+    h.click({ui:'codex'});
+    for(const [query,id] of [['火药桶','F12'],['炎爆咒','F12'],['火星弹','F01'],['火星术','F01'],['F01','F01']]){
+      assert.equal(h.search(query),query,'input value is what the player typed');
+      assert.match(h.html(),new RegExp(`data-type="${id}"`),query);
+      h.click({type:id});assert.match(h.html(),/aria-label="法术详情"/);
+      h.click({ui:'back'});
+    }
+  }finally{h.close();}
+});
+
+test('permanent imprints remain visible on individual spell icons and details after reloading',async()=>{
+  const run=arranged(['F15','F15','F15','F15']);
+  run.inventory[0].imprints={ember:2,magnet:true,lurk:true};
+  const h=await harness(run);
+  try{
+    h.click({ui:'continue'});
+    assert.equal((h.html().match(/class="imprint-dot"/g)||[]).length,1);
+    h.click({slot:'0'});
+    const labels=h.html().match(/<div class="imprint-list">([^]*?)<\/div>/)?.[1]||'';
+    assert.match(labels,/永久火印 2\/3 · 基础伤害 \+40%/);
+    assert.match(labels,/永久磁引/);assert.match(labels,/永久潜伏/);
+    await h.reload();h.click({ui:'continue'});h.click({slot:'1'});
+    assert.doesNotMatch(h.html(),/永久火印 2\/3/,'same-name second instance is not enhanced');
+    h.click({ui:'close'});h.click({slot:'0'});
+    assert.match(h.html(),/永久火印 2\/3 · 基础伤害 \+40%/);
+  }finally{h.close();}
+});
+
+test('fire scroll accepts a charging spell but reports a full permanent imprint cap',async()=>{
+  for(const stacks of [0,3]){
+    const run=arranged(['L11','C01','F15','F15']);
+    run.inventory[0].counter=2;
+    if(stacks)run.inventory[0].imprints={ember:stacks};
+    const h=await harness(run);
+    try{
+      h.click({ui:'continue'});h.click({slot:'1'});
+      if(stacks)assert.match(notice(h.html()),/火印已满/);
+      else assert.doesNotMatch(notice(h.html()),/无收益|尚未就绪|需额外推进/);
+      assert.match(h.html(),/永久火印/);
     }finally{h.close();}
   }
 });

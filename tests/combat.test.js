@@ -59,14 +59,14 @@ test('summons replace shortest same kind, then act and age once',()=>{
   let a=resolveRound(r).state;
   assert.equal(a.summons.length,2);
   assert.ok(!a.summons.some(x=>x.uid==='s1'));
-  assert.equal(a.inventory[0].counter,2);
+  assert.equal(a.inventory[0].counter,1);
   assert.equal(a.enemies[0].hp,88);
 });
 test('scroll buffs left before shots and removes only used inventory',()=>{
   let r=fixture(['F15','C01','C04']);
   r.magazine[2]=null;
   let a=resolveRound(r).state;
-  assert.equal(a.enemies[0].hp,82);
+  assert.equal(a.enemies[0].hp,86);
   assert.deepEqual(a.inventory.map(x=>x.typeId),['F15','C04']);
 });
 test('controls reject previous round and enemies do not attack after moving',()=>{
@@ -275,7 +275,7 @@ test('consumed element counts remain locked until round end',()=>{
   const a=resolveRound(r).state;
   // The consumed fire scroll still satisfies S01 for both later fire shots.
   assert.equal(a.enemies[0].burn,3);
-  assert.equal(a.enemies[0].hp,64);
+  assert.equal(a.enemies[0].hp,68);
   assert.equal(a.inventory.length,2);
 });
 test('burn-consuming conditional damage is native, amplified, and grants native kill listeners',()=>{

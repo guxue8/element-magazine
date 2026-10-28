@@ -13,8 +13,13 @@ export const DIFFICULTIES=Object.freeze(Array.from({length:MAX_DIFFICULTY+1},(_,
 export function getDifficulty(level=0){return DIFFICULTIES[levelOf(level)];}
 export function getUnlockedDifficulty(meta={}){return Math.max(meta.wins>0?1:0,levelOf(meta.unlockedDifficulty));}
 export function selectDifficulty(meta,requested=0){return Math.min(levelOf(requested),getUnlockedDifficulty(meta));}
-export function getWaveIds(batch,encounterVersion=3){
+export function getWaveIds(batch,encounterVersion=4){
   const base=WAVES[batch-1]||[];
+  if(encounterVersion===4){
+    const prior=getWaveIds(batch,3);
+    if(batch===1||!base.length||base.some(id=>id.startsWith('boss')))return prior;
+    return [...prior,...Array(Math.ceil(prior.length*.5)).fill('bug')];
+  }
   if(encounterVersion===3){
     if(batch===1||!base.length||base.some(id=>id.startsWith('boss')))return [...base];
     const prior=getWaveIds(batch,2);
@@ -37,10 +42,30 @@ function swarmHealth(typeId,batch){
   const otherBudget=prior.filter(id=>id!=='bug').reduce((total,id)=>total+oldHp(id),0);
   return oldHp(typeId)*(otherBudget>0?Math.max(0,Math.min(1,(budget-bugBudget)/otherBudget)):.9);
 }
-export function getEnemyPreview(typeId,batch,level=0,encounterVersion=3){
+function magicSwarmHealth(typeId,batch){
+  const prior=getWaveIds(batch,3),wave=getWaveIds(batch,4);
+  const oldHp=id=>getEnemyPreview(id,batch,0,3).hp;
+  const bugHp=batch<=6?3:batch<=12?5:7;
+  if(typeId==='bug')return bugHp;
+  if(!prior.length||prior.some(id=>id.startsWith('boss')))return oldHp(typeId)*.9;
+  const budget=prior.reduce((total,id)=>total+oldHp(id),0)*.95;
+  const bugBudget=wave.filter(id=>id==='bug').length*bugHp;
+  const otherBudget=prior.filter(id=>id!=='bug').reduce((total,id)=>total+oldHp(id),0);
+  return oldHp(typeId)*(otherBudget>0?Math.max(0,Math.min(1,(budget-bugBudget)/otherBudget)):.95);
+}
+export function getEnemyPreview(typeId,batch,level=0,encounterVersion=4){
   const def=ENEMIES[typeId];if(!def)return null;
   const boss=typeId.startsWith('boss'),scale=batch<=6?1:batch<=12?1.6:2.4;
   const legacy=encounterVersion===1,difficulty=getDifficulty(level);
+  if(encounterVersion===4){
+    const prior=getEnemyPreview(typeId,batch,level,3);
+    const hp=Math.min(prior.hp,Math.max(1,Math.ceil(magicSwarmHealth(typeId,batch)*difficulty.hpMultiplier)));
+    // Keep contact pressure close to v3 despite more bodies; preserve recruitment income.
+    const relief=typeId==='bug'||boss||batch<=2?2:1;
+    const difficultyDamage=def.damage>0?Math.max(1-def.damage,difficulty.damageBonus-relief):0;
+    return {...def,hp,damage:def.damage+(def.damage>0?difficultyDamage:0),difficultyDamage,
+      shield:typeId==='bug'?difficulty.startingShield/2:difficulty.startingShield,draftReward:typeId==='bug'?5:10};
+  }
   const swarm=encounterVersion===3;
   const health=swarm?Math.max(1,Math.ceil((boss?def.hp*.81:swarmHealth(typeId,batch))*difficulty.hpMultiplier)):
     legacy?(boss?def.hp:Math.ceil(def.hp*scale)):

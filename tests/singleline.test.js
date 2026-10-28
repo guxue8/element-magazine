@@ -11,7 +11,7 @@ function combat(id,positions=[4],lanes=positions.map((_,i)=>i%3)){
  const c=new Combat(run);c.slot=0;c.current=c.layout[0];c.currentDef=BULLET_MAP[id];c.hitTargets=[];return c;
 }
 const damage=c=>c.s.enemies.map(e=>100-e.hp);
-const cases=[['F08',[6,4,4,0]],['H02',[10,0,0,0]],['L01',[6,5,5,0]],['W08',[6,6,6,0]],['R02',[8,0,0,0]]];
+const cases=[['F08',[6,4,4,4]],['H02',[10,0,0,0]],['L01',[6,5,5,0]],['W08',[6,6,6,0]],['R02',[8,0,0,0]]];
 for(const [id,expected] of cases){
  test(`${id}: intended isolated damage and overlap targets independent of legacy lanes`,()=>{
   const solo=combat(id);effects[id](solo);assert.deepEqual(damage(solo),[expected[0]]);

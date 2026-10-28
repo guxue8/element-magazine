@@ -8,13 +8,41 @@ import {
   CombatBonds
 } from './combat-bonds.js';
 import {normalizeResources,addResource} from './resources.js';
+import {imprintDamageBonus} from './spell-imprints.js';
 export const implementedBulletIds=Object.freeze([...Object.keys(effects),...Object.keys(scrollEffects)]);
 const clone=x=>structuredClone(x);
 export const distance=(a,b)=>Math.abs(a.position-b.position);
+// Collapse one spatial blast into a single playback beat. Simulation frames and
+// their damage order remain available for logs, save determinism and reactions.
+function blastPresentationFrames(frames){
+  const result=[];
+  for(let i=0;i<frames.length;i++){
+    const first=frames[i];
+    if(!first.blastGroup){result.push(clone(first));continue;}
+    const group=[first];
+    while(frames[i+1]?.blastGroup===first.blastGroup)group.push(frames[++i]);
+    const victims=new Map();
+    for(const f of group)if(f.target&&Number.isFinite(f.hpDamage)){
+      const prior=victims.get(f.target.uid)||{target:clone(f.target),hpDamage:0,absorbed:0,killed:false};
+      prior.target=clone(f.target);prior.hpDamage+=f.hpDamage;prior.absorbed+=f.absorbed||0;prior.killed||=f.killed;
+      victims.set(f.target.uid,prior);
+    }
+    const last=group.at(-1),meta=first.blastMeta;
+    for(const victim of victims.values()){
+      const alive=last.board.enemies.find(e=>e.uid===victim.target.uid);
+      if(alive)victim.target=clone(alive);
+    }
+    result.push({type:'explosion',text:meta.text,sourceId:meta.sourceId,element:meta.element,slot:meta.slot,
+      secondary:meta.secondary,sourceBond:meta.sourceBond,empowered:group.some(f=>f.empowered),target:clone(meta.center),duration:640,
+      hpDamage:[...victims.values()].reduce((sum,v)=>sum+v.hpDamage,0),killed:[...victims.values()].some(v=>v.killed),
+      blast:{center:clone(meta.center),radius:meta.radius,victims:[...victims.values()]},board:clone(last.board)});
+  }
+  return result;
+}
 // The simulation keeps its original enemy-by-enemy order. Playback groups
 // advances only within intervals that do not cross a counter/control displacement.
 export function combatPresentationFrames({frames=[],enemyPhase}){
-  if(!enemyPhase)return clone(frames);
+  if(!enemyPhase)return blastPresentationFrames(frames);
   const {startIndex,endIndex,startBoard,endBoard,events=[]}=enemyPhase;
   const sequence=[];
   for(let i=startIndex;i<=endIndex;i++){
@@ -70,7 +98,7 @@ export function combatPresentationFrames({frames=[],enemyPhase}){
   if(JSON.stringify(lastBoard)!==JSON.stringify(endBoard)){
     playback.push({type:'status',action:'settle',text:'敌方行动结束',duration:160,board:clone(endBoard)});
   }
-  return [...clone(frames.slice(0,startIndex)),...playback,...clone(frames.slice(endIndex))];
+  return blastPresentationFrames([...frames.slice(0,startIndex),...playback,...frames.slice(endIndex)]);
 }
 export class Combat {
   constructor(run){
@@ -134,6 +162,22 @@ export class Combat {
     return this.sorted(this.alive().filter(e=>e.uid!==t.uid&&distance(t,e)<=r&&p(e)),false).slice(0,n);
   } back(t,n=2){
     return this.sorted(this.alive().filter(e=>e.uid!==t.uid&&e.position>=t.position),false).slice(0,n);
+  } blast(center,radius,apply,{includeCenter=true,secondary=false,sourceBond=null}={}){
+    if(!center)return [];
+    const origin=clone(center),start=this.frames.length;
+    // Snapshot the entire spatial footprint before damage or knockback. There
+    // is no target-count cap and killing the center never collapses the radius.
+    const targets=[...(includeCenter&&center.hp>0?[center]:[]),...this.near(center,radius,Infinity)];
+    targets.forEach((target,index)=>apply(target,index));
+    if(this.frames.length>start){
+      const group=`blast-${start}`,meta={center:origin,radius,sourceId:this.currentDef?.id||null,
+        element:this.currentDef?.element||'fire',slot:this.slot,secondary:secondary||this.replay,sourceBond,
+        text:`${this.currentDef?.name||'魔法'}：范围爆发`};
+      for(const frame of this.frames.slice(start)){frame.blastGroup=group;frame.blastMeta=meta;}
+      // Status application can occur after the final damage event.
+      this.frames.at(-1).board=clone({enemies:this.alive(),summons:this.s.summons,hp:this.s.hp,shield:this.s.shield});
+    }
+    return targets;
   } adjacent(i){
     return [i%4?i-1:-1,i%4<3?i+1:-1,i-4,i+4].filter(j=>j>=0&&j<12);
   } right(i){
@@ -223,7 +267,7 @@ export class Combat {
     const killed=t.hp===0;
     if(killed){
       this.s.stats.kills++;
-      this.s.resources.draft+=10;
+      this.s.resources.draft+=t.draftReward??10;
       if(t.typeId.startsWith('boss')&&!this.s.defeatedBosses.includes(t.typeId)){
         this.s.defeatedBosses.push(t.typeId);
         this.s.stats.bossKills++;
@@ -232,7 +276,8 @@ export class Combat {
     }this.frame(opts.type||'shot',`${opts.label||this.currentDef?.name||'攻击'}：${amount} ${ELEMENTS[element]?.name||element}伤害${killed?'，击杀':''}`,{
       slot:this.slot>=0?this.slot:undefined,targetId:t.uid,element,amount,
       target:clone(t),killed,absorbed,hpDamage:Math.min(before,amount-absorbed),
-      sourceId:this.currentDef?.id||null,secondary:Boolean(opts.secondary||opts.burn||opts.jump||this.replay)
+      sourceId:opts.sourceId||this.currentDef?.id||null,sourceBond:opts.sourceBond||null,
+      empowered:Boolean(opts.empowered),secondary:Boolean(opts.secondary||opts.burn||opts.jump||this.replay)
     });
     return {
       killed,amount,overflow:Math.max(0,amount-absorbed-before)
@@ -248,12 +293,15 @@ export class Combat {
     };
     const first=this.nativeCount===0;
     let bonus=this.replay?0:this.bonds.multiplier(d,snap,opts);
+    const imprint=this.replay?0:imprintDamageBonus(this.current);
     if(!this.replay){
-      bonus+=this.buffs[this.slot]?.scroll||0;
-      if(first&&(this.current.temp?.loadedLurk||this.current.typeId==='F13'||this.current.mark==='M02'))bonus+=.2;
-    }let value=this.replay?Math.floor(base*this.replayScale*(this.has('S11')?1.25:1)):Math.round(base*(1+Math.min(1,bonus))+conditional*(1+Math.min(1,this.bonds.multiplier(d,snap,opts))));
+      if(first&&(this.current.temp?.loadedLurk||this.current.mark==='M02'))bonus+=.2;
+    }
+    // Permanent inscriptions are a separate base-value improvement: a fully
+    // synergized spell must not silently lose its purchased inscription.
+    let value=this.replay?Math.floor(base*this.replayScale*(this.has('S11')?1.25:1)):Math.round(base*(1+Math.min(1,bonus)+imprint)+conditional*(1+Math.min(1,this.bonds.multiplier(d,snap,opts))));
     const out=this.damage(t,value,d.element,{
-      ...opts,label:this.replay?`${d.name}回响`:d.name
+      ...opts,empowered:bonus+imprint>0,label:this.replay?`${d.name}回响`:d.name
     });
     if(this.replay)return out;
     this.nativeCount++;
@@ -334,7 +382,9 @@ export class Combat {
     };
     this.s.summons.push(unit);
     this.spawnCount++;
-    this.frame('summon',`召唤${kind==='spring'?'泉灵':kind==='guard'?'岩卫':'礁炮'}`);
+    this.frame('summon',`召唤${kind==='spring'?'泉灵':kind==='guard'?'岩卫':'礁炮'}`,{
+      action:'summon',sourceId:this.currentDef?.id,element:this.currentDef?.element,slot:this.slot,summonId:unit.uid
+    });
     return unit;
   }  command(s){
     if(this.replay||!s||!this.s.summons.includes(s)||this.commands.has(s.uid))return;
@@ -347,7 +397,7 @@ export class Combat {
       if(normal&&s.variant==='banner')this.derived(this.target(),6,'fire');
     }else if(target){
       this.derived(target,s.kind==='spring'?Math.round(6*(normal&&this.has('S05')?1.25:1)):12,s.kind==='spring'?'water':'earth',{
-        type:'summon',label:s.kind==='spring'?'泉灵':'礁炮'
+        type:'summon',sourceId:s.sourceId,label:s.kind==='spring'?'泉灵':'礁炮'
       });
       if(s.kind==='spring')this.wet(target);
       else if(target.wet)this.derived(target,4,'water');
@@ -421,6 +471,7 @@ export class Combat {
       if(d.trigger==='timer'&&b.counter>0){
         if(this.s.slots[i].engraving==='G03')this.s.slots[i].charge=Math.min(6,(this.s.slots[i].charge||0)+2);
         if(b.typeId==='L11'&&this.stage('E04')&&this.once('E04.wait',2))this.shield(2);
+        this.frame('status',`${d.name}蓄力：还需入阵 ${b.counter} 次`,{action:'charge',sourceId:d.id,element:d.element,slot:i,counter:b.counter,duration:240});
         continue;
       }this.nativeCount=0;
       this.spawnCount=0;
@@ -428,7 +479,7 @@ export class Combat {
       effects[b.typeId](this);
       if(this.nativeCount||this.spawnCount){
         if(d.trigger==='timer'){
-          b.counter=b.typeId==='L11'&&this.stage('E04',5)?2:d.counter;
+          b.counter=b.typeId==='L11'&&this.stage('E04',5)?1:d.counter;
           this.success.push(b);
           this.bonds.timer(b);
           if(this.buffs[i].L14){

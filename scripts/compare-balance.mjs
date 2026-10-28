@@ -14,23 +14,26 @@ export function comparisonRun(seed,version,difficulty=0){
     const p=wave[i];
     if(enemy.typeId!==p.id)throw new Error('Comparison first-wave enemy mismatch');
     Object.assign(enemy,{hp:p.hp,maxHp:p.hp,shield:p.shield,difficultyDamage:p.difficultyDamage});
+    if(p.draftReward===undefined)delete enemy.draftReward;
+    else enemy.draftReward=p.draftReward;
   });
   return run;
 }
 
 const mean=(rows,key)=>rows.length?Math.round(rows.reduce((total,row)=>total+row[key],0)/rows.length*100)/100:0;
-export function compareBalance(count=100,levels=[0,5,10]){
+export function compareBalance(count=100,levels=[0,5,10],versions=[3,4]){
   const groups=[];
-  for(const difficulty of levels)for(const encounterVersion of [2,3]){
+  for(const difficulty of levels)for(const encounterVersion of versions){
     const rows=[];
     for(let seed=1;seed<=count;seed++){
       const result=simulateCampaign(seed,{startRun:comparisonRun(seed,encounterVersion,difficulty)});
       const r=result.run;
-      rows.push({seed,outcome:r.outcome,hp:r.hp,kills:r.stats.kills,turns:r.stats.turns,completedBatches:r.completedBatches,saveChecks:result.saveChecks});
+      rows.push({seed,outcome:r.outcome,hp:r.hp,maxHp:r.maxHp,healthPercent:Math.round(r.hp/r.maxHp*10000)/100,kills:r.stats.kills,turns:r.stats.turns,completedBatches:r.completedBatches,saveChecks:result.saveChecks});
     }
     const wins=rows.filter(row=>row.outcome==='victory');
     groups.push({difficulty,encounterVersion,runs:count,wins:wins.length,winRate:wins.length/count,
       meanFinalHp:mean(rows,'hp'),meanWinnerHp:mean(wins,'hp'),meanKills:mean(rows,'kills'),meanWinnerKills:mean(wins,'kills'),
+      meanHealthPercent:mean(rows,'healthPercent'),meanWinnerHealthPercent:mean(wins,'healthPercent'),
       meanTurns:mean(rows,'turns'),meanCompletedBatches:mean(rows,'completedBatches'),rows});
   }
   return {strategy:'Fixed existing chooseAction policy: no talents, current-card and reachable-bond scores, no target selection or slot swaps, no future RNG/combat inspection. Every action saved and reloaded.',

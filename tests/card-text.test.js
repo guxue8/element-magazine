@@ -4,6 +4,7 @@ import {BULLETS,BULLET_MAP,BONDS} from '../src/catalog.js';
 import {cardText,keywordsForText,CARD_COPY_IDS} from '../src/card-text.js';
 import {newRun} from '../src/campaign.js';
 import {resolveRound} from '../src/combat.js';
+import {magicText} from '../src/spell-language.js';
 
 test('every bullet has deliberately authored short copy and safe stat values',()=>{
   assert.deepEqual([...CARD_COPY_IDS].sort(),BULLETS.map(x=>x.id).sort());
@@ -14,7 +15,7 @@ test('every bullet has deliberately authored short copy and safe stat values',()
     assert.ok(card.stats.length>0,def.id);
     assert.ok(card.stats.every(x=>x.kind&&x.label&&String(x.value).length),def.id);
     assert.equal(new Set(card.keywords.map(x=>x.id)).size,card.keywords.length,def.id);
-    assert.equal(card.details,def.description,def.id);
+    assert.equal(card.details,magicText(def.description),def.id);
   }
 });
 test('summons, passive buffs and consumed burn are never mislabelled as direct attack',()=>{
@@ -35,11 +36,11 @@ test('keywords are relevant, unique, and include precise shared rules',()=>{
   const wet=keywordsForText('潮湿')[0];
   assert.match(wet.description,/2/);
   assert.doesNotMatch(wet.description,/受到.*伤害.*增加/);
-  assert.match(cardText(BULLET_MAP.H01).keywords.find(x=>x.id==='timer').description,/入夹/);
+  assert.match(cardText(BULLET_MAP.H01).keywords.find(x=>x.id==='timer').description,/入阵/);
   assert.match(cardText(BULLET_MAP.H01).keywords.find(x=>x.id==='spring').description,/6/);
   assert.match(keywordsForText('护盾')[0].description,/上限 20/);
   assert.match(keywordsForText('护盾')[0].description,/保留到下一回合/);
-  assert.match(cardText(BULLET_MAP.F13).text,/24.*3|3.*24/);
+  assert.match(cardText(BULLET_MAP.F13).text,/爆炸半径 2.*48/);
   assert.match(cardText(BULLET_MAP.H21).text,/本回合.*刷新|战斗刷新/);
 });
 test('bond copy follows the live definition and preserves condition thresholds',()=>{
@@ -80,8 +81,7 @@ test('all displayed primary attack values match real unmodified combat attacks',
     const first=frames.find(f=>f.type==='shot'&&f.sourceId===def.id);
     assert.ok(first,`${def.id} has a real attack`);
     const base=Number(String(badge.value).split(' ')[0]);
-    // F13 always carries Lurk; the badge explicitly promises the base value.
-    const expected=def.id==='F13'?Math.round(base*1.2):base;
+    const expected=base;
     assert.equal(first.amount,expected,`${def.id}: displayed ${badge.label} must match its first attack`);
   }
 });

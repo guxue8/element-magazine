@@ -1,6 +1,7 @@
 // Card-face copy is authored separately from the complete rules in catalog.js.
 // Numeric badges are base values, never estimates of final combat damage.
 import {BULLET_MAP} from './catalog.js';
+import {magicText} from './spell-language.js';
 
 const stat=(kind,label,value)=>({kind,label,value});
 const entry=(text,damage=null,extra=[],direction=null,damageLabel='基础伤害')=>({
@@ -12,43 +13,43 @@ const COPY={
   F03:entry('主目标与 1 格内另一敌人各附加 1 层燃烧。',7,[stat('burn','燃烧',1)]),
   F04:entry('命中燃烧敌人：复制其至多 2 层燃烧给 1 格内另一敌人。每夹一次，不消耗原层数。',9,[stat('burn','复制上限',2)]),
   F05:entry('附加 2 层燃烧。',6,[stat('burn','燃烧',2)]),
-  F06:entry('攻击主目标及 2 格内至多 3 名其他敌人，各附加 3 层燃烧。',18,[stat('burn','燃烧',3)],null,'每目标伤害'),
+  F06:entry('爆炸半径 2：所有敌人各附加 3 层燃烧。',30,[stat('burn','燃烧',3)],null,'范围伤害'),
   F07:entry('按命中前的燃烧层数，立即结算一次燃烧；2 格内至多 2 名其他敌人各受每层 2 火伤。每夹一次，不消耗层数。',10,[stat('burn','计入层数上限',5)]),
-  F08:entry('溅射：1 格内至多 2 名其他敌人各受 4 火伤。',6,[stat('damage','溅射伤害',4)]),
+  F08:entry('爆炸半径 1：其余所有敌人各受 4 火伤。',6,[stat('damage','范围伤害',4)]),
   F09:entry('攻击前破盾 4。每夹一次。',10,[stat('shieldBreak','破盾',4)]),
-  F10:entry('击杀：对 1 格内至多 3 名其他敌人各造成 6 火伤。每夹一次，不连锁。',9,[stat('damage','爆破伤害',6)]),
+  F10:entry('击杀：爆炸半径 1，其余所有敌人各受 6 火伤。不连爆。',9,[stat('damage','爆炸伤害',6)]),
   F11:entry('消耗目标至多 2 层燃烧，每层追加 8 火伤。',8,[stat('bonus','每层附伤',8)]),
-  F12:entry('击杀：将至多 20 点溢伤转移给 1 格内另一敌人。只转移一次。',28,[stat('bonus','溢伤上限',20)]),
-  F13:entry('潜伏。消耗目标全部燃烧，每层追加 6 火伤；1 格内至多 3 名其他敌人各受 24 火伤。',64,[stat('damage','溅射伤害',24)]),
-  F14:entry('攻击至多 3 敌，优先燃烧层数最多者。各消耗至多 3 层燃烧，每层追加 4 火伤。',36,[stat('hits','最多目标',3)],null,'每目标伤害'),
+  F12:entry('爆炸半径 1：其余所有敌人各受 20 火伤。',40,[stat('damage','范围伤害',20)]),
+  F13:entry('消耗主目标全部燃烧，每层追加 8 火伤。爆炸半径 2：其余所有敌人各受 48 火伤。',100,[stat('damage','范围伤害',48)]),
+  F14:entry('以燃烧最多的敌人为中心，爆炸半径 3。各消耗至多 3 层燃烧，每层追加 6 火伤。',60,[stat('bonus','每层附伤',6)],null,'范围伤害'),
   F15:entry('命中主目标。',12),
   F16:entry('右邻弹的首次命中附加 5 火伤。',7,[stat('bonus','右邻附伤',5)],'right'),
   F17:entry('命中燃烧敌人：推进下邻计时弹。每夹一次。',9,[stat('timer','推进',1)],'down'),
   F18:entry('同行其他白色普通弹的首次命中附加 3 火伤。',6,[stat('bonus','同行附伤',3)],'row'),
   F19:entry('上下邻弹首次命中燃烧敌人：附加 8 火伤，附伤无视护甲。',null,[stat('bonus','相邻附伤',8)],'upDown'),
-  F20:entry('成功攻击后，同列下方普通弹的首次命中附加 18 火伤。',48,[stat('bonus','下方附伤',18)],'down'),
+  F20:entry('成功施放后，同列下方普通魔法的首次命中附加 18 火伤。',60,[stat('bonus','下方附伤',18)],'down'),
   F21:entry('四邻弹的首次命中附加 3 火伤与 1 层燃烧。装填前持有至少 6 枚火弹：获得磁引。',null,[stat('bonus','四邻附伤',3),stat('burn','附加燃烧',1)],'around'),
   H01:entry('召唤 1 泉灵，寿命 2。',null,[stat('summon','泉灵',1),stat('duration','寿命',2)]),
   H02:entry('场上有泉灵时，命中施加潮湿。',10,[stat('wet','潮湿',1)]),
-  H03:entry('召唤 1 泉灵，寿命 3。',null,[stat('summon','泉灵',1),stat('duration','寿命',3)]),
+  H03:entry('召唤 1 泉灵，寿命 3，并立即指令。',null,[stat('summon','泉灵',1),stat('duration','寿命',3)]),
   H04:entry('指令最早召唤、尚未接受指令的泉灵立即行动。每夹一次。',6,[stat('summon','指令',1)]),
-  H05:entry('召唤 1 雾泉灵，寿命 2；行动额外给 2 护盾，每回合一次。',null,[stat('summon','雾泉灵',1),stat('shield','行动护盾',2)]),
-  H06:entry('召唤泉灵与礁炮各 1，寿命 3；攻击主目标及 1 格内至多 2 名其他敌人。',24,[stat('summon','造物',2)],null,'每目标伤害'),
-  H07:entry('2 格内至多 2 名其他敌人各受 18 水伤。召唤 2 泉灵，寿命 3；立刻指令它们行动。',36,[stat('summon','泉灵',2)]),
+  H05:entry('召唤 1 雾泉灵，寿命 2，并立即指令。行动额外给 2 护盾，每回合一次。',null,[stat('summon','泉灵',1),stat('shield','行动护盾',2)]),
+  H06:entry('爆炸半径 1。召唤泉灵与礁炮各 1，寿命 3。',30,[stat('summon','造物',2)],null,'范围伤害'),
+  H07:entry('爆炸半径 2，其余所有敌人各受 24 水伤。召唤 2 泉灵，寿命 3，立即指令。',42,[stat('damage','范围伤害',24),stat('summon','泉灵',2)]),
   H08:entry('命中施加缓行。',9,[stat('slow','移动减少',1)]),
   H09:entry('目标本回合已受到缓行：追加 6 水伤。',8,[stat('bonus','缓行附伤',6)]),
   H10:entry('命中施加缓行；若被控制抗性抵抗，改为缓行后方最近的可控敌人。至多控制 1 敌。',7,[stat('slow','最多控制',1)]),
   H11:entry('1 格内另一敌人受 5 水伤；主副目标各施加缓行。',7,[stat('damage','副目标伤害',5)]),
   H12:entry('消耗潮湿并施加缓行；若缓行无效，改为追加 8 水伤。',8,[stat('bonus','抵抗附伤',8)]),
-  H13:entry('攻击主目标及 2 格内至多 5 名其他敌人，各施加缓行。',36,[stat('hits','最多目标',6)],null,'每目标伤害'),
+  H13:entry('爆炸半径 2：所有敌人施加缓行。',42,[stat('slow','移动减少',1)],null,'范围伤害'),
   H14:entry('四邻弹的首次命中附加 3 水伤；其中前 2 次命中施加缓行，同名共享。',null,[stat('bonus','四邻附伤',3),stat('slow','缓行次数',2)],'around'),
   H15:entry('命中主目标。',12),
   H16:entry('命中施加潮湿。首次执行获得 2 战斗刷新，同名每回合一次。',8,[stat('resource','战斗刷新',2)]),
   H17:entry('本回合已获得 2 战斗刷新：追加 8 水伤；否则获得 1 战斗刷新。',8,[stat('bonus','条件附伤',8)]),
   H18:entry('命中潮湿敌人：追加 6 水伤。击杀：获得 1 战斗刷新。',10,[stat('bonus','潮湿附伤',6)]),
   H19:entry('本回合首次获得战斗刷新：回复 2 生命。同名每回合一次。',null,[stat('heal','回复生命',2)]),
-  H20:entry('穿透至多 2 名其他敌人，各受 12 水伤。主目标被击杀：获得 2 战斗刷新。',24,[stat('damage','穿透伤害',12)]),
-  H21:entry('本回合此前每获得 1 战斗刷新，追加一发 20 水伤追击，最多 2 发；不消耗刷新值。',48,[stat('damage','每发追击',20)]),
+  H20:entry('穿透至多 2 名其他敌人，各受 18 水伤。主目标被击杀：获得 2 战斗刷新。',36,[stat('damage','穿透伤害',18)]),
+  H21:entry('本回合此前每获得 1 战斗刷新，追加一发 24 水伤追击，最多 2 发；不消耗刷新值。',60,[stat('damage','每发追击',24)]),
   L01:entry('弹跳 2 次，每跳 5 雷伤、距离 2 格。',6,[stat('damage','每跳伤害',5)]),
   L02:entry('主目标 2 格内没有其他敌人：追加 4 雷伤。',10,[stat('bonus','孤立附伤',4)]),
   L03:entry('弹跳 3 次，每跳 3 雷伤、距离 2 格。',7,[stat('damage','每跳伤害',3)]),
@@ -56,12 +57,12 @@ const COPY={
   L05:entry('弹跳至 2 格内另一敌人，造成 6 雷伤；再返回仍存活的主目标，造成 6 雷伤。',8,[stat('damage','每跳伤害',6)]),
   L06:entry('弹跳 4 次，每跳 24 雷伤、距离 3 格。',60,[stat('damage','每跳伤害',24)]),
   L07:entry('从主目标分出 2 条电链，各弹跳 2 次；每跳 5 雷伤、距离 2 格，所有电链不重复命中。',10,[stat('damage','每跳伤害',5)]),
-  L08:entry('命中主目标。',30),
+  L08:entry('蓄力后命中主目标。无目标时保留就绪。',36),
   L09:entry('入夹后仍有其他雷计时弹等待：首次命中获得 1 护盾。同名每夹最多 3。',12,[stat('shield','护盾',1)]),
   L10:entry('击杀主目标：推进右邻计时弹。每夹一次。',7,[stat('timer','推进',1)],'right'),
   L11:entry('命中主目标。',84),
   L12:entry('入夹后每有 1 枚计时弹等待，获得 2 护盾。同名每夹合计最多 6。',null,[stat('shield','护盾上限',6)]),
-  L13:entry('本夹此前每成功执行一枚其他计时弹，追加 12 雷伤，最多计入 2 枚。',96,[stat('bonus','每枚附伤',12)]),
+  L13:entry('此前每施放 1 枚其他蓄力魔法，追加 24 雷伤，最多 2 枚。击杀：溢伤以半径 1 爆炸，最多 60。',132,[stat('bonus','每枚附伤',24),stat('damage','溢伤上限',60)]),
   L14:entry('上下邻计时弹成功执行后，附击 18 雷伤。每枚每夹一次，召唤成功也可触发。',null,[stat('bonus','附击伤害',18)],'upDown'),
   L15:entry('命中主目标。',12),
   L16:entry('右邻弹的首次命中附加 5 雷伤。',7,[stat('bonus','右邻附伤',5)],'right'),
@@ -69,20 +70,20 @@ const COPY={
   L18:entry('同列其他弹的首次命中附加 4 雷伤；弹跳距离 +1 格。',null,[stat('bonus','同列附伤',4)],'column'),
   L19:entry('同行其他普通弹首次命中潮湿敌人：对 2 格内另一敌人附击 4 雷伤。',8,[stat('bonus','附击伤害',4)],'row'),
   L20:entry('弹夹中每有一列含携带弹，追加一束 20 雷伤脉冲，最多 3 束；击杀后可换敌。',60,[stat('damage','每束脉冲',20)]),
-  L21:entry('磁引。穿透至多 2 名其他敌人，各受 36 雷伤。同列有携带弹：本次攻击无视护甲。',72,[stat('damage','穿透伤害',36)],'column'),
+  L21:entry('磁引。穿透至多 2 名其他敌人，各受 54 雷伤。同列有携带魔法：无视护甲。',108,[stat('damage','穿透伤害',54)],'column'),
   W01:entry('连发 2 发；击杀后下一发可换敌。','6 × 2',[stat('hits','连发',2)],null,'每发伤害 × 发数'),
   W02:entry('以 25% 基础伤害回响此前最近的可用普通弹。同名每夹一次。',9,[stat('echo','回响比例','25%')]),
   W03:entry('连发 2 发；两发命中同一敌人时，第二发追加 5 风伤。','4 × 2',[stat('bonus','同目标附伤',5)],null,'每发伤害 × 发数'),
   W04:entry('以 50% 基础伤害回响已发射的左邻普通弹。同名每夹一次。',6,[stat('echo','回响比例','50%')],'left'),
   W05:entry('连发 2 发；首发击杀时，第二发换敌并追加 8 风伤。','5 × 2',[stat('bonus','击杀附伤',8)],null,'每发伤害 × 发数'),
-  W06:entry('连发 6 发；击杀后下一发可换敌。','14 × 6',[stat('hits','连发',6)],null,'每发伤害 × 发数'),
+  W06:entry('连发 6 道风刃；击杀后下一道可换敌。','18 × 6',[stat('hits','连发',6)],null,'每道伤害 × 次数'),
   W07:entry('以 60% 基础伤害回响最近 2 枚元素不同的可用普通弹，按原先顺序执行。同名每夹一次。',30,[stat('echo','回响比例','60%')]),
   W08:entry('穿透至多 3 敌。',6,[stat('hits','最多目标',3)],null,'每目标伤害'),
   W09:entry('命中距玩家不超过 2 格的敌人：击退 1 格。',7,[stat('push','击退距离',1)]),
   W10:entry('对主目标 1 格内另一敌人造成 6 风伤。',10,[stat('damage','副目标伤害',6)]),
   W11:entry('命中击退 1 格。',10,[stat('push','击退距离',1)]),
   W12:entry('命中击退 1 格；成功则追加 4 风伤，失败则获得 2 护盾。击杀不触发，同名每夹最多给 4 护盾。',8,[stat('bonus','击退附伤',4),stat('shield','抵抗护盾',2)]),
-  W13:entry('穿透至多 3 敌；伤害结算后，各击退 1 格。',26,[stat('hits','最多目标',3)],null,'每目标伤害'),
+  W13:entry('穿透至多 3 敌；伤害结算后，各击退 1 格。',36,[stat('hits','最多目标',3)],null,'每目标伤害'),
   W14:entry('同行其他普通弹穿透目标 +1，上限 3；首次命中附加 2 风伤。不增加弹跳或范围目标。',null,[stat('bonus','同行附伤',2)],'row'),
   W15:entry('命中施加风标。',9,[stat('bonus','风标附伤',3)]),
   W16:entry('右邻、下邻弹的首次命中各附加 3 风伤。',7,[stat('bonus','相邻附伤',3)],'rightDown'),
@@ -96,14 +97,14 @@ const COPY={
   R03:entry('召唤 1 礁炮，寿命 2。',null,[stat('summon','礁炮',1),stat('duration','寿命',2)]),
   R04:entry('指令 1 个岩造物立即行动，礁炮优先。每夹一次，只选尚未接受指令的造物。',6,[stat('summon','指令',1)]),
   R05:entry('召唤 1 散射礁炮，寿命 2；命中后向 1 格内另一敌人溅射 6 岩伤，每回合一次。',null,[stat('summon','散射礁炮',1),stat('bonus','溅射伤害',6)]),
-  R06:entry('召唤岩卫与礁炮各 1，寿命 3。',48,[stat('summon','造物',2)]),
-  R07:entry('召唤岩卫与礁炮各 1，寿命 3；立即指令它们行动，礁炮先行。',36,[stat('summon','造物',2)]),
+  R06:entry('爆炸半径 1，其余敌人各受 24 岩伤。召唤岩卫与礁炮各 1，寿命 3。',60,[stat('damage','范围伤害',24),stat('summon','造物',2)]),
+  R07:entry('爆炸半径 2，其余敌人各受 36 岩伤。召唤岩卫与礁炮各 1，寿命 3，并立即指令。',60,[stat('damage','范围伤害',36),stat('summon','造物',2)]),
   R08:entry('命中获得 1 护盾。同名每夹最多 4。',10,[stat('shield','护盾',1)]),
   R09:entry('执行时没有护盾：获得 3 护盾。同名每夹一次，无需命中。',8,[stat('shield','护盾',3)]),
   R10:entry('攻击前消耗至多 4 护盾，每点追加 3 岩伤。无目标不消耗。',8,[stat('bonus','每点护盾附伤',3)]),
   R11:entry('命中后获得 1 次反击机会，反击造成 10 岩伤。',8,[stat('counter','反击伤害',10)]),
   R12:entry('本回合首次岩伤反击造成伤害后，获得 6 护盾。同名每回合一次。',null,[stat('shield','反击后护盾',6)]),
-  R13:entry('攻击后获得 8 护盾与 2 次反击机会，每次反击造成 10 岩伤。',48,[stat('shield','护盾',8),stat('counter','反击次数',2)]),
+  R13:entry('攻击后获得 12 护盾与 2 次反击机会，每次反击造成 10 岩伤。',60,[stat('shield','护盾',12),stat('counter','反击次数',2)]),
   R14:entry('上邻弹的首次命中附加 6 岩伤；执行本槽时获得 3 护盾。',null,[stat('bonus','上邻附伤',6),stat('shield','护盾',3)],'up'),
   R15:entry('命中主目标。',12),
   R16:entry('命中满血敌人：追加 8 岩伤。击杀：获得 1 战斗拆解。',8,[stat('bonus','满血附伤',8)]),
@@ -111,18 +112,19 @@ const COPY={
   R18:entry('本夹首次子弹本体击杀：获得 3 战斗拆解。同名每夹一次。',null,[stat('resource','战斗拆解',3)]),
   R19:entry('四邻每有 1 个空槽，追加 3 岩伤，最多计入 2 格。',10,[stat('bonus','每空槽附伤',3)],'around'),
   R20:entry('攻击前破盾 12；每实际移除 4 护盾，获得 1 战斗拆解。',36,[stat('shieldBreak','破盾',12)]),
-  R21:entry('弹夹每有 1 个空槽，追加一发 12 岩伤碎片，最多 3 发。主目标被击杀：获得 3 战斗拆解。',72,[stat('damage','每发碎片',12)]),
-  C01:entry('左邻弹本回合首次攻击的基础伤害 +50%，包含该次连发与群攻。同名不叠加。',null,[stat('bonus','基础增幅','50%')],'left'),
+  R21:entry('本阵每有 1 个空槽，追加一发 24 岩伤碎片，最多 3 发。主目标被击杀：获得 3 战斗拆解。',108,[stat('damage','每发碎片',24)]),
+  C01:entry('为左邻伤害魔法刻下永久火印：基础伤害 +20%，最多 3 层。未就绪的蓄力魔法也能保留强化。',null,[stat('bonus','每层增幅','20%'),stat('hits','层数上限',3)],'left'),
   C02:entry('选燃烧最多的至多 2 敌，各消耗至多 3 层燃烧，每层造成 4 火伤。',null,[stat('burn','每层伤害',4),stat('hits','最多目标',2)]),
   C03:entry('对最近 3 敌施加潮湿与缓行。',null,[stat('hits','最多目标',3)]),
   C04:entry('回复 8 生命，获得 2 战斗刷新。',null,[stat('heal','回复生命',8),stat('resource','战斗刷新',2)]),
   C05:entry('推进右邻计时弹；归零后仍在原槽位执行。',null,[stat('timer','推进',1)],'right'),
-  C06:entry('上下邻常驻弹获得临时磁引，只影响下次装填。',null,[stat('weight','装填权重','×2')],'upDown'),
-  C07:entry('左邻常驻弹获得临时潜伏，只影响下次装填。',null,[stat('weight','装填权重','×0.5')],'left'),
+  C06:entry('上下邻常驻魔法获得永久磁引。从下次入阵开始生效，同类不叠加。',null,[stat('weight','抽取权重','×2')],'upDown'),
+  C07:entry('左邻常驻魔法获得永久潜伏。从下次入阵开始生效，同类不叠加。',null,[stat('weight','抽取权重','×0.5'),stat('bonus','首段增幅','20%')],'left'),
   C08:entry('召唤岩卫与礁炮各 1，寿命 2。',null,[stat('summon','造物',2),stat('duration','寿命',2)]),
 };
 
 const GLOSSARY=[
+  ['explosion','爆炸','以爆心为中心，命中左右半径内的全部敌人，不受目标数量限制。按战线距离判定，边界也命中；每个目标在同一次爆炸中只受一次范围伤害。'],
   ['burn','燃烧','每层在敌人行动前造成 2 火伤，上限 5 层。持续 2 次结算，再次施加会刷新持续时间。'],
   ['wet','潮湿','持续 2 个回合的水属性标记；本身不造成伤害，由子弹或羁绊利用。再次施加刷新持续时间。'],
   ['slow','缓行','本回合移动距离 −1。成功受控的敌人本回合和下回合抵抗新的控制；首领至少移动 1 格。'],
@@ -161,10 +163,10 @@ const DIRECTION_LABELS={left:'左邻',right:'右邻',up:'上邻',down:'下方',u
 export const CARD_COPY_IDS=Object.freeze(Object.keys(COPY));
 
 export function keywordsForText(text=''){
-  const value=String(text);
+  const value=magicText(text);
   return GLOSSARY.flatMap(([id,name,description,aliases=[]])=>{
-    const shownName=[name,...aliases].find(word=>value.includes(word));
-    return shownName?[{id,name:shownName,description}]:[];
+    const shownName=[name,...aliases].map(magicText).find(word=>value.includes(word));
+    return shownName?[{id,name:shownName,description:magicText(description)}]:[];
   });
 }
 
@@ -181,9 +183,9 @@ export function cardText(def){
   // be hidden behind an older hard-coded summary keyed by the same save id.
   const authored=def.trigger&&COPY[def.id];
   const prefix=def.trigger==='timer'?`计时 ${def.counter}。`:def.trigger==='passive'?'携带。':def.trigger==='consumable'?'一次性。':'';
-  const text=prefix+(authored?.text||playerText(def.description));
+  const text=magicText(prefix+(authored?.text||playerText(def.description)));
   const stats=authored?authored.stats.map(x=>({...x})):[];
   if(def.trigger==='timer')stats.push(stat('timer','计时',def.counter));
   const direction=authored?.direction||null;
-  return {text,keywords:keywordsForText(text),stats,direction,directionLabel:DIRECTION_LABELS[direction]||'',details:def.description||''};
+  return {text,keywords:keywordsForText(text),stats,direction,directionLabel:DIRECTION_LABELS[direction]||'',details:magicText(def.description||'')};
 }

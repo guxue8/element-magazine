@@ -83,7 +83,9 @@ test('final batch enters cleanup until every enemy dies, without extra reinforce
     }
     if(before.isCleanup){
       cleanupTurns++;
-      assert.equal(run.resources.draft-before.resources.draft,(run.stats.kills-before.stats.kills)*10,'cleanup gives kill rewards only');
+      const survivors=new Set(run.enemies.map(e=>e.uid));
+      const killReward=before.enemies.filter(e=>!survivors.has(e.uid)).reduce((total,e)=>total+(e.draftReward??10),0);
+      assert.equal(run.resources.draft-before.resources.draft,killReward,'cleanup gives each defeated enemy\'s reward only');
       assert.equal(run.resources.swap,before.resources.swap,'no repeat batch swap grant');
       assert.equal(run.completedBatches,18);
       assert.equal(run.batch,18);

@@ -5,6 +5,7 @@ import {RESOURCE_COSTS,normalizeResources,addResource} from './resources.js';
 import {canBuyTalent,createTalentState,ensureTalentState,getSwapCost,getRefreshCost} from './talent-tree.js';
 import {getUnlockedDifficulty,selectDifficulty,getWaveIds,getEnemyPreview} from './difficulty.js';
 import {ELEMENT_KEYS,validElementBan,allowedElements,bulletAllowed,bondAllowed,enchantmentAllowed} from './element-pool.js';
+import {imprintDrawFlags} from './spell-imprints.js';
 export {rollElementBan} from './element-pool.js';
 
 const BOND_ROUNDS=[2,4,6,9,12,15,17];
@@ -29,7 +30,14 @@ function bondGap(run,bond,{includeTarget=true}={}){
   return gap;
 }
 export function getActiveBonds(run){return run.bonds.filter(id=>bondAllowed(run,BOND_MAP[id])&&bondGap(run,BOND_MAP[id])===0);}
-export function previewWave(batch,difficulty=0,encounterVersion=3){return getWaveIds(batch,encounterVersion).map(id=>getEnemyPreview(id,batch,difficulty,encounterVersion));}
+export function previewWave(batch,difficulty=0,encounterVersion=4){
+  let bugIndex=0;
+  return getWaveIds(batch,encounterVersion).map(id=>{
+    const position=id==='boss3'?4:id.startsWith('boss')?5:
+      encounterVersion===4&&batch>=3&&id==='bug'?4+(bugIndex++%3):6;
+    return {...getEnemyPreview(id,batch,difficulty,encounterVersion),position};
+  });
+}
 export function getIntent(enemy,run){
   const def=ENEMIES[enemy.typeId];
   if(!def)return '未知敌人';
@@ -93,16 +101,16 @@ function starter(run){
 }
 function spawnBatch(run){
   for(const preview of previewWave(run.batch,run.difficulty||0,run.encounterVersion||1)){
-    const typeId=preview.id,boss=typeId.startsWith('boss');
+    const typeId=preview.id;
     const hp=preview.hp;
-    const position=typeId==='boss3'?4:boss?5:6;
-    run.enemies.push({uid:`e${run.nextUid++}`,typeId,hp,maxHp:hp,heal:typeId==='healer'?(run.batch<=6?6:run.batch<=12?9:12):0,shield:preview.shield,difficultyDamage:preview.difficultyDamage,lane:(random(run),0),position,burn:0,burnTurns:0,wet:0,slow:false,controlledAt:-2,attackCount:0,boost:0});
+    const position=preview.position;
+    run.enemies.push({uid:`e${run.nextUid++}`,typeId,hp,maxHp:hp,heal:typeId==='healer'?(run.batch<=6?6:run.batch<=12?9:12):0,shield:preview.shield,difficultyDamage:preview.difficultyDamage,...(preview.draftReward===undefined?{}:{draftReward:preview.draftReward}),lane:(random(run),0),position,burn:0,burnTurns:0,wet:0,slow:false,controlledAt:-2,attackCount:0,boost:0});
   }
 }
 export function newRun(seed=Date.now(),meta=createMeta(),difficulty=0,bannedElement=null){
   requireRule(validElementBan(bannedElement),'禁用元素无效');
   const traits=clone(meta.talents||{}),maxHp=100+5*(traits.body||0);
-  const run={version:1,id:`run-${seed}-${Date.now()}`,seed:Number(seed)>>>0,rng:(Number(seed)>>>0)||1,difficulty:selectDifficulty(meta,difficulty),bannedElement,encounterVersion:3,phase:'supply',round:1,batch:1,completedBatches:0,isCleanup:false,
+  const run={version:1,id:`run-${seed}-${Date.now()}`,seed:Number(seed)>>>0,rng:(Number(seed)>>>0)||1,difficulty:selectDifficulty(meta,difficulty),bannedElement,encounterVersion:4,phase:'supply',round:1,batch:1,completedBatches:0,isCleanup:false,
     hp:maxHp,maxHp,shield:0,resources:{draft:100+25*(traits.supply||0),refresh:10+10*(traits.refresh||0),remove:30+30*(traits.remove||0),swap:20+5*(traits.swap||0)},
     inventory:[],magazine:Array(12).fill(null),rest:null,slots:Array.from({length:12},()=>({engraving:null,charge:0,recycleRound:0})),enemies:[],summons:[],bonds:[],evolutions:{},offers:null,pending:[],selectedTarget:null,logs:[],stats:{kills:0,bossKills:0,damage:0,turns:0},defeatedBosses:[],traits,handled:[],eventOrder:[],outcome:null,reward:0,nextUid:1,draftCount:0,startRerolled:false,emergencyUsed:false};
   run.resources=normalizeResources(run.resources);
@@ -210,8 +218,9 @@ function queueBatchRewards(run){
 }
 function weightInfo(run,item){
   const fireCount=getCounts(run).fire;
-  const magnet=item.typeId==='L21'||(item.typeId==='F21'&&fireCount>=6)||item.mark==='M01'||item.temp?.magnet;
-  const lurk=item.typeId==='F13'||item.mark==='M02'||item.temp?.lurk;
+  const flags=imprintDrawFlags(item);
+  const magnet=item.typeId==='L21'||(item.typeId==='F21'&&fireCount>=6)||item.mark==='M01'||item.temp?.magnet||flags.magnet;
+  const lurk=item.mark==='M02'||item.temp?.lurk||flags.lurk;
   return {weight:Math.max(.25,Math.min(3,(magnet?2:1)*(lurk?0.5:1))),lurk:Boolean(lurk)};
 }
 export function getDrawWeight(run,item){return weightInfo(run,item).weight;}

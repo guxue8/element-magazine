@@ -17,7 +17,7 @@ test('catalog has complete unique content and valid references',()=>{
 test('approved IDs preserve card identity, modes and evolution targets',()=>{
  assert.equal(new Set(c.BULLETS.map(x=>x.name)).size,113);
  for(const prefix of ['F','H','L','W','R']) for(let i=1;i<=21;i++) assert.ok(c.BULLET_MAP[`${prefix}${String(i).padStart(2,'0')}`]);
- assert.deepEqual(['H01','H18','R03','R11','L08','W07'].map(id=>[id,c.BULLET_MAP[id].name,c.BULLET_MAP[id].trigger,c.BULLET_MAP[id].counter]),[['H01','泉种弹','timer',2],['H18','回潮弹','shot',0],['R03','礁种弹','timer',2],['R11','碎石弹','shot',0],['L08','电容弹','timer',2],['W07','复调风眼','timer',2]]);
+ assert.deepEqual(['H01','H18','R03','R11','L08','W07'].map(id=>[id,c.BULLET_MAP[id].name,c.BULLET_MAP[id].trigger,c.BULLET_MAP[id].counter]),[['H01','泉种弹','timer',1],['H18','回潮弹','shot',0],['R03','礁种弹','timer',2],['R11','碎石弹','shot',0],['L08','电容弹','timer',2],['W07','复调风眼','timer',2]]);
  assert.deepEqual(c.BONDS.filter(x=>x.grade==='evolution').map(x=>x.targetId),['F16','F11','H18','L11','L14','W03','R03','R11']);
  for(const x of c.ENCHANTMENTS) assert.equal(c.ENCHANTMENT_MAP[x.id],x);
  for(const kind of ['mark','slot']) assert.equal(new Set(c.ENCHANTMENTS.filter(x=>x.kind===kind).map(x=>x.element)).size,5);
